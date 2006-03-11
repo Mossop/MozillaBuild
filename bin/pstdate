@@ -1,0 +1,6 @@
+#! /usr/bin/perl
+
+$now=time()-$ENV{'PST_OFFSET'};
+($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime($now);
+$year+=1900;
+print(sprintf("%04d%02d%02d%02d\n", $year, 1+$mon, $mday, $hour));

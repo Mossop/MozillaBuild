@@ -1,0 +1,6 @@
+. includes/shared.mozconfig
+
+ac_add_options --enable-default-toolkit=windows
+
+ac_add_options --disable-javaxpcom
+ac_add_options --enable-extensions=default,spellcheck

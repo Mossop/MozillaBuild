@@ -1,0 +1,47 @@
+function config() {
+	echo "Setting up build environment for $1."
+	export BUILD_CONFIG=$1
+}
+
+export BUILD_BASE=$HOME
+
+# Here we build the path. The current path should only contain the VC stuff
+VCPATH=$PATH
+
+if [ -f /etc/profile ]; then
+	. /etc/profile
+fi
+
+export MOZ_TOOLS=$BUILD_BASE/moztools
+# The full path should have VC first, then cygwin
+export PATH=$VCPATH:$MOZ_TOOLS/bin:$BUILD_BASE/bin:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin
+unset VCPATH
+
+# BASEPATH should contain Window's standard path. This must go at the very end of the path.
+if [ "$BASEPATH" ]; then
+	BASEPATH=`cygpath -p "$BASEPATH"`
+	PATH=$PATH:$BASEPATH
+fi
+
+export PST_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
+
+# Load any config script
+if [ -f $BUILD_BASE/config/default.config ]; then
+	. $BUILD_BASE/config/default.config
+fi
+
+if [ "$BUILD_CONFIG" ]; then
+	config $BUILD_CONFIG
+fi
+
+# Make sure the build dir exists
+if [ ! -d $BUILD_BASE/build ]; then
+	mkdir $BUILD_BASE/build
+fi
+
+export GLIB_PREFIX=$MOZ_TOOLS
+export LIBIDL_PREFIX=$MOZ_TOOLS
+export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
+export MOZCONFIG=$BUILD_BASE/config/.mozconfig
+export WIN32_REDIST_DIR=$BUILD_BASE/redist
+export -f config

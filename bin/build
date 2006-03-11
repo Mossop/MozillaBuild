@@ -1,0 +1,21 @@
+#! /bin/sh
+
+if [ "$1" ]; then
+	BUILD_CONFIG=$1
+fi
+
+. $BUILD_BASE/bin/applyconfig
+
+. $BUILD_BASE/build/codate
+export MOZ_BUILD_DATE
+cd $BUILD_BASE
+
+if [ -f build.log ]; then
+  mv build.log build.log.old
+fi
+
+if [ "$BUILD_WATCH" ]; then
+  make -f mozilla/client.mk 2>&1 build | tee build.log | buildwatch
+else
+  make -f mozilla/client.mk 2>&1 build | tee build.log
+fi

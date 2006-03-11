@@ -1,0 +1,14 @@
+MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
+
+if [ -f $BUILD_BASE/config/global.config ]; then
+	. $BUILD_BASE/config/global.config
+fi
+
+if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
+	. $BUILD_BASE/config/$BUILD_CONFIG.config
+fi
+
+export MOZ_OBJDIR
+export BUILD_WATCH
+export BUILD_APP
+export BUILD_CONFIG

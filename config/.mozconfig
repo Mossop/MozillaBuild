@@ -1,0 +1,15 @@
+if [ "$BUILD_WATCH" ]; then
+  ac_add_options --enable-xterm-updates
+fi
+
+if [ -f $topsrcdir/$BUILD_APP/config/mozconfig ]; then
+	. $topsrcdir/$BUILD_APP/config/mozconfig
+fi
+
+if [ -f global.mozconfig ]; then
+	. global.mozconfig
+fi
+
+if [ -f $BUILD_CONFIG.mozconfig ]; then
+	. $BUILD_CONFIG.mozconfig
+fi
