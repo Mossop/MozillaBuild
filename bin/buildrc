@@ -39,9 +39,26 @@ if [ ! -d $BUILD_BASE/build ]; then
 	mkdir $BUILD_BASE/build
 fi
 
+export WIN32_REDIST_DIR=$BUILD_BASE/redist
+if [ ! -d $WIN32_REDIST_DIR ]; then
+	REDIST=`echo $VCVARS | sed -e s/\"//g`
+	REDIST=`cygpath "$REDIST"`
+	REDIST=`dirname "$REDIST"`
+	REDIST=$REDIST/redist/x86/Microsoft.VC80.CRT
+	if [ -d "$REDIST" ]; then
+		mkdir $WIN32_REDIST_DIR
+		cp "$REDIST"/* $WIN32_REDIST_DIR
+	fi
+fi
+
+if [ ! -d $MOZ_TOOLS ]; then
+	wget http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
+	unzip moztools-static.zip
+	rm -f moztools-static.zip
+fi
+
 export GLIB_PREFIX=$MOZ_TOOLS
 export LIBIDL_PREFIX=$MOZ_TOOLS
 export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
 export MOZCONFIG=$BUILD_BASE/config/.mozconfig
-export WIN32_REDIST_DIR=$BUILD_BASE/redist
 export -f config
