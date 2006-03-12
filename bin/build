@@ -6,8 +6,11 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-. $BUILD_BASE/build/codate
-export MOZ_BUILD_DATE
+if [ -f $BUILD_BASE/build/codate ]; then
+	. $BUILD_BASE/build/codate
+	export MOZ_BUILD_DATE
+fi
+
 cd $BUILD_BASE
 
 if [ -f build.log ]; then

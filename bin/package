@@ -7,4 +7,29 @@ fi
 . $BUILD_BASE/bin/applyconfig
 
 make -C $MOZ_OBJDIR/$BUILD_APP/installer
-cp -f $MOZ_OBJDIR/dist/*.zip $BUILD_BASE
+
+if [ -f $BUILD_BASE/build/codate ]; then
+	. $BUILD_BASE/build/codate
+else
+	MOZ_BUILD_DATE=`date +%Y%m%d%H`
+fi
+
+if [ ! -d $BUILD_BASE/packages ]; then
+	mkdir $BUILD_BASE/packages
+fi
+
+if [ ! -d $BUILD_BASE/packages/$BUILD_CONFIG ]; then
+	mkdir $BUILD_BASE/packages/$BUILD_CONFIG
+fi
+
+for FILE in $MOZ_OBJDIR/dist/*.en-US.win32.zip
+do
+	if [ -f $FILE ]; then
+		#TARGET=`echo $FILE | sed s/\.en-US\.win32\.zip\$//`
+		#TARGET=`echo $TARGET | sed s/.*\\\///`
+		#TARGET="$TARGET.$BUILD_CONFIG"
+		TARGET="$BUILD_CONFIG"
+		cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
+		cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$MOZ_BUILD_DATE.zip
+	fi
+done
