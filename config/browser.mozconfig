@@ -1,7 +1,0 @@
-. includes/static.mozconfig
-. includes/firefox.mozconfig
-
-ac_add_options --enable-default-toolkit=windows
-
-ac_add_options --enable-extensions=default,spellcheck,safe-browsing
-ac_add_options --disable-places
