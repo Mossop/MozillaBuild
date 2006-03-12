@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /bin/sh
 #
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -43,7 +43,17 @@
 # $Revision$
 #
 
-$now=time()-$ENV{'PST_OFFSET'};
-($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime($now);
-$year+=1900;
-print(sprintf("%04d%02d%02d%02d\n", $year, 1+$mon, $mday, $hour));
+if [ -d $BUILD_BASE/mozilla ]; then
+
+	cd $BUILD_BASE/mozilla
+
+	for FILE in $BUILD_BASE/patches/*.patch
+	do
+		if [ -f $FILE ]; then
+			patch -p0 <$FILE
+		fi
+	done
+
+else
+	echo "The source tree doesn't appear to exist."
+fi
