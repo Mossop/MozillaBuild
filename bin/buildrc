@@ -56,7 +56,7 @@ if [ -f /etc/profile ]; then
 	. /etc/profile
 fi
 
-export MOZ_TOOLS=$BUILD_BASE/moztools
+export MOZ_TOOLS=$BUILD_BASE/tools/moztools
 # The full path should have VC first, then cygwin
 export PATH=$VCPATH:$MOZ_TOOLS/bin:$BUILD_BASE/bin:/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin
 unset VCPATH
@@ -80,20 +80,38 @@ if [ ! -f .cvspass ]; then
 	cvs login 2>/dev/null
 fi
 
-export WIN32_REDIST_DIR=$BUILD_BASE/redist
-if [ ! -d $WIN32_REDIST_DIR ]; then
+if [ ! -d $BUILD_BASE/tools ]; then
+	mkdir $BUILD_BASE/tools
+fi
+
+export BUILD_REDIST_STD=$BUILD_BASE/tools/redist_std
+if [ ! -d $BUILD_REDIST_STD ]; then
 	REDIST=`echo $VCVARS | sed -e s/\"//g`
 	REDIST=`cygpath "$REDIST"`
 	REDIST=`dirname "$REDIST"`
 	REDIST=$REDIST/redist/x86/Microsoft.VC80.CRT
 	if [ -d "$REDIST" ]; then
 		echo -e "\nAdding VC redistributable files."
-		mkdir $WIN32_REDIST_DIR
-		cp "$REDIST"/* $WIN32_REDIST_DIR
+		mkdir $BUILD_REDIST_STD
+		cp "$REDIST"/* $BUILD_REDIST_STD
+	fi
+fi
+
+export BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
+if [ ! -d $BUILD_REDIST_DEBUG ]; then
+	REDIST=`echo $VCVARS | sed -e s/\"//g`
+	REDIST=`cygpath "$REDIST"`
+	REDIST=`dirname "$REDIST"`
+	REDIST=$REDIST/redist/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
+	if [ -d "$REDIST" ]; then
+		echo -e "\nAdding debug VC redistributable files."
+		mkdir $BUILD_REDIST_DEBUG
+		cp "$REDIST"/* $BUILD_REDIST_DEBUG
 	fi
 fi
 
 if [ ! -d $MOZ_TOOLS ]; then
+	cd $MOZ_TOOLS/..
 	echo -e "\nDownloading Mozilla Tools..."
 	wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
 	echo "Extracting Mozilla Tools..."
@@ -101,6 +119,9 @@ if [ ! -d $MOZ_TOOLS ]; then
 	rm -f moztools-static.zip
 fi
 
+cd $BUILD_BASE
+
+export WIN32_REDIST_DIR=$BUILD_REDIST_STD
 export GLIB_PREFIX=$MOZ_TOOLS
 export LIBIDL_PREFIX=$MOZ_TOOLS
 export MOZCONFIG=$BUILD_BASE/bin/.mozconfig
