@@ -9,6 +9,8 @@ ac_add_options --disable-activex-scripting
 
 ac_add_options --enable-optimize
 
+ac_add_options --enable-default-toolkit=windows
+
 ac_add_options --with-java-include-path=/cygdrive/c/Java/jdk1.5.0_05/include
 ac_add_options --with-java-bin-path=/cygdrive/c/Java/jdk1.5.0_05/bin
 ac_add_options --enable-extensions=default,spellcheck
