@@ -25,15 +25,6 @@ fi
 
 export PST_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
 
-# Load any config script
-if [ -f $BUILD_BASE/config/default.config ]; then
-	. $BUILD_BASE/config/default.config
-fi
-
-if [ "$BUILD_CONFIG" ]; then
-	config $BUILD_CONFIG
-fi
-
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then
 	mkdir $BUILD_BASE/build
@@ -68,7 +59,7 @@ fi
 
 export GLIB_PREFIX=$MOZ_TOOLS
 export LIBIDL_PREFIX=$MOZ_TOOLS
-export MOZCONFIG=$BUILD_BASE/config/.mozconfig
+export MOZCONFIG=$BUILD_BASE/bin/.mozconfig
 export -f config
 
 echo -e "\nUse \"update\" to update the source tree and \"build\" to build it."
