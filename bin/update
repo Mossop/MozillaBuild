@@ -49,7 +49,19 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-cd $BUILD_BASE
+if [ ! -d $BUILD_BASE/source ]; then
+	mkdir $BUILD_BASE/source
+fi
+
+if [ ! -d $BUILD_SOURCE ]; then
+	mkdir $BUILD_SOURCE
+fi
+
+cd $BUILD_SOURCE
+if [ -f $BUILD_SOURCE/cvsco.log ]; then
+	rm $BUILD_SOURCE/cvsco.log
+fi
+
 if [ ! -f mozilla/client.mk ]; then
 	cvs checkout -A mozilla/client.mk
 fi
@@ -57,10 +69,19 @@ fi
 FLAGS="MOZ_CO_PROJECT=$MOZ_CO_PROJECT"
 if [ "$MOZ_CO_DATE" ]; then
   FLAGS="$FLAGS \"MOZ_CO_DATE=$MOZ_CO_DATE\""
+	TIME=`date --date="$MOZ_CO_DATE" +%s`
+else
+	TIME=`date +%s`
 fi
 
-echo -n "MOZ_BUILD_DATE=" >$BUILD_BASE/build/codate
-pstdate >>$BUILD_BASE/build/codate
+if [ "$MOZ_CO_TAG" ]; then
+  FLAGS="$FLAGS \"MOZ_CO_TAG=$MOZ_CO_TAG\""
+fi
+
+TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
+TIME=$(($TIME-$TIME_OFFSET))
+date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
+date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
 
 if [ "$BUILD_WATCH" ]; then
   make -f mozilla/client.mk 2>&1 checkout $FLAGS | buildwatch

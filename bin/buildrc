@@ -67,8 +67,6 @@ if [ "$BASEPATH" ]; then
 	PATH=$PATH:$BASEPATH
 fi
 
-export PST_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
-
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then
 	mkdir $BUILD_BASE/build
@@ -84,32 +82,6 @@ if [ ! -d $BUILD_BASE/tools ]; then
 	mkdir $BUILD_BASE/tools
 fi
 
-export BUILD_REDIST_STD=$BUILD_BASE/tools/redist_std
-if [ ! -d $BUILD_REDIST_STD ]; then
-	REDIST=`echo $VCVARS | sed -e s/\"//g`
-	REDIST=`cygpath "$REDIST"`
-	REDIST=`dirname "$REDIST"`
-	REDIST=$REDIST/redist/x86/Microsoft.VC80.CRT
-	if [ -d "$REDIST" ]; then
-		echo -e "\nAdding VC redistributable files."
-		mkdir $BUILD_REDIST_STD
-		cp "$REDIST"/* $BUILD_REDIST_STD
-	fi
-fi
-
-export BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
-if [ ! -d $BUILD_REDIST_DEBUG ]; then
-	REDIST=`echo $VCVARS | sed -e s/\"//g`
-	REDIST=`cygpath "$REDIST"`
-	REDIST=`dirname "$REDIST"`
-	REDIST=$REDIST/redist/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
-	if [ -d "$REDIST" ]; then
-		echo -e "\nAdding debug VC redistributable files."
-		mkdir $BUILD_REDIST_DEBUG
-		cp "$REDIST"/* $BUILD_REDIST_DEBUG
-	fi
-fi
-
 if [ ! -d $MOZ_TOOLS ]; then
 	cd $MOZ_TOOLS/..
 	echo -e "\nDownloading Mozilla Tools..."
@@ -121,7 +93,6 @@ fi
 
 cd $BUILD_BASE
 
-export WIN32_REDIST_DIR=$BUILD_REDIST_STD
 export GLIB_PREFIX=$MOZ_TOOLS
 export LIBIDL_PREFIX=$MOZ_TOOLS
 export MOZCONFIG=$BUILD_BASE/bin/.mozconfig

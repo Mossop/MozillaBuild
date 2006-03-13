@@ -51,10 +51,10 @@ fi
 
 make -C $MOZ_OBJDIR/$BUILD_APP/installer
 
-if [ -f $BUILD_BASE/build/codate ]; then
-	. $BUILD_BASE/build/codate
+if [ -f $MOZ_OBJDIR/codate ]; then
+	. $MOZ_OBJDIR/codate
 else
-	MOZ_BUILD_DATE=`date +%Y%m%d%H`
+	BUILD_CO_DATE=`date +%Y%m%d.%H%M`
 fi
 
 if [ ! -d $BUILD_BASE/packages ]; then
@@ -73,6 +73,6 @@ do
 		#TARGET="$TARGET.$BUILD_CONFIG"
 		TARGET="$BUILD_CONFIG"
 		cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
-		cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$MOZ_BUILD_DATE.zip
+		cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.zip
 	fi
 done

@@ -43,9 +43,9 @@
 # $Revision$
 #
 
-if [ -d $BUILD_BASE/mozilla ]; then
+if [ -d $BUILD_SOURCE ]; then
 
-	cd $BUILD_BASE/mozilla
+	cd $BUILD_SOURCE
 
 	for FILE in $BUILD_BASE/patches/*.patch
 	do
