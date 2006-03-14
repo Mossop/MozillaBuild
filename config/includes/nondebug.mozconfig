@@ -1,4 +1,2 @@
-export WIN32_REDIST_DIR=$BUILD_REDIST_STD
-
 ac_add_options --disable-tests
 ac_add_options --disable-debug
