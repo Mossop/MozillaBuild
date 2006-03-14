@@ -81,6 +81,7 @@ if [ ! "$BUILD_SOURCE" ]; then
 	fi
 fi
 
+export QUILT_PATCHES=$BUILD_BASE/patches/$BUILD_CONFIG
 export WIN32_REDIST_DIR
 export MOZ_OBJDIR
 export BUILD_SOURCE

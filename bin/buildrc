@@ -43,8 +43,13 @@
 #
 
 function config() {
-	echo "Setting up build environment for $1."
-	export BUILD_CONFIG=$1
+	if [ "$1" ]; then
+		echo "Setting up build environment for $1."
+		export BUILD_CONFIG=$1
+	else
+		echo "Changing to default build environment."
+		export -n BUILD_CONFIG
+	fi
 }
 
 export BUILD_BASE=$HOME

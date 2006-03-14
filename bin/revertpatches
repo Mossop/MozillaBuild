@@ -37,28 +37,18 @@
 #
 # ***** END LICENSE BLOCK *****
 #
-# $HeadURL$
-# $LastChangedBy$
-# $Date$
-# $Revision$
+# $HeadURL: svn://svn.blueprintit.co.uk/dave/mozilla/MozillaBuild/trunk/bin/applypatches $
+# $LastChangedBy: dave $
+# $Date: 2006-03-13 20:34:14 +0000 (Mon, 13 Mar 2006) $
+# $Revision: 574 $
 #
 
 if [ -f $BUILD_BASE/patches/.applied ]; then
-	OLDCONIG=`cat $BUILD_BASE/patches/.applied`
-
-	if [ "$BUILD_CONFIG" != "$OLDCONFIG" ]; then
-		revertpatches
-	fi
-fi
-
-. $BUILD_BASE/bin/applyconfig
-
-if [ -d $BUILD_SOURCE/mozilla ]; then
-	if [ -d $QUILT_PATCHES ]; then
-
-		cd $BUILD_SOURCE/mozilla
-		quilt push -a
-		echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied
-		
-	fi
+	BUILD_CONFIG=`cat $BUILD_BASE/patches/.applied`
+	
+	. $BUILD_BASE/bin/applyconfig
+	
+	cd $BUILD_SOURCE/mozilla
+	quilt pop -a
+	rm -f $BUILD_BASE/patches/.applied
 fi
