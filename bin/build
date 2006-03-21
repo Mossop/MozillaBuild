@@ -44,8 +44,10 @@
 #
 
 if [ "$1" ]; then
-	BUILD_CONFIG=$1
+	config $1
 fi
+
+applypatches
 
 . $BUILD_BASE/bin/applyconfig
 
