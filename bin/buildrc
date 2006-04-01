@@ -43,13 +43,13 @@
 #
 
 function config() {
-	if [ "$1" ]; then
-		echo "Setting up build environment for $1."
-		export BUILD_CONFIG=$1
-	else
-		echo "Changing to default build environment."
-		export -n BUILD_CONFIG
-	fi
+  if [ "$1" ]; then
+    echo "Setting up build environment for $1."
+    export BUILD_CONFIG=$1
+  else
+    echo "Changing to default build environment."
+    export -n BUILD_CONFIG
+  fi
 }
 
 export BUILD_BASE=$HOME
@@ -58,7 +58,7 @@ export BUILD_BASE=$HOME
 VCPATH=$PATH
 
 if [ -f /etc/profile ]; then
-	. /etc/profile
+  . /etc/profile
 fi
 
 export MOZ_TOOLS=$BUILD_BASE/tools/moztools
@@ -68,32 +68,32 @@ unset VCPATH
 
 # BASEPATH should contain Window's standard path. This must go at the very end of the path.
 if [ "$BASEPATH" ]; then
-	BASEPATH=`cygpath -p "$BASEPATH"`
-	PATH=$PATH:$BASEPATH
+  BASEPATH=`cygpath -p "$BASEPATH"`
+  PATH=$PATH:$BASEPATH
 fi
 
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then
-	mkdir $BUILD_BASE/build
+  mkdir $BUILD_BASE/build
 fi
 
 export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
 if [ ! -f .cvspass ]; then
-	echo -e "\nPlease press enter at the password prompt...\n"
-	cvs login 2>/dev/null
+  echo -e "\nPlease press enter at the password prompt...\n"
+  cvs login 2>/dev/null
 fi
 
 if [ ! -d $BUILD_BASE/tools ]; then
-	mkdir $BUILD_BASE/tools
+  mkdir $BUILD_BASE/tools
 fi
 
 if [ ! -d $MOZ_TOOLS ]; then
-	cd $MOZ_TOOLS/..
-	echo -e "\nDownloading Mozilla Tools..."
-	wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
-	echo "Extracting Mozilla Tools..."
-	unzip moztools-static.zip >/dev/null
-	rm -f moztools-static.zip
+  cd $MOZ_TOOLS/..
+  echo -e "\nDownloading Mozilla Tools..."
+  wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
+  echo "Extracting Mozilla Tools..."
+  unzip moztools-static.zip >/dev/null
+  rm -f moztools-static.zip
 fi
 
 cd $BUILD_BASE

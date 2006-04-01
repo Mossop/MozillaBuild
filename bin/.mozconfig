@@ -49,13 +49,13 @@ if [ "$BUILD_WATCH" ]; then
 fi
 
 if [ -f $topsrcdir/$BUILD_APP/config/mozconfig ]; then
-	. $topsrcdir/$BUILD_APP/config/mozconfig
+  . $topsrcdir/$BUILD_APP/config/mozconfig
 fi
 
 if [ -f $CONFIG/.mozconfig ]; then
-	. $CONFIG/.mozconfig
+  . $CONFIG/.mozconfig
 fi
 
 if [ -f $CONFIG/$BUILD_CONFIG.mozconfig ]; then
-	. $CONFIG/$BUILD_CONFIG.mozconfig
+  . $CONFIG/$BUILD_CONFIG.mozconfig
 fi

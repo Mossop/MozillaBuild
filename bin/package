@@ -44,7 +44,7 @@
 #
 
 if [ "$1" ]; then
-	config $1
+  config $1
 fi
 
 . $BUILD_BASE/bin/applyconfig
@@ -52,27 +52,27 @@ fi
 make -C $MOZ_OBJDIR/$BUILD_APP/installer
 
 if [ -f $MOZ_OBJDIR/codate ]; then
-	. $MOZ_OBJDIR/codate
+  . $MOZ_OBJDIR/codate
 else
-	BUILD_CO_DATE=`date +%Y%m%d.%H%M`
+  BUILD_CO_DATE=`date +%Y%m%d.%H%M`
 fi
 
 if [ ! -d $BUILD_BASE/packages ]; then
-	mkdir $BUILD_BASE/packages
+  mkdir $BUILD_BASE/packages
 fi
 
 if [ ! -d $BUILD_BASE/packages/$BUILD_CONFIG ]; then
-	mkdir $BUILD_BASE/packages/$BUILD_CONFIG
+  mkdir $BUILD_BASE/packages/$BUILD_CONFIG
 fi
 
 for FILE in $MOZ_OBJDIR/dist/*.en-US.win32.zip
 do
-	if [ -f $FILE ]; then
-		#TARGET=`echo $FILE | sed s/\.en-US\.win32\.zip\$//`
-		#TARGET=`echo $TARGET | sed s/.*\\\///`
-		#TARGET="$TARGET.$BUILD_CONFIG"
-		TARGET="$BUILD_CONFIG"
-		cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
-		cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.zip
-	fi
+  if [ -f $FILE ]; then
+    #TARGET=`echo $FILE | sed s/\.en-US\.win32\.zip\$//`
+    #TARGET=`echo $TARGET | sed s/.*\\\///`
+    #TARGET="$TARGET.$BUILD_CONFIG"
+    TARGET="$BUILD_CONFIG"
+    cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
+    cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.zip
+  fi
 done

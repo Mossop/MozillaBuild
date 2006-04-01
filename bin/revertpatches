@@ -44,11 +44,11 @@
 #
 
 if [ -f $BUILD_BASE/patches/.applied ]; then
-	BUILD_CONFIG=`cat $BUILD_BASE/patches/.applied`
-	
-	. $BUILD_BASE/bin/applyconfig
-	
-	cd $BUILD_SOURCE/mozilla
-	quilt pop -a
-	rm -f $BUILD_BASE/patches/.applied
+  BUILD_CONFIG=`cat $BUILD_BASE/patches/.applied`
+
+  . $BUILD_BASE/bin/applyconfig
+
+  cd $BUILD_SOURCE/mozilla
+  quilt pop -a
+  rm -f $BUILD_BASE/patches/.applied
 fi

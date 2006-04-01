@@ -44,8 +44,8 @@
 #
 
 if [ -f $1 ]; then
-	. $BUILD_BASE/bin/applyconfig
-	quilt delete -r $1
+  . $BUILD_BASE/bin/applyconfig
+  quilt delete -r $1
 else
-	echo "Usage: addpatch <patchfile>"
+  echo "Usage: addpatch <patchfile>"
 fi

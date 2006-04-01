@@ -48,37 +48,37 @@ VCREDIST=`dirname "$VCREDIST"`
 VCREDIST=$VCREDIST/redist
 
 if [ -d $BUILD_BASE/tools/redist ]; then
-	export BUILD_REDIST=$BUILD_BASE/tools/redist_std
+  export BUILD_REDIST=$BUILD_BASE/tools/redist_std
 elif [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
-	export BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
+  export BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
 fi
 
 if [ -d $BUILD_BASE/tools/redist_debug ]; then
-	export BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
+  export BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
 elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
-	export BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
+  export BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
 fi
 
 WIN32_REDIST_DIR="\"$BUILD_REDIST\""
 
 if [ -f $BUILD_BASE/config/.config ]; then
-	. $BUILD_BASE/config/.config
+  . $BUILD_BASE/config/.config
 fi
 
 if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
-	. $BUILD_BASE/config/$BUILD_CONFIG.config
+  . $BUILD_BASE/config/$BUILD_CONFIG.config
 fi
 
 if [ ! "$MOZ_OBJDIR" ]; then
-	MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
+  MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
 fi
 
 if [ ! "$BUILD_SOURCE" ]; then
-	if [ "$MOZ_CO_TAG" ]; then
-		BUILD_SOURCE=$BUILD_BASE/source/$MOZ_CO_TAG
-	else
-		BUILD_SOURCE=$BUILD_BASE/source/HEAD
-	fi
+  if [ "$MOZ_CO_TAG" ]; then
+    BUILD_SOURCE=$BUILD_BASE/source/$MOZ_CO_TAG
+  else
+    BUILD_SOURCE=$BUILD_BASE/source/HEAD
+  fi
 fi
 
 export QUILT_PATCHES=$BUILD_BASE/patches/$BUILD_CONFIG
