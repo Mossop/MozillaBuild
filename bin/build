@@ -44,7 +44,7 @@
 #
 
 if [ "$1" ]; then
-	config $1
+  config $1
 fi
 
 applypatches
@@ -53,30 +53,30 @@ applypatches
 
 if [ -d $BUILD_SOURCE ]; then
 
-	if [ -f $BUILD_SOURCE/codate ]; then
-		. $BUILD_SOURCE/codate
-		export MOZ_BUILD_DATE
-	fi
+  if [ -f $BUILD_SOURCE/codate ]; then
+    . $BUILD_SOURCE/codate
+    export MOZ_BUILD_DATE
+  fi
+
+  if [ ! -d $MOZ_OBJDIR ]; then
+    mkdir $MOZ_OBJDIR
+  fi
+  cp -f $BUILD_SOURCE/codate $MOZ_OBJDIR
+
+  cd $BUILD_SOURCE
 	
-	if [ ! -d $MOZ_OBJDIR ]; then
-		mkdir $MOZ_OBJDIR
-	fi
-	cp -f $BUILD_SOURCE/codate $MOZ_OBJDIR
-	
-	cd $BUILD_SOURCE
-	
-	if [ ! -d $BUILD_BASE/logs ]; then
-		mkdir $BUILD_BASE/logs
-	fi
-	
-	LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
-	
-	if [ "$BUILD_WATCH" ]; then
-	  make -f mozilla/client.mk 2>&1 build | tee $LOGNAME | buildwatch
-	else
-	  make -f mozilla/client.mk 2>&1 build | tee $LOGNAME
-	fi
+  if [ ! -d $BUILD_BASE/logs ]; then
+    mkdir $BUILD_BASE/logs
+  fi
+
+  LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
+
+  if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch ]; then
+    make -f mozilla/client.mk 2>&1 build | tee $LOGNAME | buildwatch
+  else
+    make -f mozilla/client.mk 2>&1 build | tee $LOGNAME
+  fi
 
 else
-	echo "Source tree does not appear to exist yet. You must run \"update\" first."
+  echo "Source tree does not appear to exist yet. You must run \"update\" first."
 fi
