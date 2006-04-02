@@ -1,0 +1,31 @@
+#! /bin/bash
+
+VS="C:\\Program Files\\Microsoft Visual Studio 8"
+ 
+HOME=`dirname $0`
+export HOME=`dirname $HOME`
+
+VC="$VS\\VC"
+VSCOMMON="$VS\\Common7"
+PLATFORMSDK="$VC\\PlatformSDK"
+SDK="$VS\\SDK\\v2.0"
+
+export FRAMEWORKSDKDIR="$SDK"
+export FRAMEWORKDIR="C:\\WINDOWS\\Microsoft.NET\\Framework"
+export FRAMEWORKVERSION=v2.0.50727
+
+export VCVARS="\"$VC\\vcvarsall.bat\""
+export BASEPATH="c:\\WINDOWS\\system32;c:\\WINDOWS;c:\\WINDOWS\\System32\\Wbem;/usr/bin"
+
+export DEVENVDIR="$VS\\Common7\\IDE"
+export INCLUDE="$VC\\ATLMFC\\INCLUDE;$VC\\INCLUDE;$PLATFORMSDK\\include;"
+export LIB="$VC\\ATLMFC\\LIB;$VC\\LIB;$VC\\PlatformSDK\\lib;$SDK\\lib;"
+export LIBPATH="$FRAMEWORKDIR\\$FRAMEWORKVERSION;$VC\\ATLMFC\\LIB"
+export VCINSTALLDIR="$VC"
+export VS80COMNTOOLS="$VSCOMMON\\Tools\\"
+export VSINSTALLDIR="$VS"
+
+NEWPATH="$VSCOMMON\\IDE;$VC\\BIN;$VSCOMMON\\Tools;$VSCOMMON\\Tools\bin;$PLATFORMSDK\\bin;$SDK\\bin;$FRAMEWORKDIR\\$FRAMEWORKVERSION;$VC\\VCPackages;."
+export PATH=`cygpath -p "$NEWPATH"`
+
+/usr/bin/bash --rcfile $HOME/bin/buildrc
