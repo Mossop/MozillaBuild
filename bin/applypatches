@@ -44,7 +44,7 @@
 #
 
 if [ -f $BUILD_BASE/patches/.applied ]; then
-  OLDCONIG=`cat $BUILD_BASE/patches/.applied`
+  OLDCONFIG=`cat $BUILD_BASE/patches/.applied`
 
   if [ "$BUILD_CONFIG" != "$OLDCONFIG" ]; then
     revertpatches
