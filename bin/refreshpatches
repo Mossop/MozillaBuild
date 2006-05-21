@@ -37,40 +37,19 @@
 #
 # ***** END LICENSE BLOCK *****
 #
-# $HeadURL$
-# $LastChangedBy$
-# $Date$
-# $Revision$
+# $HeadURL: svn://svn.blueprintit.co.uk/dave/mozilla/MozillaBuild/trunk/bin/applypatches $
+# $LastChangedBy: dave $
+# $Date: 2006-03-14 18:36:41 +0000 (Tue, 14 Mar 2006) $
+# $Revision: 576 $
 #
 
-if [ "$1" ]; then
-  config $1
-fi
+revertpatches
 
 . $BUILD_BASE/bin/applyconfig
-
-make -C $MOZ_OBJDIR/$BUILD_APP/installer
-
-if [ -f $MOZ_OBJDIR/codate ]; then
-  . $MOZ_OBJDIR/codate
-else
-  BUILD_CO_DATE=`date +%Y%m%d.%H%M`
-fi
-
-if [ ! -d $BUILD_BASE/packages ]; then
-  mkdir $BUILD_BASE/packages
-fi
-
-if [ ! -d $BUILD_BASE/packages/$BUILD_CONFIG ]; then
-  mkdir $BUILD_BASE/packages/$BUILD_CONFIG
-fi
-
-for FILE in $MOZ_OBJDIR/dist/*.en-US.win32.zip
+cd $BUILD_SOURCE/mozilla
+cat $QUILT_PATCHES/series | while read PATCH TYPE
 do
-  if [ -f $FILE ]; then
-    #TARGET="$(echo $(echo $FILE | sed s/\.en-US\.win32\.zip\$//) | sed s/.*\\\///).$BUILD_CONFIG"
-    TARGET="$BUILD_CONFIG"
-    cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
-    cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.zip
-  fi
+  quilt push
+  quilt refresh $PATCH
 done
+echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied

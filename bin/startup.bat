@@ -1,5 +1,8 @@
 @echo off
 
+REM The default build config to start with
+SET BUILD_CONFIG_DEFAULT=browser-noncairo
+
 REM Set this to the vcvars script that comes with Visual C
 SET VCVARS="C:\Program Files\Microsoft Visual Studio 8\VC\vcvarsall.bat"
 

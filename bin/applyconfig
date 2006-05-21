@@ -42,10 +42,7 @@
 # $Revision$
 #
 
-VCREDIST=`echo $VCVARS | sed -e s/\"//g`
-VCREDIST=`cygpath "$VCREDIST"`
-VCREDIST=`dirname "$VCREDIST"`
-VCREDIST=$VCREDIST/redist
+VCREDIST=$(dirname "$(cygpath "$(echo $VCVARS | sed -e s/\"//g)")")/redist
 
 if [ -d $BUILD_BASE/tools/redist ]; then
   export BUILD_REDIST=$BUILD_BASE/tools/redist_std

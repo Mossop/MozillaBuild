@@ -64,21 +64,22 @@ if [ -f $BUILD_SOURCE/cvsco.log ]; then
   rm $BUILD_SOURCE/cvsco.log
 fi
 
-if [ ! -f mozilla/client.mk ]; then
-  cvs checkout -A mozilla/client.mk
+CLFLAGS="-A"
+if [ "$MOZ_CO_TAG" ]; then
+  FLAGS="$FLAGS \"MOZ_CO_TAG=$MOZ_CO_TAG\""
+  CLFLAGS="-r $MOZ_CO_TAG"
 fi
 
 FLAGS="MOZ_CO_PROJECT=$MOZ_CO_PROJECT"
 if [ "$MOZ_CO_DATE" ]; then
   FLAGS="$FLAGS \"MOZ_CO_DATE=$MOZ_CO_DATE\""
+  CFFLAGS="$CLFLAGS -d \"$MOZ_CO_DATE\""
   TIME=`date --date="$MOZ_CO_DATE" +%s`
 else
   TIME=`date +%s`
 fi
 
-if [ "$MOZ_CO_TAG" ]; then
-  FLAGS="$FLAGS \"MOZ_CO_TAG=$MOZ_CO_TAG\""
-fi
+cvs checkout $CLFLAGS mozilla/client.mk
 
 TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
 TIME=$(($TIME-$TIME_OFFSET))

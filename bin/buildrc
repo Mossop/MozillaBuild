@@ -48,7 +48,7 @@ function config() {
     export BUILD_CONFIG=$1
   else
     echo "Changing to default build environment."
-    export -n BUILD_CONFIG
+    export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
   fi
 }
 
@@ -100,6 +100,7 @@ fi
 
 cd $BUILD_BASE
 
+export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export GLIB_PREFIX=$MOZ_TOOLS
 export LIBIDL_PREFIX=$MOZ_TOOLS
 export MOZCONFIG=$BUILD_BASE/bin/.mozconfig
