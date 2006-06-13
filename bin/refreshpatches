@@ -50,6 +50,6 @@ cd $BUILD_SOURCE/mozilla
 cat $QUILT_PATCHES/series | while read PATCH TYPE
 do
   quilt push
-  quilt refresh $PATCH
+  quilt refresh -U 8 $PATCH
 done
 echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied

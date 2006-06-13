@@ -66,6 +66,19 @@ if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
   . $BUILD_BASE/config/$BUILD_CONFIG.config
 fi
 
+if [ -f $BUILD_BASE/config/aliases ]; then
+  exec 3<&0
+  exec 0<"$BUILD_BASE/config/aliases"
+  while read ALIAS APP
+  do
+    if [ "$BUILD_APP" == "$ALIAS" ]; then
+      BUILD_APP=$APP
+    fi
+  done
+  exec 0<&3
+  exec 3<&-
+fi
+
 if [ ! "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
 fi

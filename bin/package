@@ -49,7 +49,7 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-make -C $MOZ_OBJDIR/$BUILD_APP/installer
+make -C $MOZ_OBJDIR/xpinstall/packager
 
 if [ -f $MOZ_OBJDIR/codate ]; then
   . $MOZ_OBJDIR/codate
