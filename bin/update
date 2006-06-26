@@ -86,8 +86,8 @@ TIME=$(($TIME-$TIME_OFFSET))
 date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
 date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
 
-if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch ]; then
-  make -f mozilla/client.mk 2>&1 checkout $FLAGS | buildwatch
+if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
+  make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
 else
   make -f mozilla/client.mk 2>&1 checkout $FLAGS
 fi
