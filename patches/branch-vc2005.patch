@@ -1,0 +1,404 @@
+? build/win32
+Index: Makefile.in
+===================================================================
+RCS file: /cvsroot/mozilla/Makefile.in,v
+retrieving revision 1.299.2.16
+diff -u -8 -p -r1.299.2.16 Makefile.in
+--- Makefile.in	23 Jun 2006 22:48:01 -0000	1.299.2.16
++++ Makefile.in	4 Aug 2006 20:08:14 -0000
+@@ -570,16 +570,17 @@ ifdef MOZ_PROFILE
+ 	mkdir -p $(DIST)/$(BUILDID)
+ 	/bin/find $(DIST) -name "*.dbg" -exec mv {} $(DIST)/$(BUILDID) \;
+ endif # MOZ_PROFILE
+ endif # MOZILLA_OFFICIAL
+ 
+ signnss:
+ ifdef MOZILLA_OFFICIAL
+ 	echo signing NSS libs
++	test -f $(DEPTH)/nss/shlibsign.exe.manifest && cp $(DEPTH)/nss/shlibsign.exe.manifest $(DIST)/bin
+ 	cd $(DIST)/bin; ./shlibsign.exe -v -i softokn3.dll
+ 	cd $(DIST)/bin; ./shlibsign.exe -v -i freebl3.dll
+ endif # MOZILLA_OFFICIAL
+ 
+ BUILDID = $(shell cat $(DEPTH)/config/build_number)
+ deliver: splitsymbols rebase signnss
+ 
+ endif # WINNT
+Index: configure.in
+===================================================================
+RCS file: /cvsroot/mozilla/configure.in,v
+retrieving revision 1.1503.2.88
+diff -u -8 -p -r1.1503.2.88 configure.in
+--- configure.in	25 Jul 2006 20:10:51 -0000	1.1503.2.88
++++ configure.in	4 Aug 2006 20:08:24 -0000
+@@ -121,16 +121,18 @@ GTK2_VERSION=1.3.7
+ MAKE_VERSION=3.78
+ WINDRES_VERSION=2.14.90
+ W32API_VERSION=2.4
+ GNOMEVFS_VERSION=2.0
+ GNOMEUI_VERSION=2.2.0
+ GCONF_VERSION=1.2.1
+ LIBGNOME_VERSION=2.0
+ 
++MSMANIFEST_TOOL=
++
+ dnl Set various checks
+ dnl ========================================================
+ MISSING_X=
+ AC_PROG_AWK
+ 
+ dnl Initialize the Pthread test variables early so they can be
+ dnl  overridden by each platform.
+ dnl ========================================================
+@@ -418,16 +420,37 @@ case "$target" in
+             _CC_SUITE=6
+         elif test "$_CC_MAJOR_VERSION" = "13"; then
+             _CC_SUITE=7
+         elif test "$_CC_MAJOR_VERSION" = "14"; then
+             _CC_SUITE=8
+         else
+             AC_MSG_ERROR([This version of the MSVC compiler, $CC_VERSION , is unsupported.])
+         fi
++	
++        if test -n "$WIN32_REDIST_DIR"; then
++            WIN32_REDIST_DIR=`cd "$WIN32_REDIST_DIR" && pwd`
++            WIN32_REDIST_DIR_QUOTED=`cd "$WIN32_REDIST_DIR" && pwd | sed 's, ,\\ ,g'`
++        fi
++
++	# bug #249782
++	# ensure that mt.exe is Microsoft (R) Manifest Tool and not magnetic tape manipulation utility (or something else)
++	if test "$_CC_SUITE" -ge "8"; then
++		MSMT_TOOL=`mt 2>&1|grep 'Microsoft (R) Manifest Tool'`
++		if test -n "MSMT_TOOL"; then
++			MSMANIFEST_TOOL_VERSION=`echo ${MSMANIFEST_TOOL}|grep -Po "(^|\s)[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?(\s|$)"`
++			if test -z "MSMANIFEST_TOOL_VERSION"; then
++				AC_MSG_WARN([Unknown version of the Microsoft (R) Manifest Tool.])
++			fi
++			MSMANIFEST_TOOL=1
++			unset MSMT_TOOL
++		else
++			AC_MSG_ERROR([Microsoft (R) Manifest Tool must be in your \$PATH.])
++		fi
++	fi
+ 
+         # Check linker version
+         _LD_FULL_VERSION=`"${LD}" -v 2>&1 | sed -ne "$_MSVC_VER_FILTER"`
+         _LD_MAJOR_VERSION=`echo ${_LD_FULL_VERSION} | $AWK -F\. '{ print $1 }'`
+         if test "$_LD_MAJOR_VERSION" != "$_CC_SUITE"; then
+             AC_MSG_ERROR([The linker major version, $_LD_FULL_VERSION,  does not match the compiler suite version, $_CC_SUITE.])
+         fi
+         INCREMENTAL_LINKER=1
+@@ -7101,25 +7124,31 @@ AC_SUBST(MOZ_APP_DISPLAYNAME)
+ AC_SUBST(MOZ_APP_VERSION)
+ AC_SUBST(FIREFOX_VERSION)
+ AC_SUBST(THUNDERBIRD_VERSION)
+ AC_SUBST(SUNBIRD_VERSION)
+ AC_SUBST(SEAMONKEY_VERSION)
+ 
+ AC_SUBST(MOZ_PKG_SPECIAL)
+ 
++AC_SUBST(MOZILLA_OFFICIAL)
++AC_SUBST(BUILD_OFFICIAL)
++AC_SUBST(MOZ_MILESTONE_RELEASE)
++
+ dnl win32 options
+ AC_SUBST(MOZ_PROFILE)
+ AC_SUBST(MOZ_DEBUG_SYMBOLS)
+ AC_SUBST(MOZ_COVERAGE)
+ AC_SUBST(MOZ_MAPINFO)
+ AC_SUBST(MOZ_BROWSE_INFO)
+ AC_SUBST(MOZ_TOOLS_DIR)
+ AC_SUBST(CYGWIN_WRAPPER)
+ AC_SUBST(AS_PERL)
++AC_SUBST(WIN32_REDIST_DIR)
++AC_SUBST(WIN32_REDIST_DIR_QUOTED)
+ 
+ dnl Echo the CFLAGS to remove extra whitespace.
+ CFLAGS=`echo \
+ 	$_WARNINGS_CFLAGS \
+ 	$CFLAGS`
+ 
+ CXXFLAGS=`echo \
+ 	$_MOZ_RTTI_FLAGS \
+@@ -7217,16 +7246,17 @@ AC_DEFINE_UNQUOTED(MOZ_DLL_SUFFIX, "$DLL
+ AC_SUBST(LIB_SUFFIX)
+ AC_SUBST(OBJ_SUFFIX)
+ AC_SUBST(BIN_SUFFIX)
+ AC_SUBST(ASM_SUFFIX)
+ AC_SUBST(IMPORT_LIB_SUFFIX)
+ AC_SUBST(USE_N32)
+ AC_SUBST(CC_VERSION)
+ AC_SUBST(CXX_VERSION)
++AC_SUBST(MSMANIFEST_TOOL)
+ 
+ if test "$USING_HCC"; then
+    CC='${topsrcdir}/build/hcc'
+    CC="$CC '$_OLDCC'"
+    CXX='${topsrcdir}/build/hcpp'
+    CXX="$CXX '$_OLDCXX'"
+    AC_SUBST(CC)
+    AC_SUBST(CXX)
+Index: browser/installer/windows/packages-static
+===================================================================
+RCS file: /cvsroot/mozilla/browser/installer/windows/packages-static,v
+retrieving revision 1.53.2.30
+diff -u -8 -p -r1.53.2.30 packages-static
+--- browser/installer/windows/packages-static	6 Jul 2006 05:48:49 -0000	1.53.2.30
++++ browser/installer/windows/packages-static	4 Aug 2006 20:08:33 -0000
+@@ -33,16 +33,20 @@ bin\plc4.dll
+ bin\plds4.dll
+ bin\xpcom.dll
+ bin\xpcom_core.dll
+ bin\xpistub.dll
+ bin\nspr4.dll
+ bin\components\xpinstal.dll
+ bin\components\jar50.dll
+ bin\xpcom_compat.dll
++bin\Microsoft.VC80.CRT.manifest
++bin\msvcm80.dll
++bin\msvcp80.dll
++bin\msvcr80.dll
+ 
+ [browser]
+ ; [Base Browser Files]
+ bin\firefox.exe
+ bin\plugins\npnul32.dll
+ bin\res\cmessage.txt
+ bin\xpicleanup.exe
+ bin\LICENSE
+Index: build/Makefile.in
+===================================================================
+RCS file: /cvsroot/mozilla/build/Makefile.in,v
+retrieving revision 1.18
+diff -u -8 -p -r1.18 Makefile.in
+--- build/Makefile.in	22 Apr 2005 19:06:27 -0000	1.18
++++ build/Makefile.in	4 Aug 2006 20:08:35 -0000
+@@ -45,16 +45,20 @@ include $(DEPTH)/config/autoconf.mk
+ 
+ MODULE = build
+ PACKAGE_FILE = build.pkg
+ 
+ ifeq (,$(filter WINCE WINNT OS2,$(OS_ARCH)))
+ DIRS		= unix
+ endif
+ 
++ifeq (WINNT,$(OS_ARCH))
++DIRS = win32
++endif
++
+ include $(topsrcdir)/config/rules.mk
+ 
+ # Install bloaturls.txt file for tinderbox bloat test.
+ libs:: bloaturls.txt
+ 	$(INSTALL) $< $(DIST)/bin
+ 
+ # Install bloatcycle.html into dist/bin/res, for auto-cycling
+ # of bloaturls.txt.  This is for browsers that can't do -f
+Index: config/Makefile.in
+===================================================================
+RCS file: /cvsroot/mozilla/config/Makefile.in,v
+retrieving revision 3.113.2.2
+diff -u -8 -p -r3.113.2.2 Makefile.in
+--- config/Makefile.in	18 Feb 2006 21:25:32 -0000	3.113.2.2
++++ config/Makefile.in	4 Aug 2006 20:08:38 -0000
+@@ -148,33 +148,33 @@ install::
+ 		exit 1; \
+ 	fi;
+ 	$(SYSINSTALL) $(IFLAGS1) nsBuildID.h $(DESTDIR)$(includedir)
+ 	$(SYSINSTALL) $(IFLAGS1) $(DEPTH)/mozilla-config.h $(DESTDIR)$(includedir)
+ 
+ GARBAGE += build_number nsBuildID \
+ 	$(FINAL_LINK_COMPS) $(FINAL_LINK_LIBS) $(FINAL_LINK_COMP_NAMES)
+ 
+-ifneq ($(origin BUILD_OFFICIAL)_$(origin MOZILLA_OFFICIAL),undefined_undefined)
++ifneq (,$(BUILD_OFFICIAL)$(MOZILLA_OFFICIAL))
+ _BN_OFFICIAL=1
+ else
+ _BN_OFFICIAL=
+ endif
+ 
+ ifdef MOZ_ENABLE_GTK2
+   GLIB_CFLAGS = $(MOZ_GTK2_CFLAGS)
+   GLIB_LIBS = $(MOZ_GTK2_LIBS)
+ endif
+ 
+ build_number: FORCE
+ 	$(PERL) -I$(srcdir) $(srcdir)/bdate.pl $@ $(_BN_OFFICIAL)
+ 
+ nsBuildID.h: nsBuildID.h.in build_number $(srcdir)/milestone.txt Makefile
+ 	$(RM) $@
+-	$(PERL) -I$(srcdir) $(srcdir)/aboutime.pl -m $(srcdir)/milestone.txt $@ build_number $(srcdir)/nsBuildID.h.in
++	MOZ_MILESTONE_RELEASE=$(MOZ_MILESTONE_RELEASE) $(PERL) -I$(srcdir) $(srcdir)/aboutime.pl -m $(srcdir)/milestone.txt $@ build_number $(srcdir)/nsBuildID.h.in
+ 
+ ifndef CROSS_COMPILE
+ ifdef USE_ELF_DYNSTR_GC
+ elf-dynstr-gc: elf-dynstr-gc.c Makefile Makefile.in
+ 	$(CC) $(COMPILE_CFLAGS) $(GLIB_CFLAGS) -o $@ $< $(LDFLAGS) $(GLIB_LIBS) 
+ 
+ export:: elf-dynstr-gc
+ 	$(INSTALL) -m 555 elf-dynstr-gc $(DIST)/bin
+Index: config/autoconf.mk.in
+===================================================================
+RCS file: /cvsroot/mozilla/config/autoconf.mk.in,v
+retrieving revision 3.363.2.19
+diff -u -8 -p -r3.363.2.19 autoconf.mk.in
+--- config/autoconf.mk.in	25 Jul 2006 20:11:12 -0000	3.363.2.19
++++ config/autoconf.mk.in	4 Aug 2006 20:08:39 -0000
+@@ -531,23 +531,29 @@ MOZ_PSM=@MOZ_PSM@
+ 
+ # Gssapi (krb5) libraries and headers for the Negotiate auth method
+ GSSAPI_INCLUDES = @GSSAPI_INCLUDES@
+ USE_GSSAPI	= @USE_GSSAPI@
+ 
+ # for Qt build
+ MOC=@MOC@
+ 
++MOZILLA_OFFICIAL = @MOZILLA_OFFICIAL@
++BUILD_OFFICIAL = @BUILD_OFFICIAL@
++MOZ_MILESTONE_RELEASE = @MOZ_MILESTONE_RELEASE@
++
+ # Win32 options
+ MOZ_PROFILE	= @MOZ_PROFILE@
+ MOZ_COVERAGE	= @MOZ_COVERAGE@
+ MOZ_BROWSE_INFO	= @MOZ_BROWSE_INFO@
+ MOZ_TOOLS_DIR	= @MOZ_TOOLS_DIR@
+ MOZ_DEBUG_SYMBOLS = @MOZ_DEBUG_SYMBOLS@
+ MOZ_QUANTIFY	= @MOZ_QUANTIFY@
++MSMANIFEST_TOOL = @MSMANIFEST_TOOL@
++WIN32_REDIST_DIR = @WIN32_REDIST_DIR@
+ 
+ #python options
+ PYTHON = @MOZ_PYTHON@
+ PYTHON_PREFIX = @MOZ_PYTHON_PREFIX@
+ PYTHON_INCLUDES = @MOZ_PYTHON_INCLUDES@
+ PYTHON_LIBS = @MOZ_PYTHON_LIBS@
+ PYTHON_DEBUG_SUFFIX = @MOZ_PYTHON_DEBUG_SUFFIX@
+ PYTHON_DLL_SUFFIX = @MOZ_PYTHON_DLL_SUFFIX@
+Index: config/mozBDate.pm
+===================================================================
+RCS file: /cvsroot/mozilla/config/mozBDate.pm,v
+retrieving revision 1.7
+diff -u -8 -p -r1.7 mozBDate.pm
+--- config/mozBDate.pm	14 Dec 2004 22:39:26 -0000	1.7
++++ config/mozBDate.pm	4 Aug 2006 20:08:39 -0000
+@@ -136,17 +136,18 @@ sub SubstituteBuildNumber($$$) {
+             print $OUTFILE $id;
+         }
+         elsif ($id =~ "NS_BUILD_ID") {
+             $temp = "NS_BUILD_ID " . $build;
+             $id =~ s/NS_BUILD_ID\s\d+/$temp/;
+             print $OUTFILE $id;
+         }
+         elsif ($id =~ "GRE_BUILD_ID") {
+-            if (defined($ENV{'MOZ_MILESTONE_RELEASE'})) {
++            if (defined($ENV{'MOZ_MILESTONE_RELEASE'}) &&
++                $ENV{'MOZ_MILESTONE_RELEASE'} ne "") {
+                 $temp = "GRE_BUILD_ID \"$milestone\"";
+             } else {
+                 $temp = "GRE_BUILD_ID \"${milestone}_${build}\"";
+             }
+             $id =~ s/GRE_BUILD_ID\s\"\d+\"/$temp/;
+             print $OUTFILE $id;
+         }
+         else {
+Index: config/rules.mk
+===================================================================
+RCS file: /cvsroot/mozilla/config/rules.mk,v
+retrieving revision 3.487.2.5
+diff -u -8 -p -r3.487.2.5 rules.mk
+--- config/rules.mk	7 Jul 2006 04:13:36 -0000	3.487.2.5
++++ config/rules.mk	4 Aug 2006 20:08:42 -0000
+@@ -797,16 +797,22 @@ ifeq (WINCE,$(OS_ARCH))
+ 	$(LD) -NOLOGO -OUT:$@ $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(PROGOBJS) $(RESFILE) $(LIBS) $(EXTRA_LIBS) $(OS_LIBS)
+ else
+ ifeq ($(MOZ_OS2_TOOLS),VACPP)
+ 	$(LD) -OUT:$@ $(LDFLAGS) $(PROGOBJS) $(LIBS) $(EXTRA_LIBS) $(OS_LIBS) $(EXE_DEF_FILE) -ST:0x100000
+ else
+ 
+ ifeq (_WINNT,$(GNU_CC)_$(OS_ARCH))
+ 	$(LD) -NOLOGO -OUT:$@ -PDB:$(PDBFILE) $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(PROGOBJS) $(RESFILE) $(LIBS) $(EXTRA_LIBS) $(OS_LIBS)
++ifdef MSMANIFEST_TOOL
++	@if test -f $@.manifest; then \
++		mt.exe -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
++		rm -f $@.manifest; \
++	fi
++endif	# MSVC with manifest tool
+ else
+ ifeq ($(CPP_PROG_LINK),1)
+ 	$(CCC) -o $@ $(CXXFLAGS) $(WRAP_MALLOC_CFLAGS) $(PROGOBJS) $(RESFILE) $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS_DIR) $(LIBS) $(OS_LIBS) $(EXTRA_LIBS) $(BIN_FLAGS) $(WRAP_MALLOC_LIB) $(PROFILER_LIBS) $(EXE_DEF_FILE)
+ else # ! CPP_PROG_LINK
+ 	$(CC) -o $@ $(CFLAGS) $(PROGOBJS) $(RESFILE) $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS_DIR) $(LIBS) $(OS_LIBS) $(EXTRA_LIBS) $(BIN_FLAGS) $(EXE_DEF_FILE)
+ endif # CPP_PROG_LINK
+ endif # WINNT && !GNU_CC
+ endif # OS2
+@@ -829,16 +835,22 @@ $(HOST_PROGRAM): $(HOST_PROGOBJS) $(HOST
+ ifeq ($(MOZ_OS2_TOOLS),VACPP)
+ 	$(LD) -OUT:$@ $(LDFLAGS) $(HOST_OBJS) $(HOST_LIBS) $(HOST_EXTRA_LIBS) -ST:0x100000
+ else
+ ifeq (WINCE,$(OS_ARCH))
+ 	$(HOST_LD) -NOLOGO -OUT:$@ $(HOST_OBJS) $(WIN32_EXE_LDFLAGS) $(HOST_LIBS) $(HOST_EXTRA_LIBS)
+ else
+ ifeq (_WINNT,$(GNU_CC)_$(HOST_OS_ARCH))
+ 	$(HOST_LD) -NOLOGO -OUT:$@ -PDB:$(PDBFILE) $(HOST_OBJS) $(WIN32_EXE_LDFLAGS) $(HOST_LIBS) $(HOST_EXTRA_LIBS)
++ifdef MSMANIFEST_TOOL
++	@if test -f $@.manifest; then \
++		mt.exe -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
++		rm -f $@.manifest; \
++	fi
++endif	# MSVC with manifest tool
+ else
+ 	$(HOST_CC) -o $@ $(HOST_CFLAGS) $(HOST_LDFLAGS) $(HOST_PROGOBJS) $(HOST_LIBS) $(HOST_EXTRA_LIBS)
+ endif
+ endif
+ endif
+ 
+ #
+ # This is an attempt to support generation of multiple binaries
+@@ -852,16 +864,22 @@ $(SIMPLE_PROGRAMS): %$(BIN_SUFFIX): %.$(
+ ifeq (WINCE,$(OS_ARCH))
+ 	$(LD) -nologo  -entry:main -out:$@ $< $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS) $(EXTRA_LIBS) $(OS_LIBS)
+ else
+ ifeq ($(MOZ_OS2_TOOLS),VACPP)
+ 	$(LD) -Out:$@ $< $(LDFLAGS) $(LIBS) $(OS_LIBS) $(EXTRA_LIBS) $(WRAP_MALLOC_LIB) $(PROFILER_LIBS)
+ else
+ ifeq (_WINNT,$(GNU_CC)_$(OS_ARCH))
+ 	$(LD) -nologo -out:$@ -pdb:$(PDBFILE) $< $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS) $(EXTRA_LIBS) $(OS_LIBS)
++ifdef MSMANIFEST_TOOL
++	@if test -f $@.manifest; then \
++		mt.exe -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;1; \
++		rm -f $@.manifest; \
++	fi
++endif	# MSVC with manifest tool
+ else
+ ifeq ($(CPP_PROG_LINK),1)
+ 	$(CCC) $(WRAP_MALLOC_CFLAGS) $(CXXFLAGS) -o $@ $< $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS_DIR) $(LIBS) $(OS_LIBS) $(EXTRA_LIBS) $(WRAP_MALLOC_LIB) $(PROFILER_LIBS) $(BIN_FLAGS)
+ else
+ 	$(CC) $(WRAP_MALLOC_CFLAGS) $(CFLAGS) $(OUTOPTION)$@ $< $(WIN32_EXE_LDFLAGS) $(LDFLAGS) $(LIBS_DIR) $(LIBS) $(OS_LIBS) $(EXTRA_LIBS) $(WRAP_MALLOC_LIB) $(PROFILER_LIBS) $(BIN_FLAGS)
+ endif # CPP_PROG_LINK
+ endif # WINNT && !GNU_CC
+ endif # OS/2 VACPP
+@@ -1005,16 +1023,24 @@ endif
+ endif
+ ifdef NO_LD_ARCHIVE_FLAGS
+ ifdef SHARED_LIBRARY_LIBS
+ 	@rm -f $(SUB_SHLOBJS)
+ 	@for lib in $(SHARED_LIBRARY_LIBS); do $(AR_EXTRACT) $${lib}; $(CLEANUP2); done
+ endif # SHARED_LIBRARY_LIBS
+ endif # NO_LD_ARCHIVE_FLAGS
+ 	$(MKSHLIB) $(SHLIB_LDSTARTFILE) $(OBJS) $(LOBJS) $(SUB_SHLOBJS) $(RESFILE) $(LDFLAGS) $(EXTRA_DSO_LDOPTS) $(OS_LIBS) $(EXTRA_LIBS) $(DEF_FILE) $(SHLIB_LDENDFILE)
++ifeq (_WINNT,$(GNU_CC)_$(OS_ARCH))
++ifdef MSMANIFEST_TOOL
++	@if test -f $@.manifest; then \
++		mt.exe -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;2; \
++		rm -f $@.manifest; \
++	fi
++endif	# MSVC with manifest tool
++endif	# WINNT && !GCC
+ 	@rm -f foodummyfilefoo $(SUB_SHLOBJS) $(DELETE_AFTER_LINK)
+ else # os2 vacpp
+ 	$(MKSHLIB) -O:$@ -DLL -INC:_dllentry $(LDFLAGS) $(OBJS) $(LOBJS) $(EXTRA_DSO_LDOPTS) $(OS_LIBS) $(EXTRA_LIBS) $(DEF_FILE)
+ endif # !os2 vacpp
+ 	chmod +x $@
+ ifndef NO_COMPONENT_LINK_MAP
+ ifndef MOZ_COMPONENTS_VERSION_SCRIPT_LDFLAGS
+ ifndef MOZ_DEBUG
