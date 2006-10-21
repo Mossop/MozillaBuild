@@ -43,18 +43,20 @@
 # $Revision$
 #
 
-if [ -f $BUILD_BASE/patches/.applied ]; then
-  OLDCONFIG=`cat $BUILD_BASE/patches/.applied`
-
-  if [ "$BUILD_CONFIG" != "$OLDCONFIG" ]; then
-    revertpatches
+if [ -f /bin/quilt ]; then
+  if [ -f $BUILD_BASE/patches/.applied ]; then
+    OLDCONFIG=`cat $BUILD_BASE/patches/.applied`
+  
+    if [ "$BUILD_CONFIG" != "$OLDCONFIG" ]; then
+      revertpatches
+    fi
   fi
-fi
-
-. $BUILD_BASE/bin/applyconfig
-
-if [ -d $BUILD_SOURCE/mozilla ] && [ -d $QUILT_PATCHES ]; then
-  cd $BUILD_SOURCE/mozilla
-  quilt push -a
-  echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied
+  
+  . $BUILD_BASE/bin/applyconfig
+  
+  if [ -d $BUILD_SOURCE/mozilla ] && [ -d $QUILT_PATCHES ]; then
+    cd $BUILD_SOURCE/mozilla
+    quilt push -a
+    echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied
+  fi
 fi

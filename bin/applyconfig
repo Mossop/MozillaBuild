@@ -42,7 +42,11 @@
 # $Revision$
 #
 
-VCREDIST=$(dirname "$(cygpath "$(echo $VCVARS | sed -e s/\"//g)")")/redist
+if [ "$OSTYPE" == "cygwin" ]; then
+  VCREDIST=$(cygpath "$VCINSTALLDIR")/redist
+elif [ "$OSTYPE" == "msys" ]; then
+  VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
+fi
 
 if [ -d $BUILD_BASE/tools/redist ]; then
   export BUILD_REDIST=$BUILD_BASE/tools/redist_std

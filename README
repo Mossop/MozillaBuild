@@ -1,0 +1,19 @@
+MSYS Requirements
+
+Install MSYS
+Install msysDTK
+Install bash for MSYS
+Install date from coreutils for MSYS
+Install zip and unzip to tools/zip
+
+Cygwin Requirements
+
+Install basic cygwin plus:
+  patchutils
+  make (3.80 required)
+  perl
+  zip
+  unzip
+  cvs
+  
+Install quilt for patch management functions

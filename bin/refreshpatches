@@ -43,13 +43,15 @@
 # $Revision: 576 $
 #
 
-revertpatches
-
-. $BUILD_BASE/bin/applyconfig
-cd $BUILD_SOURCE/mozilla
-cat $QUILT_PATCHES/series | while read PATCH TYPE
-do
-  quilt push
-  quilt refresh -U 8 $PATCH
-done
-echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied
+if [ -f /bin/quilt ]; then
+  revertpatches
+  
+  . $BUILD_BASE/bin/applyconfig
+  cd $BUILD_SOURCE/mozilla
+  cat $QUILT_PATCHES/series | while read PATCH TYPE
+  do
+    quilt push
+    quilt refresh -U 8 $PATCH
+  done
+  echo $BUILD_CONFIG >$BUILD_BASE/patches/.applied
+fi

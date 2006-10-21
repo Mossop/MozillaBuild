@@ -43,18 +43,20 @@
 # $Revision: 576 $
 #
 
-if [ -f $BUILD_BASE/patches/.applied ]; then
-  OLDCONFIG=`cat $BUILD_BASE/patches/.applied`
-
-  if [ "$BUILD_CONFIG" == "$OLDCONFIG" ]; then
-    revertpatches
+if [ -f /bin/quilt ]; then
+  if [ -f $BUILD_BASE/patches/.applied ]; then
+    OLDCONFIG=`cat $BUILD_BASE/patches/.applied`
+  
+    if [ "$BUILD_CONFIG" == "$OLDCONFIG" ]; then
+      revertpatches
+    fi
   fi
-fi
-
-. $BUILD_BASE/bin/applyconfig
-
-if [ -f $BUILD_BASE/patches/$BUILD_CONFIG/$1 ]; then
-  quilt delete $1
-else
-  echo "Usage: addpatch <patchfile>"
+  
+  . $BUILD_BASE/bin/applyconfig
+  
+  if [ -f $BUILD_BASE/patches/$BUILD_CONFIG/$1 ]; then
+    quilt delete $1
+  else
+    echo "Usage: removepatch <patchfile>"
+  fi
 fi

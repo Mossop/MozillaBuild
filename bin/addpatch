@@ -43,9 +43,11 @@
 # $Revision: 576 $
 #
 
-if [ -f $1 ]; then
-  . $BUILD_BASE/bin/applyconfig
-  quilt import -p0 $1
-else
-  echo "Usage: addpatch <patchfile>"
+if [ -f /bin/quilt ]; then
+  if [ -f $1 ]; then
+    . $BUILD_BASE/bin/applyconfig
+    quilt import -p0 $1
+  else
+    echo "Usage: addpatch <patchfile>"
+  fi
 fi

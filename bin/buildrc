@@ -52,27 +52,15 @@ function config() {
   fi
 }
 
-# Here we build the path. The current path should only contain the VC stuff
-VCPATH=$PATH
-
-PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin
-
-export BUILD_BASE=`echo $HOME | sed -e s/\\\\/$//g`
-
+OLDPATH=$PATH
 if [ -f /etc/profile ]; then
   . /etc/profile
 fi
+PATH=$OLDPATH
+
+export BUILD_BASE=`echo $HOME | sed -e s/\\\\/$//g`
 
 export MOZ_TOOLS=$BUILD_BASE/tools/moztools
-# The full path should have VC first, then cygwin
-export PATH=$VCPATH:$MOZ_TOOLS/bin:$BUILD_BASE/bin:$PATH
-unset VCPATH
-
-# BASEPATH should contain Window's standard path. This must go at the very end of the path.
-if [ "$BASEPATH" ]; then
-  BASEPATH=`cygpath -p "$BASEPATH"`
-  PATH=$PATH:$BASEPATH
-fi
 
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then
