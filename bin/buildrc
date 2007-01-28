@@ -52,6 +52,15 @@ function config() {
   fi
 }
 
+if [ "$OSTYPE" == "linux" ]; then
+  BUILD_PLATFORM=linux
+elif [ "$OSTYPE" == "darwin8.0" ]; then
+  BUILD_PLATFORM=mac
+else
+  BUILD_PLATFORM=win
+fi
+export BUILD_PLATFORM
+
 OLDPATH=$PATH
 if [ -f /etc/profile ]; then
   . /etc/profile
@@ -59,8 +68,6 @@ fi
 PATH=$OLDPATH
 
 export BUILD_BASE=`echo $HOME | sed -e s/\\\\/$//g`
-
-export MOZ_TOOLS=$BUILD_BASE/tools/moztools
 
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then
@@ -73,24 +80,28 @@ if [ ! -f .cvspass ]; then
   cvs login 2>/dev/null
 fi
 
-if [ ! -d $BUILD_BASE/tools ]; then
-  mkdir $BUILD_BASE/tools
-fi
+if [ "$BUILD_PLATFORM" == "win" ]; then
+  export MOZ_TOOLS=$BUILD_BASE/tools/moztools
 
-if [ ! -d $MOZ_TOOLS ]; then
-  cd $MOZ_TOOLS/..
-  echo -e "\nDownloading Mozilla Tools..."
-  wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
-  echo "Extracting Mozilla Tools..."
-  unzip moztools-static.zip >/dev/null
-  rm -f moztools-static.zip
+  if [ ! -d $BUILD_BASE/tools ]; then
+    mkdir $BUILD_BASE/tools
+  fi
+
+  if [ ! -d $MOZ_TOOLS ]; then
+    cd $BUILD_BASE/tools
+    echo -e "\nDownloading Mozilla Tools..."
+    wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
+    echo "Extracting Mozilla Tools..."
+    unzip moztools-static.zip >/dev/null
+    rm -f moztools-static.zip
+  fi
+  export GLIB_PREFIX=$MOZ_TOOLS
+  export LIBIDL_PREFIX=$MOZ_TOOLS
 fi
 
 cd $BUILD_BASE
 
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
-export GLIB_PREFIX=$MOZ_TOOLS
-export LIBIDL_PREFIX=$MOZ_TOOLS
 export MOZCONFIG=$BUILD_BASE/bin/.mozconfig
 export -f config
 

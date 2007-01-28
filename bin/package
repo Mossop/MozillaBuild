@@ -68,9 +68,18 @@ fi
 for FILE in $MOZ_OBJDIR/dist/*.en-US.win32.zip
 do
   if [ -f $FILE ]; then
-    #TARGET="$(echo $(echo $FILE | sed s/\.en-US\.win32\.zip\$//) | sed s/.*\\\///).$BUILD_CONFIG"
     TARGET="$BUILD_CONFIG"
     cp -f $FILE $BUILD_BASE/packages/$TARGET.zip
     cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.zip
   fi
 done
+
+for FILE in $MOZ_OBJDIR/dist/*.en-US.mac.dmg
+do
+  if [ -f $FILE ]; then
+    TARGET="$BUILD_CONFIG"
+    cp -f $FILE $BUILD_BASE/packages/$TARGET.dmg
+    cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.dmg
+  fi
+done
+

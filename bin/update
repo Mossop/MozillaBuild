@@ -81,10 +81,18 @@ fi
 
 cvs checkout $CLFLAGS mozilla/client.mk
 
-TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
-TIME=$(($TIME-$TIME_OFFSET))
-date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
-date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
+if [ "$BUILD_PLATFORM" == "mac" ]; then
+  CURRENTTZ=$TZ
+  export TZ="US/Pacific"
+  date -r $TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
+  date -r $TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
+  export TZ=$CURRENTTZ
+else
+  TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
+  TIME=$(($TIME-$TIME_OFFSET))
+  date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
+  date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
+fi
 
 if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
   make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
