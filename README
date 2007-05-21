@@ -1,9 +1,13 @@
 MSYS Requirements
 
+http://www.mingw.org/download.shtml
 Install MSYS
 Install msysDTK
 Install bash for MSYS
+Install wget for MSYS ??
 Install date from coreutils for MSYS
+
+http://www.info-zip.org/
 Install zip and unzip to tools/zip
 
 Cygwin Requirements
