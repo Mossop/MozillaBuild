@@ -4,4 +4,4 @@
 . $CONFIG/includes/nonstatic.mozconfig
 . $CONFIG/includes/firefox.mozconfig
 
-ac_add_options --enable-extensions=default,zipwriter
+ac_add_options --enable-extensions=default

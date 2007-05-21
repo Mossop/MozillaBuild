@@ -1,0 +1,2 @@
+ac_add_options --enable-tests
+ac_add_options --disable-debug

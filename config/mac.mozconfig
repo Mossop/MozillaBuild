@@ -1,0 +1,3 @@
+#. $topsrcdir/build/macosx/universal/mozconfig
+mk_add_options MOZ_MAKE_FLAGS="-j4 -w"
+#ac_add_app_options ppc --enable-prebinding

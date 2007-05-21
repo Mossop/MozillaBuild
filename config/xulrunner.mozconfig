@@ -1,12 +1,17 @@
 . $CONFIG/includes/buildid.mozconfig
 . $CONFIG/includes/nondebug.mozconfig
 
-. $CONFIG/includes/nonstatic.mozconfig
+. $CONFIG/includes/static.mozconfig
 . $CONFIG/includes/xulrunner.mozconfig
 
 ac_add_options --enable-optimize
 
-JAVA_PATH=`cygpath $JAVA_HOME`
+if [ "$OSTYPE" == "cygwin" ]; then
+  JAVA_PATH=`cygpath $JAVA_HOME`
+else
+  JAVA_PATH=$JAVA_HOME
+fi
+
 if [ -d $JAVA_PATH/include ]; then
   ac_add_options --with-java-include-path=$JAVA_PATH/include
   ac_add_options --with-java-bin-path=$JAVA_PATH/bin
@@ -14,4 +19,4 @@ else
   ac_add_options --disable-javaxpcom
 fi
 
-ac_add_options --enable-extensions=default,spellcheck
+ac_add_options --enable-extensions=default

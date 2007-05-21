@@ -62,8 +62,8 @@ fi
 
 WIN32_REDIST_DIR="\"$BUILD_REDIST\""
 
-if [ -f $BUILD_BASE/config/.config ]; then
-  . $BUILD_BASE/config/.config
+if [ -f $BUILD_BASE/config/config ]; then
+  . $BUILD_BASE/config/config
 fi
 
 if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then

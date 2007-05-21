@@ -101,8 +101,10 @@ fi
 
 cd $BUILD_BASE
 
+export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
+export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
-export MOZCONFIG=$BUILD_BASE/bin/.mozconfig
+export MOZCONFIG=$BUILD_BASE/bin/mozconfig
 export -f config
 
 echo -e "\nUse \"update\" to update the source tree and \"build\" to build it."

@@ -4,4 +4,4 @@ BUILD_APP=`echo $BUILD_CONFIG | sed -e s/-.*//`    # By default strip the end of
 #MOZ_CO_TAG=MOZILLA_1_8_BRANCH                      # Selects a branch to checkout
 #MOZ_CO_DATE="2006-02-24 21:30"                     # Checkout from a specific time
 
-#BUILD_WATCH=1                                      # Use buildwatch to make the build output look nice
+BUILD_WATCH=1                                      # Use buildwatch to make the build output look nice

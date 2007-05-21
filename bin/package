@@ -49,7 +49,12 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-make -C $MOZ_OBJDIR/xpinstall/packager
+if [ -d $MOZ_OBJDIR/ppc ]; then
+  MOZ_OBJDIR=$MOZ_OBJDIR/ppc
+fi
+
+#make -C $MOZ_OBJDIR/xpinstall/packager
+make -C $MOZ_OBJDIR/$BUILD_APP/installer
 
 if [ -f $MOZ_OBJDIR/codate ]; then
   . $MOZ_OBJDIR/codate
@@ -82,4 +87,3 @@ do
     cp -f $FILE $BUILD_BASE/packages/$BUILD_CONFIG/$TARGET.$BUILD_CO_DATE.dmg
   fi
 done
-

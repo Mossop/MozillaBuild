@@ -63,7 +63,7 @@ if [ -d $BUILD_SOURCE ]; then
   fi
   cp -f $BUILD_SOURCE/codate $MOZ_OBJDIR
 
-  cd $BUILD_SOURCE
+  cd $BUILD_SOURCE/mozilla
 	
   if [ ! -d $BUILD_BASE/logs ]; then
     mkdir $BUILD_BASE/logs
@@ -72,9 +72,9 @@ if [ -d $BUILD_SOURCE ]; then
   LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 
   if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
-    make -f mozilla/client.mk 2>&1 build | tee $LOGNAME | $BUILD_BASE/bin/buildwatch/buildwatch
+    make -f client.mk 2>&1 build | tee $LOGNAME | $BUILD_BASE/bin/buildwatch/buildwatch
   else
-    make -f mozilla/client.mk 2>&1 build | tee $LOGNAME
+    make -f client.mk 2>&1 build | tee $LOGNAME
   fi
 
 else

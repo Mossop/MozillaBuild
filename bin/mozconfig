@@ -52,12 +52,12 @@ if [ -f $topsrcdir/$BUILD_APP/config/mozconfig ]; then
   . $topsrcdir/$BUILD_APP/config/mozconfig
 fi
 
-if [ -f $CONFIG/.mozconfig ]; then
-  . $CONFIG/.mozconfig
+if [ -f $CONFIG/mozconfig ]; then
+  . $CONFIG/mozconfig
 fi
 
 if [ -f $CONFIG/$BUILD_PLATFORM.mozconfig ]; then
-  . $CONFIG/$BUILD_CONFIG.mozconfig
+  . $CONFIG/$BUILD_PLATFORM.mozconfig
 fi
 
 if [ -f $CONFIG/$BUILD_CONFIG.mozconfig ]; then
