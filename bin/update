@@ -43,27 +43,25 @@
 # $Revision$
 #
 
-revertpatches
-
 if [ "$1" ]; then
   config $1
 fi
 
 . $BUILD_BASE/bin/applyconfig
 
-if [ ! -d $BUILD_BASE/source ]; then
-  mkdir $BUILD_BASE/source
+if [ ! -d $BUILD_BASE/clean ]; then
+  mkdir $BUILD_BASE/clean
 fi
 
-if [ ! -d $BUILD_SOURCE ]; then
-  mkdir $BUILD_SOURCE
+if [ ! -d $BUILD_CLEAN ]; then
+  mkdir $BUILD_CLEAN
 fi
 
-cd $BUILD_SOURCE
-if [ -f $BUILD_SOURCE/cvsco.log ]; then
-  rm $BUILD_SOURCE/cvsco.log
+if [ -f $BUILD_CLEAN/cvsco.log ]; then
+  rm $BUILD_CLEAN/cvsco.log
 fi
 
+cd $BUILD_CLEAN
 CLFLAGS="-A"
 if [ "$MOZ_CO_TAG" ]; then
   FLAGS="$FLAGS \"MOZ_CO_TAG=$MOZ_CO_TAG\""
@@ -84,8 +82,8 @@ cvs checkout $CLFLAGS mozilla/client.mk
 if [ "$BUILD_PLATFORM" == "mac" ]; then
   CURRENTTZ=$TZ
   export TZ="US/Pacific"
-  date -r $TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
-  date -r $TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
+  date -r $TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_CLEAN/codate
+  date -r $TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_CLEAN/codate
   export TZ=$CURRENTTZ
   
   if [ ! -f mozilla/build/macosx/universal/mozconfig ]; then
@@ -94,12 +92,41 @@ if [ "$BUILD_PLATFORM" == "mac" ]; then
 else
   TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
   TIME=$(($TIME-$TIME_OFFSET))
-  date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
-  date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_SOURCE/codate
+  date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_CLEAN/codate
+  date --date=@$TIME +BUILD_CO_DATE=%Y%m%d.%H%M >>$BUILD_CLEAN/codate
 fi
+
+. $BUILD_CLEAN/codate
 
 if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
   make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
 else
   make -f mozilla/client.mk 2>&1 checkout $FLAGS
+fi
+
+if [ ! -f $BUILD_CLEAN/.hgignore ]; then
+  cp $BUILD_BASE/config/hgignore $BUILD_CLEAN/.hgignore
+fi
+
+if [ ! -d $BUILD_CLEAN/.git ]; then
+  git-init
+  git-config core.excludes ~/config/rcsignore
+fi
+
+git-add .
+git-commit -a -m "CVS pull from $BUILD_CO_DATE"
+
+if [ ! -d $BUILD_BASE/source ]; then
+  mkdir $BUILD_BASE/source
+fi
+
+if [ ! -d $BUILD_SOURCE ]; then
+  cd $BUILD_BASE/source
+  git-clone -l $BUILD_CLEAN
+  cd $BUILD_SOURCE
+  stg init
+else
+  cd $BUILD_SOURCE
+  stg pull
+  stg clean
 fi

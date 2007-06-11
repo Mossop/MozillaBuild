@@ -43,8 +43,6 @@
 # $Revision: 686 $
 #
 
-revertpatches
-
 if [ "$1" ]; then
   config $1
 fi

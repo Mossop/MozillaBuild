@@ -47,8 +47,6 @@ if [ "$1" ]; then
   config $1
 fi
 
-applypatches
-
 . $BUILD_BASE/bin/applyconfig
 
 if [ -d $BUILD_SOURCE ]; then

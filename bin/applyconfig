@@ -87,6 +87,14 @@ if [ ! "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
 fi
 
+if [ ! "$BUILD_CLEAN" ]; then
+  if [ "$MOZ_CO_TAG" ]; then
+    BUILD_CLEAN=$BUILD_BASE/clean/$MOZ_CO_TAG
+  else
+    BUILD_CLEAN=$BUILD_BASE/clean/HEAD
+  fi
+fi
+
 if [ ! "$BUILD_SOURCE" ]; then
   if [ "$MOZ_CO_TAG" ]; then
     BUILD_SOURCE=$BUILD_BASE/source/$MOZ_CO_TAG
@@ -95,9 +103,9 @@ if [ ! "$BUILD_SOURCE" ]; then
   fi
 fi
 
-export QUILT_PATCHES=$BUILD_BASE/patches/$BUILD_CONFIG
 export WIN32_REDIST_DIR
 export MOZ_OBJDIR
+export BUILD_CLEAN
 export BUILD_SOURCE
 export BUILD_WATCH
 export BUILD_APP
