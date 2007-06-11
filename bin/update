@@ -104,10 +104,6 @@ else
   make -f mozilla/client.mk 2>&1 checkout $FLAGS
 fi
 
-if [ ! -f $BUILD_CLEAN/.hgignore ]; then
-  cp $BUILD_BASE/config/hgignore $BUILD_CLEAN/.hgignore
-fi
-
 if [ ! -d $BUILD_CLEAN/.git ]; then
   git-init
   git-config core.excludes ~/config/rcsignore
