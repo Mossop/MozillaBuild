@@ -23,8 +23,7 @@ def getCVSRoot (repo):
 #    return os.path.join(repo, "mozilla")
 # My weird and wonderful build environment!
     (source, branch) = os.path.split(repo)
-    (root, temp) = os.path.split(source)
-    return os.path.join(root, "clean", branch, "mozilla")
+    return os.path.join(os.path.dirname(source), "clean", branch, "mozilla")
 
 # this function processes one "file" within the patch
 def readFile (input, line):
@@ -59,7 +58,7 @@ def readFile (input, line):
         # find the old CVS revision
         (oldrev, olddate) = getCVSRev(filepath[1:])
         if oldrev is not None:
-            (dir, leafname) = os.path.split(filepath)
+            leafname = os.path.basename(filepath)
             print "retrieving revision %s" % oldrev     # repository revision line
             print "diff %s -p -r%s %s" % (os.environ["GIT_DIFF_OPTS"], oldrev, leafname)
             print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
@@ -159,7 +158,7 @@ def main ():
         repo = os.getcwd()
         repotest = os.path.join(repo, ".git")
         while not os.path.exists(repotest):
-            (repo, temp) = os.path.split(repo)
+            repo = os.path.dirname(repo)
             repotest = os.path.join(repo, ".git")
         
         mozroot = os.path.join(repo, "mozilla")
