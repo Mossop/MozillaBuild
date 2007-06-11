@@ -42,14 +42,11 @@ def readFile (input, line):
         sys.stderr.write(":header: " + line)
         line = input.readline()
     
-    # found the diff command line, pull the file name out
-    sys.stderr.write(":diffcmd: " + line)
-    diffcmd = line[:-1]
-
     # This gives us the files path from the mozilla dir
-    indexRE = re.match("diff --git a(/mozilla)?(/.*?) b\\1\\2$", diffcmd)
+    indexRE = re.match("diff --git a(/mozilla)?(/.*?) b\\1\\2$", line[:-1])
     if indexRE is not None:
         filepath = indexRE.group(2)
+    sys.stderr.write(filepath[1:] + "\n")
     if filepath.endswith("/.gitignore"):
         sys.stderr.write("Ignoring file " + filepath + "\n")
         suppress = True;
@@ -65,7 +62,7 @@ def readFile (input, line):
             (dir, leafname) = os.path.split(filepath)
             print "retrieving revision %s" % oldrev     # repository revision line
             print "diff %s -p -r%s %s" % (os.environ["GIT_DIFF_OPTS"], oldrev, leafname)
-            print "--- %s\t%s\t%s" % (filepath, getCVSTime(olddate), oldrev)
+            print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
         else:
             print "diff -N %s" % filepath
             print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
