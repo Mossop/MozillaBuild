@@ -7,9 +7,28 @@ import os
 import optparse
 import time
 
+# This should be run from somewhere within the git repo, it will find the
+# repository root automatically
+# Everything should be pretty automated, only exception is the getCVSRoot
+# function that allows you to have the cvs working dir somewhere other
+# than the repository.
+
+# This function finds the CVS dir for a given repository
+# Change this to suit your build environment, it should return the path to
+# the mozilla directory in your cvs working dir
+def getCVSRoot (repo):
+# Use if the repository and cvs mozilla dir are the same
+#    return repo
+# Use if the cvs mozilla dir is inside the repo
+#    return os.path.join(repo, "mozilla")
+# My weird and wonderful build environment!
+    (source, branch) = os.path.split(repo)
+    (root, temp) = os.path.split(source)
+    return os.path.join(root, "clean", branch, "mozilla")
+
 # this function processes one "file" within the patch
 def readFile (input, line):
-    global repo
+    global mozroot
     suppress = False;
     
     # look for start of the diff command line
@@ -26,6 +45,8 @@ def readFile (input, line):
     # found the diff command line, pull the file name out
     sys.stderr.write(":diffcmd: " + line)
     diffcmd = line[:-1]
+
+    # This gives us the files path from the mozilla dir
     indexRE = re.match("diff --git a(/mozilla)?(/.*?) b\\1\\2$", diffcmd)
     if indexRE is not None:
         filepath = indexRE.group(2)
@@ -36,7 +57,7 @@ def readFile (input, line):
         print "Index: %s" % filepath[1:]
         # print separator and RCS file path
         print 67 * "="
-        print "RCS file: /cvsroot/%s/%s,v" % (repo, filepath[1:])
+        print "RCS file: /cvsroot/mozilla/%s,v" % filepath[1:]
     
         # find the old CVS revision
         (oldrev, olddate) = getCVSRev(filepath[1:])
@@ -48,7 +69,7 @@ def readFile (input, line):
         else:
             print "diff -N %s" % filepath
             print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
-        newfile = os.path.join(repo, filepath[1:])
+        newfile = os.path.join(mozroot, filepath[1:])
         if os.path.exists(newfile):
             stat = os.stat(newfile)
             newdate = time.gmtime(stat.st_mtime)
@@ -97,18 +118,16 @@ def getCVSTime(date):
     return `date[2]` + time.strftime(" %b %Y %H:%M:%S -0000", date);
 
 def getCVSRev (file):
-    global repo
+    global repo,cvsroot
     
     if repo is None:
         # we're reading a premade patch or something
         return ""
     
-    fullpath = os.path.join(repo, file);
-    (CVSdir, leafname) = os.path.split(fullpath)
-    CVSdir = os.path.join(CVSdir, "CVS")
-    CVSdir = os.path.join(CVSdir, "Entries")
-    if os.path.exists(CVSdir):
-        entries = open(CVSdir)
+    (path, leafname) = os.path.split(file)
+    entriespath = os.path.join(cvsroot, path, "CVS", "Entries")
+    if os.path.exists(entriespath):
+        entries = open(entriespath)
         for line in entries.readlines():
             if line.startswith("/" + leafname + "/"):
                 revRE = re.match("/[^/]+/([^/]+)/([^/]+)/", line)
@@ -119,7 +138,7 @@ def getCVSRev (file):
     return (None, None)
 
 def main ():
-    global repo
+    global repo,mozroot,cvsroot
     
     parser = optparse.OptionParser()
     parser.add_option("-u", "--unified", dest="context",
@@ -139,9 +158,20 @@ def main ():
         repo = None
 
     else:
+        # find the repo
+        repo = os.getcwd()
+        repotest = os.path.join(repo, ".git")
+        while not os.path.exists(repotest):
+            (repo, temp) = os.path.split(repo)
+            repotest = os.path.join(repo, ".git")
+        
+        mozroot = os.path.join(repo, "mozilla")
+        if not os.path.exists(mozroot):
+            mozroot = repo
+
+        cvsroot = getCVSRoot(repo)
+
         # make a diff from stg
-    
-        repo = "mozilla"
         environ = os.environ
         
         diffargs = ""
