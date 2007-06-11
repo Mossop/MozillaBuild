@@ -1,9 +1,10 @@
-syntax: glob
 *.orig
 *.rej
 *~
 .cdtproject
 .project
 .DS_Store
+.mozconfig.mk
+.mozconfig.out
 cvsco.log
 CVS

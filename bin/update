@@ -106,7 +106,7 @@ fi
 
 if [ ! -d $BUILD_CLEAN/.git ]; then
   git-init
-  git-config core.excludes ~/config/rcsignore
+  git-config core.excludesfile ~/config/rcsignore
 fi
 
 git-add .
