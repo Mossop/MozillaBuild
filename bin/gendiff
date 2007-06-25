@@ -55,10 +55,10 @@ def readFile (input, line):
         print 67 * "="
         print "RCS file: /cvsroot/mozilla/%s,v" % filepath[1:]
     
+        leafname = os.path.basename(filepath)
         # find the old CVS revision
         (oldrev, olddate) = getCVSRev(filepath[1:])
         if oldrev is not None:
-            leafname = os.path.basename(filepath)
             print "retrieving revision %s" % oldrev     # repository revision line
             print "diff %s -p -r%s %s" % (os.environ["GIT_DIFF_OPTS"], oldrev, leafname)
             print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
@@ -76,6 +76,13 @@ def readFile (input, line):
     # Skip over extraneous crap
     line = input.readline()
     while line and not line.startswith("@@"):
+        if line.startswith("Binary files "):
+            if not suppress:
+                if oldrev is not None:
+                    print "Binary files %s and %s differ" % (leafname, leafname)
+                else:
+                    print "Binary files /dev/null and %s differ" % (leafname)
+            return input.readline()
         line = input.readline()
 
     # read the @@ line holding the line number counts
