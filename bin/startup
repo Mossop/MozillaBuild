@@ -6,5 +6,15 @@ export HOME=`pwd`
 export PATH=$HOME/bin:$PATH
 
 export BUILD_CONFIG_DEFAULT=minefield
+export MOZ_CVS_USER=dtownsend%oxymoronical.com
+
+if [ "$MOZ_CVS_USER" ]; then
+  eval `ssh-agent -s`
+  ssh-add
+fi
 
 /bin/bash --rcfile $HOME/bin/buildrc
+
+if [ "$SSH_AGENT_PID" ]; then
+  ssh-agent -k
+fi

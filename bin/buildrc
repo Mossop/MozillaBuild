@@ -74,12 +74,6 @@ if [ ! -d $BUILD_BASE/build ]; then
   mkdir $BUILD_BASE/build
 fi
 
-export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
-if [ ! -f .cvspass ]; then
-  echo -e "\nPlease press enter at the password prompt...\n"
-  cvs login 2>/dev/null
-fi
-
 if [ "$BUILD_PLATFORM" == "win" ]; then
   export MOZ_TOOLS=$BUILD_BASE/tools/moztools
 
@@ -97,6 +91,17 @@ if [ "$BUILD_PLATFORM" == "win" ]; then
   fi
   export GLIB_PREFIX=$MOZ_TOOLS
   export LIBIDL_PREFIX=$MOZ_TOOLS
+fi
+
+if [ "$MOZ_CVS_USER" ]; then
+  export CVS_RSH=ssh
+  export CVSROOT=$MOZ_CVS_USER@cvs.mozilla.org:/cvsroot
+else
+  export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
+  if [ ! -f .cvspass ]; then
+    echo -e "\nPlease press enter at the password prompt...\n"
+    cvs login 2>/dev/null
+  fi
 fi
 
 cd $BUILD_BASE
