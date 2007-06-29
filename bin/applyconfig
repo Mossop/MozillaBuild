@@ -87,19 +87,31 @@ if [ ! "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
 fi
 
-if [ ! "$BUILD_CLEAN" ]; then
-  if [ "$MOZ_CO_TAG" ]; then
-    BUILD_CLEAN=$BUILD_BASE/clean/$MOZ_CO_TAG
-  else
-    BUILD_CLEAN=$BUILD_BASE/clean/HEAD
-  fi
-fi
-
 if [ ! "$BUILD_SOURCE" ]; then
+  if [ ! -d $BUILD_BASE/source ]; then
+    mkdir $BUILD_BASE/source
+  fi
+
   if [ "$MOZ_CO_TAG" ]; then
     BUILD_SOURCE=$BUILD_BASE/source/$MOZ_CO_TAG
   else
     BUILD_SOURCE=$BUILD_BASE/source/HEAD
+  fi
+fi
+
+if [ ! "$BUILD_CLEAN" ]; then
+  if [ "$BUILD_USEGIT" ]; then
+    if [ ! -d $BUILD_BASE/clean ]; then
+      mkdir $BUILD_BASE/clean
+    fi
+
+    if [ "$MOZ_CO_TAG" ]; then
+      BUILD_CLEAN=$BUILD_BASE/clean/$MOZ_CO_TAG
+    else
+      BUILD_CLEAN=$BUILD_BASE/clean/HEAD
+    fi
+  else
+    BUILD_CLEAN=$BUILD_SOURCE
   fi
 fi
 

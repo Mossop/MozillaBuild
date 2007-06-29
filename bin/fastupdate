@@ -49,29 +49,12 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-if [ ! -d $BUILD_BASE/clean ]; then
-  mkdir $BUILD_BASE/clean
-fi
-
 if [ ! -d $BUILD_CLEAN ]; then
   mkdir $BUILD_CLEAN
 fi
 
 if [ -f $BUILD_CLEAN/cvsco.log ]; then
   rm $BUILD_CLEAN/cvsco.log
-fi
-
-if [ ! -d $BUILD_BASE/source ]; then
-  mkdir $BUILD_BASE/source
-fi
-
-if [ ! -d $BUILD_SOURCE ]; then
-  mkdir $BUILD_SOURCE
-fi
-
-cd $BUILD_SOURCE
-if [ -f $BUILD_SOURCE/cvsco.log ]; then
-  rm $BUILD_SOURCE/cvsco.log
 fi
 
 cd $BUILD_CLEAN
@@ -117,25 +100,25 @@ else
   make -f mozilla/client.mk 2>&1 fast-update $FLAGS
 fi
 
-if [ ! -d $BUILD_CLEAN/.git ]; then
-  git-init
-  git-config core.excludesfile ~/config/rcsignore
-fi
+if [ "$BUILD_USEGIT" ]; then
+  if [ ! -d $BUILD_CLEAN/.git ]; then
+    git-init
+    git-config core.excludesfile ~/config/rcsignore
+  fi
 
-git-add .
-git-commit -a -m "CVS pull from $BUILD_CO_DATE"
+  git-add .
+  git-commit -a -m "CVS pull from $BUILD_CO_DATE"
 
-if [ ! -d $BUILD_BASE/source ]; then
-  mkdir $BUILD_BASE/source
-fi
-
-if [ ! -d $BUILD_SOURCE ]; then
-  cd $BUILD_BASE/source
-  git-clone -l $BUILD_CLEAN
-  cd $BUILD_SOURCE
-  stg init
-else
-  cd $BUILD_SOURCE
-  stg pull
-  stg clean
+  if [ "$BUILD_CLEAN" != "$BUILD_SOURCE" ]; then
+    if [ ! -d $BUILD_SOURCE ]; then
+      cd $BUILD_BASE/source
+      git-clone -l $BUILD_CLEAN
+      cd $BUILD_SOURCE
+      stg init
+    else
+      cd $BUILD_SOURCE
+      stg pull
+      stg clean
+    fi
+  fi
 fi

@@ -7,6 +7,7 @@ export PATH=$HOME/bin:$PATH
 
 export BUILD_CONFIG_DEFAULT=minefield
 export MOZ_CVS_USER=dtownsend%oxymoronical.com
+export BUILD_USEGIT=1
 
 if [ "$MOZ_CVS_USER" ]; then
   eval `ssh-agent -s`
