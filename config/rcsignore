@@ -7,4 +7,5 @@
 .mozconfig.mk
 .mozconfig.out
 cvsco.log
+.cvsignore
 CVS
