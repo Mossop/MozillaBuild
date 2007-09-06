@@ -1,7 +1,7 @@
 . $CONFIG/includes/buildid.mozconfig
 . $CONFIG/includes/nondebug.mozconfig
 
-. $CONFIG/includes/static.mozconfig
+. $CONFIG/includes/nonstatic.mozconfig
 . $CONFIG/includes/xulrunner.mozconfig
 
 ac_add_options --enable-optimize
