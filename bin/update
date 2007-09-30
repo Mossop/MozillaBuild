@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 #
 # ***** BEGIN LICENSE BLOCK *****
 # Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -102,7 +102,7 @@ fi
 
 if [ "$BUILD_USEGIT" ]; then
   if [ ! -d $BUILD_CLEAN/.git ]; then
-    git-init
+    git-init-db
     git-config core.excludesfile ~/config/rcsignore
   fi
 
