@@ -5,11 +5,16 @@ cd ..
 export HOME=`pwd`
 export PATH=$HOME/bin:$PATH
 
-export BUILD_CONFIG_DEFAULT=minefield
-export MOZ_CVS_USER=dtownsend%oxymoronical.com
-export BUILD_USEGIT=1
+BUILD_CONFIG_DEFAULT=minefield
+if [ -f config/localrc ]; then
+  . config/localrc
+fi
+
+export BUILD_CONFIG_DEFAULT
+export BUILD_USEGIT
 
 if [ "$MOZ_CVS_USER" ]; then
+  export MOZ_CVS_USER
   eval `ssh-agent -s`
   ssh-add
 fi
