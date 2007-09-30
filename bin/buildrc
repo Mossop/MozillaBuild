@@ -52,7 +52,7 @@ function config() {
   fi
 }
 
-if [ "$OSTYPE" == "linux" ]; then
+if [ "$OSTYPE" == "linux" -o "$OSTYPE" == "linux-gnu" ]; then
   BUILD_PLATFORM=linux
 elif [ "$OSTYPE" == "darwin8.0" ]; then
   BUILD_PLATFORM=mac
