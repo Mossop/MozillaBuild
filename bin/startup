@@ -12,6 +12,7 @@ fi
 
 export BUILD_CONFIG_DEFAULT
 export BUILD_USEGIT
+export BUILD_WATCH
 
 if [ "$MOZ_CVS_USER" ]; then
   export MOZ_CVS_USER

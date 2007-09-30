@@ -94,7 +94,7 @@ fi
 
 . $BUILD_CLEAN/codate
 
-if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
+if [ "$BUILD_WATCH" ]; then
   make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
 else
   make -f mozilla/client.mk 2>&1 checkout $FLAGS

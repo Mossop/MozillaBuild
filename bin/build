@@ -69,7 +69,7 @@ if [ -d $BUILD_SOURCE ]; then
 
   LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 
-  if [ "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
+  if [ "$BUILD_WATCH" ]; then
     make -f client.mk 2>&1 build | tee $LOGNAME | $BUILD_BASE/bin/buildwatch/buildwatch
   else
     make -f client.mk 2>&1 build | tee $LOGNAME

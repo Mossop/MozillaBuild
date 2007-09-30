@@ -83,6 +83,12 @@ if [ -f $BUILD_BASE/config/aliases ]; then
   exec 3<&-
 fi
 
+if [ "$BUILD_WATCH" ] || [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
+  BUILD_WATCH=1
+else
+  unset BUILD_WATCH
+fi
+
 if [ ! "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
 fi
