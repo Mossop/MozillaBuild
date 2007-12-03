@@ -4,5 +4,5 @@
 . $CONFIG/includes/nonstatic.mozconfig
 . $CONFIG/includes/firefox.mozconfig
 
-ac_add_options --enable-debugger-info-modules=^content,^dom,^editor,^layout,^view
+ac_add_options --enable-debugger-info-modules=^content,^editor,^layout,^view
 ac_add_options --enable-extensions=default
