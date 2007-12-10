@@ -19,5 +19,3 @@ Install basic cygwin plus:
   zip
   unzip
   cvs
-  
-Install quilt for patch management functions
