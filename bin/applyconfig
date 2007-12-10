@@ -96,12 +96,12 @@ if [ ! "$BUILD_TREE" ]; then
   fi
 fi
  
-if [ -f $BUILD_BASE/config/sources/$BUILD_TREE.config ]; then
-  . $BUILD_BASE/config/sources/$BUILD_TREE.config
+if [ -f $BUILD_BASE/config/trees/$BUILD_TREE.config ]; then
+  . $BUILD_BASE/config/trees/$BUILD_TREE.config
 fi
 
-if [ -f $BUILD_BASE/config/sources/$BUILD_TREE.local.config ]; then
-  . $BUILD_BASE/config/sources/$BUILD_TREE.local.config
+if [ -f $BUILD_BASE/config/trees/$BUILD_TREE.local.config ]; then
+  . $BUILD_BASE/config/trees/$BUILD_TREE.local.config
 fi
 
 if [ "$BUILD_WATCH" ] || [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
