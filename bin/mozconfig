@@ -56,8 +56,12 @@ if [ -f $CONFIG/mozconfig ]; then
   . $CONFIG/mozconfig
 fi
 
-if [ -f $CONFIG/$BUILD_PLATFORM.mozconfig ]; then
-  . $CONFIG/$BUILD_PLATFORM.mozconfig
+if [ -f $CONFIG/apps/$BUILD_APP.mozconfig ]; then
+  . $CONFIG/apps/$BUILD_APP.mozconfig
+fi
+
+if [ -f $CONFIG/platforms/$BUILD_PLATFORM.mozconfig ]; then
+  . $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
 fi
 
 if [ -f $CONFIG/$BUILD_CONFIG.mozconfig ]; then

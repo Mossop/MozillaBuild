@@ -50,7 +50,7 @@ fi
 . $BUILD_BASE/bin/applyconfig
 
 if [ ! -d $BUILD_CLEAN ]; then
-  mkdir $BUILD_CLEAN
+  mkdir -p $BUILD_CLEAN
 fi
 
 if [ -f $BUILD_CLEAN/cvsco.log ]; then
@@ -100,7 +100,7 @@ else
   make -f mozilla/client.mk 2>&1 checkout $FLAGS
 fi
 
-if [ "$BUILD_USEGIT" ]; then
+if [ "$BUILD_LVC" == "git" ]; then
   if [ ! -d $BUILD_CLEAN/.git ]; then
     git-init-db
     git-config core.excludesfile ~/config/rcsignore

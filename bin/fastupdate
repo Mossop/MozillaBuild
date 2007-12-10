@@ -100,7 +100,7 @@ else
   make -f mozilla/client.mk 2>&1 fast-update $FLAGS
 fi
 
-if [ "$BUILD_USEGIT" ]; then
+if [ "$BUILD_LVC" == "git" ]; then
   if [ ! -d $BUILD_CLEAN/.git ]; then
     git-init
     git-config core.excludesfile ~/config/rcsignore
