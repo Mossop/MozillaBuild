@@ -1,0 +1,5 @@
+[ui]
+ignore = ~/config/vc/hgignore
+
+[extensions]
+hgext.mq =

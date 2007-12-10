@@ -150,9 +150,6 @@ def main ():
                       help="Read git diff from stdin")
     (opts, args) = parser.parse_args()
 
-    if len(args) < 1:
-        args = ["/"]
-
     sys.stderr.write("Generating diff....\n");
 
     if opts.stdin:
@@ -163,10 +160,12 @@ def main ():
     else:
         # find the repo
         repo = os.getcwd()
-        repotest = os.path.join(repo, ".git")
-        while not os.path.exists(repotest):
+        gittest = os.path.join(repo, ".git")
+        hgtest = os.path.join(repo, ".hg")
+        while not os.path.exists(gittest) and not os.path.exists(hgtest):
             repo = os.path.dirname(repo)
-            repotest = os.path.join(repo, ".git")
+            gittest = os.path.join(repo, ".git")
+            hgtest = os.path.joinj(repo, ".hg")
         
         mozroot = os.path.join(repo, "mozilla")
         if not os.path.exists(mozroot):
@@ -174,21 +173,33 @@ def main ():
 
         cvsroot = getCVSRoot(repo)
 
-        # make a diff from stg
         environ = os.environ
-        
-        diffargs = ""
-        if opts.context is not None:
-            environ["GIT_DIFF_OPTS"] = "-u" + opts.context
 
-        stg = subprocess.Popen(
-            ["stg", "diff", "-r"] + args,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            cwd = repo,
-            env = environ)
-        diff = stg.stdout
-    
+        if os.path.exists(gittest):
+            # make a diff from stg
+            if len(args) < 1:
+                args = ["/"]
+
+            diffargs = ""
+            if opts.context is not None:
+                environ["GIT_DIFF_OPTS"] = "-u" + opts.context
+
+            stg = subprocess.Popen(
+                ["stg", "diff", "-r"] + args,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd = repo,
+                env = environ)
+            diff = stg.stdout
+        else:
+            hg = subprocess.Popen(
+                ["hg", "qdiff", "-g"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                cwd=repo,
+                env=environ)
+            diff = hg.stdout
+
     line = diff.readline()
     while True:
         if "" == line:
