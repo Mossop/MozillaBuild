@@ -67,7 +67,7 @@ fi
 FLAGS="MOZ_CO_PROJECT=$MOZ_CO_PROJECT"
 if [ "$MOZ_CO_DATE" ]; then
   FLAGS="$FLAGS \"MOZ_CO_DATE=$MOZ_CO_DATE\""
-  CFFLAGS="$CLFLAGS -d \"$MOZ_CO_DATE\""
+  CLFLAGS="$CLFLAGS -D \"$MOZ_CO_DATE\""
   TIME=`date --date="$MOZ_CO_DATE" +%s`
 else
   TIME=`date +%s`
