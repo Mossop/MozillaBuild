@@ -120,7 +120,11 @@ fi
 
 if [ ! "$BUILD_CLEAN" ]; then 
   if [ "$BUILD_LVC" ]; then 
-    BUILD_CLEAN=$BUILD_BASE/clean/$BUILD_TREE 
+    if [ "$BUILD_TREE_BASE" ]; then
+      BUILD_CLEAN=$BUILD_CASE/clean/$BUILD_TREE_BASE
+    else
+      BUILD_CLEAN=$BUILD_BASE/clean/$BUILD_TREE
+    fi
   else  
     BUILD_CLEAN=$BUILD_SOURCE 
   fi 
