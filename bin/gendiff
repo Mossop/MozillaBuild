@@ -112,8 +112,11 @@ def readFile (input, line):
         source = line[4:-1]
         if source == "/dev/null":
             print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
-        elif cvsroot is not None and oldrev is not None:
-            print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
+        elif cvsroot is not None:
+            if oldrev is not None:
+                print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
+            else:
+                print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
         else:
             print "--- %s" % (filepath[1:])
         
@@ -255,8 +258,11 @@ def main ():
                 env = environ)
             diff = stg.stdout
         else:
+            if len(args) < 1:
+                args = ["-r", "default"]
+
             hg = subprocess.Popen(
-                ["hg", "qdiff", "-g"],
+                ["hg", "diff", "-g"] + args,
                 stdout = subprocess.PIPE,
                 stderr = subprocess.PIPE,
                 cwd=repo,
