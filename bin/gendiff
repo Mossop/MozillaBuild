@@ -148,6 +148,11 @@ def readFile (input, line):
         if countRE is not None:
             old_count = int(countRE.group(1))
             new_count = int(countRE.group(2))
+        else:
+            countRE = re.match("@@ -(\d+) \+\d+,(\d+) @@", line)
+            if countRE is not None:
+                old_count = int(countRE.group(1))
+                new_count = int(countRE.group(2))
         if not suppress:
             print line[:-1]
         while old_count + new_count > 0:

@@ -8,5 +8,4 @@ syntax: glob
 .mozconfig.mk
 .mozconfig.out
 cvsco.log
-.cvsignore
 CVS

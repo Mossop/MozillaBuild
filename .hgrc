@@ -3,3 +3,4 @@ ignore = ~/config/vc/hgignore
 
 [extensions]
 hgext.mq =
+hgext.graphlog =

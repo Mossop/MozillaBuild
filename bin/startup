@@ -13,6 +13,7 @@ fi
 export BUILD_CONFIG_DEFAULT
 export BUILD_LVC
 export BUILD_WATCH
+export HGUSER
 
 if [ "$MOZ_CVS_USER" ]; then
   export MOZ_CVS_USER

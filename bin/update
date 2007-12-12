@@ -79,7 +79,7 @@ if [ "$BUILD_PLATFORM" == "mac" ]; then
   CURRENTTZ=$TZ
   export TZ="US/Pacific"
   date -r $TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_CLEAN/codate
-  date -r $TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M\"" >>$BUILD_CLEAN/codate
+  date -r $TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M -0800\"" >>$BUILD_CLEAN/codate
   export TZ=$CURRENTTZ
   
   if [ ! -f mozilla/build/macosx/universal/mozconfig ]; then
@@ -89,7 +89,7 @@ else
   TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
   TIME=$(($TIME-$TIME_OFFSET))
   date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_CLEAN/codate
-  date --date=@$TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M\"" >>$BUILD_CLEAN/codate
+  date --date=@$TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M -0800\"" >>$BUILD_CLEAN/codate
 fi
 
 . $BUILD_CLEAN/codate
@@ -104,10 +104,12 @@ if [ "$BUILD_LVC" == "git" ]; then
   if [ ! -d $BUILD_CLEAN/.git ]; then
     git-init-db
     git-config core.excludesfile ~/config/vc/gitignore
+    git-add .
+    git-commit -a -m "Initial CVS import from $BUILD_CO_DATE"
+  else
+    git-add .
+    git-commit -a -m "CVS update from $BUILD_CO_DATE"
   fi
-
-  git-add .
-  git-commit -a -m "CVS pull from $BUILD_CO_DATE"
 
   if [ "$BUILD_CLEAN" != "$BUILD_SOURCE" ]; then
     if [ ! -d $BUILD_SOURCE ]; then
@@ -126,17 +128,14 @@ if [ "$BUILD_LVC" == "git" ]; then
 elif [ "$BUILD_LVC" == "hg" ]; then
   if [ ! -d $BUILD_CLEAN/.hg ]; then
     hg init
+    hg commit -A -m "Initial CVS import" -d "$BUILD_CO_DATE" -u "mozilla.org"
+  else
+    hg commit -A -m "CVS update" -d "$BUILD_CO_DATE" -u "mozilla.org"
   fi
-  
-  hg commit -A -m "CVS pull" -d "$BUILD_CO_DATE" -u "mozilla.org"
 
   if [ "$BUILD_CLEAN" != "$BUILD_SOURCE" ]; then
     if [ ! -d $BUILD_SOURCE ]; then
       hg clone $BUILD_CLEAN $BUILD_SOURCE
-      cd $BUILD_SOURCE
-      hg qinit
     fi
-  elif [ ! -d $BUILD_SOURCE/.hg/patches ]; then
-    hg qinit
   fi
 fi
