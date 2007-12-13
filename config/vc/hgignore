@@ -2,9 +2,13 @@ syntax: glob
 *.orig
 *.rej
 *~
+*.pyc
 .cdtproject
 .project
 .DS_Store
+config.cache
+config.log
+.mozconfig
 .mozconfig.mk
 .mozconfig.out
 cvsco.log

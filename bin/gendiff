@@ -74,14 +74,18 @@ def readFile (input, line):
         line = input.readline()
     
     # This gives us the files path from the mozilla dir
-    indexRE = re.match("diff --git a(/mozilla)?(/.*?) b\\1\\2$", line[:-1])
+    indexRE = re.match("diff --git a(/.*?) b\\1$", line[:-1])
     if indexRE is not None:
-        filepath = indexRE.group(2)
-    sys.stderr.write(filepath[1:] + "\n")
-    if filepath.endswith("/.gitignore") or filepath.endswith("/.hgignore"):
-        sys.stderr.write("Ignoring file " + filepath + "\n")
-        suppress = True;
+        filepath = indexRE.group(1)
+    if filepath[:9] != "/mozilla/":
+        sys.stderr.write("Ignoring out of repository file " + filepath[1:] + "\n")
+        suppress = True
+    elif filepath.endswith("/.gitignore") or filepath.endswith("/.hgignore"):
+        sys.stderr.write("Ignoring file " + filepath[9:] + "\n")
+        suppress = True
     if not suppress:
+        filepath = filepath[8:]
+        sys.stderr.write(filepath[1:] + "\n")
         print "Index: %s" % filepath[1:]
         # print separator and RCS file path
         print 67 * "="
