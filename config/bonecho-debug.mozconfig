@@ -1,0 +1,6 @@
+. $CONFIG/includes/debug.mozconfig
+. $CONFIG/includes/static.mozconfig
+
+ac_add_options --disable-tests
+ac_add_options --enable-debugger-info-modules=^editor,^view
+ac_add_options --enable-extensions=default
