@@ -2,5 +2,5 @@
 mk_add_options MOZ_MAKE_FLAGS="-j4 -w"
 #ac_add_app_options ppc --enable-prebinding
 if [ "${OSTYPE:0:7}" == "darwin9" ]; then
-#  ac_add_options --enable-dtrace
+  ac_add_options --enable-dtrace
 fi
