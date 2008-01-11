@@ -109,10 +109,25 @@ def readFile (input, line):
                 newdate = time.gmtime(stat.st_mtime)
 
         line = input.readline()
-        while line and not line.startswith("--- "):
+        while line and not line.startswith("--- ") and not line.startswith("GIT binary patch"):
             line = input.readline()
         if not line:
             return ""
+        if line.startswith("GIT binary patch"):
+            if oldrev is not None:
+                print "--- %s\t%s\t%s" % (filepath[1:], getCVSTime(olddate), oldrev)
+                print "+++ %s\t%s\t" % (filepath[1:], getCVSTime(newdate))
+                print "Binary files %s and %s differ" % (leafname, leafname)
+            else:
+                print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
+                print "+++ %s\t%s\t" % (filepath[1:], getCVSTime(newdate))
+                print "Binary files /dev/null and %s differ" % (leafname)
+            line = input.readline()
+            while line and not line[:-1] == "":
+                line = input.readline()
+            if line:
+                line = input.readline()
+            return line
         source = line[4:-1]
         if source == "/dev/null":
             print "--- /dev/null\t1 Jan 1970 00:00:00 -0000"
