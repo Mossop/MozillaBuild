@@ -11,9 +11,10 @@ if [ -f config/localrc ]; then
 fi
 
 export BUILD_CONFIG_DEFAULT
-export BUILD_LVC
 export BUILD_WATCH
-export HGUSER
+if [ "$HGUSER" ]; then
+  export HGUSER
+fi
 
 if [ "$MOZ_CVS_USER" ]; then
   export MOZ_CVS_USER

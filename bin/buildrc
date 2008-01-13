@@ -114,4 +114,4 @@ export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export MOZCONFIG=$BUILD_BASE/bin/mozconfig
 export -f config
 
-echo -e "\nUse \"update\" to update the source tree and \"build\" to build it."
+echo -e "\nUse \"build\" to build the tree."

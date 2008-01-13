@@ -118,22 +118,9 @@ if [ ! "$BUILD_SOURCE" ]; then
   BUILD_SOURCE=$BUILD_BASE/source/$BUILD_TREE
 fi
 
-if [ ! "$BUILD_CLEAN" ]; then 
-  if [ "$BUILD_LVC" ]; then 
-    if [ "$BUILD_TREE_BASE" ]; then
-      BUILD_CLEAN=$BUILD_BASE/clean/$BUILD_TREE_BASE
-    else
-      BUILD_CLEAN=$BUILD_BASE/clean/$BUILD_TREE
-    fi
-  else  
-    BUILD_CLEAN=$BUILD_SOURCE 
-  fi 
-fi
-
 export WIN32_REDIST_DIR
 export MOZ_OBJDIR
 export BUILD_TREE
-export BUILD_CLEAN
 export BUILD_SOURCE
 export BUILD_WATCH
 export BUILD_APP

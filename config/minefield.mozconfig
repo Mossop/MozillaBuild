@@ -1,4 +1,3 @@
-. $CONFIG/includes/buildid.mozconfig
 . $CONFIG/includes/tests.mozconfig
 . $CONFIG/includes/nonstatic.mozconfig
 
