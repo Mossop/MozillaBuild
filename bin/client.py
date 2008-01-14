@@ -1,13 +1,15 @@
 #!/usr/bin/python
 
-NSPR_CO_TAG = 'NSPR_HEAD_20070820'
-NSS_CO_TAG  = 'NSS_3_12_ALPHA1B'
+NSPR_CO_TAG = 'NSPR_HEAD_20071218'
+NSS_CO_TAG  = 'NSS_3_12_ALPHA_2B'
+CORE_CO_TAG = 'HEAD'
 
 NSPR_DIRS = ('nsprpub',)
 NSS_DIRS  = ('dbm',
              'security/nss',
              'security/coreconf',
              'security/dbm')
+CORE_DIRS = ('extensions/xmlextras',)
 
 import os
 import sys
@@ -59,6 +61,7 @@ except ValueError:
     sys.exit(2)
 
 if action in ('checkout', 'co'):
+    do_cvs_checkout(CORE_DIRS, CORE_CO_TAG, options.cvsroot, options.cvs)
     do_cvs_checkout(NSPR_DIRS, NSPR_CO_TAG, options.cvsroot, options.cvs)
     do_cvs_checkout(NSS_DIRS, NSS_CO_TAG, options.cvsroot, options.cvs)
 else:
