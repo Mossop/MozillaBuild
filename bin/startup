@@ -2,8 +2,8 @@
 
 cd `dirname $0`
 cd ..
-export HOME=`pwd`
-export PATH=$HOME/bin:$PATH
+export BUILD_BASE=`pwd`
+export PATH=$BUILD_BASE/bin:$PATH
 
 BUILD_CONFIG_DEFAULT=minefield
 if [ -f config/localrc ]; then
@@ -18,12 +18,6 @@ fi
 
 if [ "$MOZ_CVS_USER" ]; then
   export MOZ_CVS_USER
-  eval `ssh-agent -s`
-  ssh-add
 fi
 
-/bin/bash --rcfile $HOME/bin/buildrc
-
-if [ "$SSH_AGENT_PID" ]; then
-  ssh-agent -k
-fi
+/bin/bash --rcfile bin/buildrc

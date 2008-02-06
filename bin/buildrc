@@ -67,7 +67,7 @@ if [ -f /etc/profile ]; then
 fi
 PATH=$OLDPATH
 
-export BUILD_BASE=`echo $HOME | sed -e s/\\\\/$//g`
+export BUILD_BASE=`echo $BUILD_BASE | sed -e s/\\\\/$//g`
 
 # Make sure the build dir exists
 if [ ! -d $BUILD_BASE/build ]; then

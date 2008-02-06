@@ -11,14 +11,14 @@ REM SET UNIX=c:\cygwin
 SET UNIX=c:\msys\1.0
 
 REM This is the base dir of the build environment. Only change if the autodetection fails.
-SET HOME=%~dp0..
+SET BUILD_BASE=%~dp0..
 
 SET GECKO_SDK=c:\gecko-sdk
 
 REM --------------------------------------------------------------------------------------
 REM The rest can be left as is.
 
-SET PATH=%UNIX%\bin;%HOME%\tools\moztools\bin;%HOME%\tools\zip;%HOME%\bin;%GECKO_SDK%\bin;%PATH%
+SET PATH=%UNIX%\bin;%BUILD_BASE%\tools\moztools\bin;%BUILD_BASE%\tools\zip;%BUILD_BASE%\bin;%GECKO_SDK%\bin;%PATH%
 call %VCVARS%
 
-%UNIX%\bin\bash --rcfile %HOME%\bin\buildrc
+%UNIX%\bin\bash --rcfile %BUILD_BASE%\bin\buildrc
