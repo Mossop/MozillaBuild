@@ -91,6 +91,8 @@ fi
 if [ ! "$BUILD_TREE" ]; then
   if [ -f $BUILD_BASE/config/trees/$BUILD_CONFIG.config ]; then
     BUILD_TREE=$BUILD_CONFIG
+  elif [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
+    BUILD_TREE=$BUILD_CONFIG
   else
     BUILD_TREE=trunk
   fi
