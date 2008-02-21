@@ -1,0 +1,14 @@
+#! /bin/sh
+
+if [ -f ".hg/hgrc" ]; then
+  HGRC=.hg/hgrc
+elif [ -f "hgrc" ]; then
+  HGRC=hgrc
+else
+  echo "Must be run from the top of the mercurial repository."
+  exit;
+fi
+
+echo "[ui]" >> $HGRC
+echo "ignore = $BUILD_BASE/config/vc/hgignore" >> $HGRC
+echo "ignore.external = $BUILD_BASE/config/vc/hgignore-external" >> $HGRC

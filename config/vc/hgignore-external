@@ -5,3 +5,4 @@
 ^security/coreconf/
 ^security/dbm/
 ^extensions/xmlextras/
+^security/manager/.nss.checkout
