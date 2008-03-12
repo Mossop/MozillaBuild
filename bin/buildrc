@@ -104,6 +104,7 @@ cd $BUILD_BASE
 
 svn update
 
+export XPCOM_DEBUG_BREAK=warn
 export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
 export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
