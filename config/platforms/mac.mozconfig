@@ -1,5 +1,6 @@
 #. $topsrcdir/build/macosx/universal/mozconfig
 mk_add_options MOZ_MAKE_FLAGS="-j4 -w"
+mk_add_options AUTOCONF=/opt/local/bin/autoconf213
 #ac_add_app_options ppc --enable-prebinding
 if [ "${OSTYPE:0:7}" == "darwin9" ]; then
   ac_add_options --enable-dtrace

@@ -60,6 +60,8 @@ if [ -f $CONFIG/apps/$BUILD_APP.mozconfig ]; then
   . $CONFIG/apps/$BUILD_APP.mozconfig
 fi
 
+mk_add_options RUN_AUTOCONF_LOCALLY=1
+
 if [ -f $CONFIG/platforms/$BUILD_PLATFORM.mozconfig ]; then
   . $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
 fi
