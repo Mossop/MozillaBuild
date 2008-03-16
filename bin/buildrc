@@ -94,7 +94,7 @@ if [ "$MOZ_CVS_USER" ]; then
   export CVSROOT=$MOZ_CVS_USER@cvs.mozilla.org:/cvsroot
 else
   export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
-  if [ ! -f .cvspass ]; then
+  if [ ! -f "$HOME/.cvspass" ]; then
     echo -e "\nPlease press enter at the password prompt...\n"
     cvs login 2>/dev/null
   fi
