@@ -1,7 +1,19 @@
 #! /bin/bash
 
-cd `dirname $0`
-cd ..
+if [ "$BUILD_BASE" ]; then
+  echo "Build environment already initialised"
+  return
+fi
+
+if [ -f "/c/mozilla/bin/buildrc" ]; then
+  cd /c/mozilla
+elif [ -f "$HOME/mozilla/bin/buildrc" ]; then
+  cd "$HOME/mozilla"
+else
+  echo "Could not find build environment"
+  return
+fi
+
 export BUILD_BASE=`pwd`
 export PATH=$BUILD_BASE/bin:$PATH
 
@@ -20,4 +32,4 @@ if [ "$MOZ_CVS_USER" ]; then
   export MOZ_CVS_USER
 fi
 
-/bin/bash --rcfile bin/buildrc
+. bin/buildrc
