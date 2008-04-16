@@ -2,16 +2,19 @@ ac_add_options --enable-canvas
 ac_add_options --enable-svg
 ac_add_options --enable-storage
 
-if [ "$OSTYPE" == "cygwin" ]; then
-  JAVA_PATH=`cygpath $JAVA_HOME`
-else
-  JAVA_PATH=$JAVA_HOME
-fi
+if [ "$JAVA_HOME" ]; then
+  if [ "$OSTYPE" == "cygwin" ]; then
+    JAVA_PATH=`cygpath $JAVA_HOME`
+  else
+    JAVA_PATH=$JAVA_HOME
+  fi
 
-if [ -d $JAVA_PATH/include ]; then
-  ac_add_options --with-java-include-path=$JAVA_PATH/include
-  ac_add_options --with-java-bin-path=$JAVA_PATH/bin
+  if [ -d $JAVA_PATH/include ]; then
+    ac_add_options --with-java-include-path=$JAVA_PATH/include
+    ac_add_options --with-java-bin-path=$JAVA_PATH/bin
+  else
+    ac_add_options --disable-javaxpcom
+  fi
 else
   ac_add_options --disable-javaxpcom
 fi
-
