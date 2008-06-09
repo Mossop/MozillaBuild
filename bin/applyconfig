@@ -94,7 +94,7 @@ if [ ! "$BUILD_TREE" ]; then
   elif [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
     BUILD_TREE=$BUILD_CONFIG
   else
-    BUILD_TREE=trunk
+    BUILD_TREE=central
   fi
 fi
  
