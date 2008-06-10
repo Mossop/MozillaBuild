@@ -70,6 +70,19 @@ if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
   . $BUILD_BASE/config/$BUILD_CONFIG.config
 fi
 
+if [ -f $BUILD_BASE/config/trees ]; then
+  exec 3<&0
+  exec 0<"$BUILD_BASE/config/trees"
+  while read ALIAS TREE
+  do
+    if [ "$BUILD_APP" == "$ALIAS" ]; then
+      BUILD_TREE=$TREE
+    fi
+  done
+  exec 0<&3
+  exec 3<&-
+fi
+
 if [ -f $BUILD_BASE/config/aliases ]; then
   exec 3<&0
   exec 0<"$BUILD_BASE/config/aliases"
@@ -87,14 +100,14 @@ if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
   . $BUILD_BASE/config/apps/$BUILD_APP.config
 fi
 
-# Default to HEAD setup
+# Default to trunk setup
 if [ ! "$BUILD_TREE" ]; then
   if [ -f $BUILD_BASE/config/trees/$BUILD_CONFIG.config ]; then
     BUILD_TREE=$BUILD_CONFIG
   elif [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
     BUILD_TREE=$BUILD_CONFIG
   else
-    BUILD_TREE=central
+    BUILD_TREE=trunk
   fi
 fi
  

@@ -1,5 +1,3 @@
 . $CONFIG/includes/debug.mozconfig
-. $CONFIG/includes/nonstatic.mozconfig
 
-ac_add_options --enable-extensions=default,-xml-rpc
-ac_add_options --enable-libxul
+ac_add_options --enable-debugger-info-modules=^editor,^view

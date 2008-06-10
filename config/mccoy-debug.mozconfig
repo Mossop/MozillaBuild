@@ -1,14 +1,1 @@
 ac_add_options --enable-debug
-
-if [ "$BUILD_PLATFORM" == "mac" ]; then
-  if [ "$BUILD_UNIVERSAL" ]; then
-    ac_add_app_options ppc  --with-libxul-sdk=$HOME/gecko-sdk/ppc
-    ac_add_app_options i386 --with-libxul-sdk=$HOME/gecko-sdk/i386
-  else
-    ac_add_options --with-libxul-sdk=../xulrunner-debug/dist
-  fi
-elif [ "$BUILD_PLATFORM" == "win" ]; then
-  ac_add_options --with-libxul-sdk=/c/gecko-sdk
-else
-  ac_add_options --with-libxul-sdk=$HOME/gecko-sdk
-fi

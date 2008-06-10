@@ -1,5 +1,4 @@
 . $CONFIG/includes/debug.mozconfig
 . $CONFIG/includes/static.mozconfig
 
-ac_add_options --enable-extensions=default
 ac_add_options --disable-trace-malloc
