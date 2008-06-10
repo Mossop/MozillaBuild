@@ -1,3 +1,10 @@
+if [ "$BUILD_APP_OPTIONS" == "debug" ]; then
+  . $CONFIG/includes/debug.mozconfig
+  ac_add_options --enable-debugger-info-modules=^editor,^view
+else
+  ac_add_options --enable-optimize
+fi
+
 ac_add_options --disable-activex
 ac_add_options --disable-activex-scripting
 ac_add_options --disable-installer

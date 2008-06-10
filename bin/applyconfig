@@ -62,6 +62,9 @@ fi
 
 WIN32_REDIST_DIR="\"$BUILD_REDIST\""
 
+BUILD_APP_ALIAS=`echo $BUILD_CONFIG | sed -e s/-.*//`
+if echo $BUILD_CONFIG | grep -q -- -; then BUILD_APP_OPTIONS=${BUILD_CONFIG#*-*}; fi
+
 if [ -f $BUILD_BASE/config/config ]; then
   . $BUILD_BASE/config/config
 fi
@@ -70,25 +73,12 @@ if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
   . $BUILD_BASE/config/$BUILD_CONFIG.config
 fi
 
-if [ -f $BUILD_BASE/config/trees ]; then
-  exec 3<&0
-  exec 0<"$BUILD_BASE/config/trees"
-  while read ALIAS TREE
-  do
-    if [ "$BUILD_APP" == "$ALIAS" ]; then
-      BUILD_TREE=$TREE
-    fi
-  done
-  exec 0<&3
-  exec 3<&-
-fi
-
 if [ -f $BUILD_BASE/config/aliases ]; then
   exec 3<&0
   exec 0<"$BUILD_BASE/config/aliases"
   while read ALIAS APP
   do
-    if [ "$BUILD_APP" == "$ALIAS" ]; then
+    if [ "$BUILD_APP_ALIAS" == "$ALIAS" ]; then
       BUILD_APP=$APP
     fi
   done
@@ -98,6 +88,21 @@ fi
 
 if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
   . $BUILD_BASE/config/apps/$BUILD_APP.config
+fi
+
+if [ ! "$BUILD_TREE" ]; then
+  if [ -f $BUILD_BASE/config/trees ]; then
+    exec 3<&0
+    exec 0<"$BUILD_BASE/config/trees"
+    while read ALIAS TREE
+    do
+      if [ "$BUILD_APP_ALIAS" == "$ALIAS" ]; then
+        BUILD_TREE=$TREE
+      fi
+    done
+    exec 0<&3
+    exec 3<&-
+  fi
 fi
 
 # Default to trunk setup
