@@ -48,8 +48,8 @@ if [ "$BUILD_WATCH" ]; then
   ac_add_options --enable-xterm-updates
 fi
 
-if [ -f $topsrcdir/$BUILD_APP/config/mozconfig ]; then
-  . $topsrcdir/$BUILD_APP/config/mozconfig
+if [ -f $BUILD_SOURCE/mozilla/$BUILD_APP/config/mozconfig ]; then
+  . $BUILD_SOURCE/mozilla/$BUILD_APP/config/mozconfig
 fi
 
 if [ -f $CONFIG/mozconfig ]; then

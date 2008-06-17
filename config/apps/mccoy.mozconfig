@@ -7,6 +7,7 @@ if [ "$BUILD_PLATFORM" == "mac" ]; then
   fi
 elif [ "$BUILD_PLATFORM" == "win" ]; then
   ac_add_options --with-libxul-sdk=/c/gecko-sdk
+  ac_add_options --enable-installer
 else
   ac_add_options --with-libxul-sdk=$HOME/gecko-sdk
 fi

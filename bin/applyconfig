@@ -86,6 +86,10 @@ if [ -f $BUILD_BASE/config/aliases ]; then
   exec 3<&-
 fi
 
+if [ ! "$BUILD_APP" ]; then
+  BUILD_APP=$BUILD_APP_ALIAS
+fi
+
 if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
   . $BUILD_BASE/config/apps/$BUILD_APP.config
 fi
