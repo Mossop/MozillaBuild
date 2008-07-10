@@ -57,4 +57,14 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
+echo BUILD_APP=$BUILD_APP
+echo BUILD_APP_ALIAS=$BUILD_APP_ALIAS
+echo BUILD_APP_OPTIONS=$BUILD_APP_OPTIONS
+echo
+echo BUILD_SOURCE=$BUILD_SOURCE
+echo MOZ_OBJDIR=$MOZ_OBJDIR
+echo
+echo MOZ_CO_TAG=$MOZ_CO_TAG
+echo
+
 . $BUILD_BASE/bin/mozconfig

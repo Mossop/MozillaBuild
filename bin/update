@@ -58,44 +58,33 @@ if [ -f $BUILD_SOURCE/cvsco.log ]; then
 fi
 
 cd $BUILD_SOURCE
-CLFLAGS="-A"
-if [ "$MOZ_CO_TAG" ]; then
-  FLAGS="$FLAGS \"MOZ_CO_TAG=$MOZ_CO_TAG\""
-  CLFLAGS="-r $MOZ_CO_TAG"
-fi
 
-FLAGS="MOZ_CO_PROJECT=$MOZ_CO_PROJECT"
-if [ "$MOZ_CO_DATE" ]; then
-  FLAGS="$FLAGS \"MOZ_CO_DATE=$MOZ_CO_DATE\""
-  CLFLAGS="$CLFLAGS -D \"$MOZ_CO_DATE\""
-  TIME=`date --date="$MOZ_CO_DATE" +%s`
+if [ -d mozilla/.hg ]; then
+  cd mozilla
+  hg pull -u
 else
-  TIME=`date +%s`
-fi
-
-cvs checkout $CLFLAGS mozilla/client.mk
-
-if [ "$BUILD_PLATFORM" == "mac" ]; then
-  CURRENTTZ=$TZ
-  export TZ="US/Pacific"
-  date -r $TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
-  date -r $TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M -0800\"" >>$BUILD_SOURCE/codate
-  export TZ=$CURRENTTZ
-  
-  if [ ! -f mozilla/build/macosx/universal/mozconfig ]; then
-    cvs checkout $CLFLAGS mozilla/build/macosx/universal/mozconfig
+  CLFLAGS="-A"
+  if [ "$MOZ_CO_TAG" ]; then
+    CLFLAGS="-r $MOZ_CO_TAG"
   fi
-else
-  TIME_OFFSET=`date --date="1970-01-01 00:00 PST" +%s`
-  TIME=$(($TIME-$TIME_OFFSET))
-  date --date=@$TIME +MOZ_BUILD_DATE=%Y%m%d%H >$BUILD_SOURCE/codate
-  date --date=@$TIME "+BUILD_CO_DATE=\"%Y-%m-%d %H:%M -0800\"" >>$BUILD_SOURCE/codate
-fi
 
-. $BUILD_SOURCE/codate
+  FLAGS="MOZ_CO_PROJECT=$MOZ_CO_PROJECT"
+  if [ "$MOZ_CO_DATE" ]; then
+    FLAGS="$FLAGS \"MOZ_CO_DATE=$MOZ_CO_DATE\""
+    CLFLAGS="$CLFLAGS -D \"$MOZ_CO_DATE\""
+  fi
 
-if [ "$BUILD_WATCH" ]; then
-  make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
-else
-  make -f mozilla/client.mk 2>&1 checkout $FLAGS
+  cvs checkout $CLFLAGS mozilla/client.mk
+
+  if [ "$BUILD_PLATFORM" == "mac" ]; then
+    if [ ! -f mozilla/build/macosx/universal/mozconfig ]; then
+      cvs checkout $CLFLAGS mozilla/build/macosx/universal/mozconfig
+    fi
+  fi
+
+  if [ "$BUILD_WATCH" ]; then
+    make -f mozilla/client.mk 2>&1 checkout $FLAGS | $BUILD_BASE/bin/buildwatch/buildwatch
+  else
+    make -f mozilla/client.mk 2>&1 checkout $FLAGS
+  fi
 fi

@@ -95,9 +95,9 @@ if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
 fi
 
 if [ ! "$BUILD_TREE" ]; then
-  if [ -f $BUILD_BASE/config/trees ]; then
+  if [ -f $BUILD_BASE/config/treemap ]; then
     exec 3<&0
-    exec 0<"$BUILD_BASE/config/trees"
+    exec 0<"$BUILD_BASE/config/treemap"
     while read ALIAS TREE
     do
       if [ "$BUILD_APP_ALIAS" == "$ALIAS" ]; then
@@ -111,9 +111,7 @@ fi
 
 # Default to trunk setup
 if [ ! "$BUILD_TREE" ]; then
-  if [ -f $BUILD_BASE/config/trees/$BUILD_CONFIG.config ]; then
-    BUILD_TREE=$BUILD_CONFIG
-  elif [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
+  if [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
     BUILD_TREE=$BUILD_CONFIG
   else
     BUILD_TREE=trunk

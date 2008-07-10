@@ -1,5 +1,5 @@
 if [ "$BUILD_PLATFORM" == "mac" ]; then
-  if [ "$BUILD_UNIVERSAL" ]; then
+  if [ "$BUILD_APP_OPTIONS" == "universal" ]; then
     ac_add_app_options ppc  --with-libxul-sdk=$HOME/gecko-sdk/ppc
     ac_add_app_options i386 --with-libxul-sdk=$HOME/gecko-sdk/i386
   else
@@ -12,3 +12,4 @@ else
   ac_add_options --with-libxul-sdk=$HOME/gecko-sdk
 fi
 ac_add_options --enable-update-channel=test
+ac_add_options --disable-crypto

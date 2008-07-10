@@ -1,1 +1,1 @@
-ac_add_options --enable-extensions=default,-xml-rpc
+ac_add_options --enable-extensions=default,nsstest
