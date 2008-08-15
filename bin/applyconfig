@@ -42,9 +42,9 @@
 # $Revision$
 #
 
-if [ "$OSTYPE" == "cygwin" ]; then
+if [ $OSTYPE = "cygwin" ]; then
   VCREDIST=$(cygpath "$VCINSTALLDIR")/redist
-elif [ "$OSTYPE" == "msys" ]; then
+elif [ $OSTYPE = "msys" ]; then
   VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
 fi
 
@@ -78,7 +78,7 @@ if [ -f $BUILD_BASE/config/aliases ]; then
   exec 0<"$BUILD_BASE/config/aliases"
   while read ALIAS APP
   do
-    if [ "$BUILD_APP_ALIAS" == "$ALIAS" ]; then
+    if [ $BUILD_APP_ALIAS = "$ALIAS" ]; then
       BUILD_APP=$APP
     fi
   done
@@ -100,7 +100,7 @@ if [ ! "$BUILD_TREE" ]; then
     exec 0<"$BUILD_BASE/config/treemap"
     while read ALIAS TREE
     do
-      if [ "$BUILD_APP_ALIAS" == "$ALIAS" ]; then
+      if [ $BUILD_APP_ALIAS = "$ALIAS" ]; then
         BUILD_TREE=$TREE
       fi
     done

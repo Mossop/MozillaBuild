@@ -1,4 +1,4 @@
-if [ "$BUILD_APP_OPTIONS" == "debug" ]; then
+if [ $BUILD_APP_OPTIONS = "debug" ]; then
   . $CONFIG/includes/debug.mozconfig
 #  ac_add_options --enable-debugger-info-modules=^editor,^view
 else

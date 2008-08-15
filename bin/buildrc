@@ -52,9 +52,9 @@ function config() {
   fi
 }
 
-if [ "${OSTYPE:0:5}" == "linux" ]; then
+if [ ${OSTYPE:0:5} = "linux" ]; then
   BUILD_PLATFORM=linux
-elif [ "${OSTYPE:0:6}" == "darwin" ]; then
+elif [ ${OSTYPE:0:6} = "darwin" ]; then
   BUILD_PLATFORM=mac
 else
   BUILD_PLATFORM=win
@@ -68,8 +68,8 @@ if [ ! -d $BUILD_BASE/build ]; then
   mkdir $BUILD_BASE/build
 fi
 
-if [ "$BUILD_PLATFORM" == "win" ]; then
-  if [ "$MOZ_TOOLS" == "" ]; then
+if [ $BUILD_PLATFORM = "win" ]; then
+  if [ $MOZ_TOOLS = "" ]; then
     export MOZ_TOOLS=$BUILD_BASE/tools/moztools
 
     if [ ! -d $BUILD_BASE/tools ]; then

@@ -76,7 +76,7 @@ else
 
   cvs checkout $CLFLAGS mozilla/client.mk
 
-  if [ "$BUILD_PLATFORM" == "mac" ]; then
+  if [ $BUILD_PLATFORM = "mac" ]; then
     if [ ! -f mozilla/build/macosx/universal/mozconfig ]; then
       cvs checkout $CLFLAGS mozilla/build/macosx/universal/mozconfig
     fi

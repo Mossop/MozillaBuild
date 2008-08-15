@@ -1,7 +1,7 @@
 mk_add_options MOZ_MAKE_FLAGS="-j4 -w"
 mk_add_options AUTOCONF=/opt/local/bin/autoconf213
 
-if [ "$BUILD_APP_OPTIONS" == "universal" ]; then
+if [ $BUILD_APP_OPTIONS = "universal" ]; then
   . $topsrcdir/build/macosx/universal/mozconfig
   ac_add_app_options ppc --enable-prebinding
 #elif [ "${OSTYPE:0:7}" == "darwin9" ]; then
