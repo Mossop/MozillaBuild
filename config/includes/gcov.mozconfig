@@ -1,0 +1,6 @@
+export CFLAGS="-fprofile-arcs -ftest-coverage"
+export CXXFLAGS="-fprofile-arcs -ftest-coverage"
+export LDFLAGS="-lgcov -static-libgcc"
+export EXTRA_DSO_LDFLAGS="-lgcov -static-libgcc"
+#ac_add_options --enable-debug
+#ac_add_options --disable-optimize
