@@ -45,6 +45,11 @@
 
 . $BUILD_BASE/bin/applyconfig
 
+BUILDDIR=
+if [ "$2" ]; then
+  BUILDDIR=/$2
+fi
+
 if [ "$1" ]; then
   mkdir -p $1
   cd $1
@@ -52,8 +57,8 @@ if [ "$1" ]; then
   cd $BUILD_SOURCE/mozilla
   ln -s $MOZ_OBJDIR $BUILD_CONFIG
   rm -f $TMPDIR/app.info
-  lcov -c -f -d $BUILD_CONFIG -o $DIR/app.info
-  genhtml -o $DIR $DIR/app.info
+  lcov -c -f -d ${BUILD_CONFIG}${BUILDDIR} -o $DIR/app.info
+  genhtml -o $DIR -p $BUILD_SOURCE/mozilla $DIR/app.info
   rm $BUILD_CONFIG
   rm $DIR/app.info
 else
