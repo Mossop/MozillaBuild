@@ -3,6 +3,8 @@ granparadiso  branch19
 bonecho       branch18
 deerpark      branch17
 shredder      branch19
-mccoy         branch19
-xulrunner     branch19
-seamonkey     branch19
+mccoy         branch191
+xulrunner     trunk
+seamonkey     comm-central
+twitter       trunk
+emrefactor    em-refactor
