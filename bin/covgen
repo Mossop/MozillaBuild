@@ -54,11 +54,11 @@ if [ "$1" ]; then
   mkdir -p $1
   cd $1
   DIR=`pwd`
-  cd $BUILD_SOURCE/mozilla
+  cd $BUILD_SOURCE
   ln -s $MOZ_OBJDIR $BUILD_CONFIG
   rm -f $TMPDIR/app.info
   lcov -c -f -d ${BUILD_CONFIG}${BUILDDIR} -o $DIR/app.info
-  genhtml -o $DIR -p $BUILD_SOURCE/mozilla $DIR/app.info
+  genhtml -o $DIR -p $BUILD_SOURCE $DIR/app.info
   rm $BUILD_CONFIG
   rm $DIR/app.info
 else

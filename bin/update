@@ -50,19 +50,18 @@ fi
 . $BUILD_BASE/bin/applyconfig
 
 if [ ! -d $BUILD_SOURCE ]; then
-  mkdir -p $BUILD_SOURCE
+  mkdir -p $BUILD_SOURCE/mozilla
+  BUILD_SOURCE=$BUILD_SOURCE/mozilla
 fi
 
-if [ -f $BUILD_SOURCE/cvsco.log ]; then
-  rm $BUILD_SOURCE/cvsco.log
+if [ -f $BUILD_SOURCE/../cvsco.log ]; then
+  rm $BUILD_SOURCE/../cvsco.log
 fi
 
-cd $BUILD_SOURCE
-
-if [ -d mozilla/.hg ]; then
-  cd mozilla
-  hg pull -u
+if [ -d $BUILD_SOURCE/.hg ]; then
+  hg -R $BUILD_SOURCE pull -u
 else
+  cd $BUILD_SOURCE/..
   CLFLAGS="-A"
   if [ "$MOZ_CO_TAG" ]; then
     CLFLAGS="-r $MOZ_CO_TAG"

@@ -52,6 +52,13 @@ function config() {
   fi
 }
 
+if [ -d /usr/lib/ccache ]; then
+  PATH=/usr/lib/ccache:$PATH
+fi
+if [ -d /opt/local/libexec/ccache ]; then
+  PATH=/opt/local/libexec/ccache:$PATH
+fi
+
 if [ ${OSTYPE:0:5} = "linux" ]; then
   BUILD_PLATFORM=linux
 elif [ ${OSTYPE:0:6} = "darwin" ]; then

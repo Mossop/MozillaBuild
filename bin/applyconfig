@@ -138,6 +138,9 @@ fi
 
 if [ ! "$BUILD_SOURCE" ]; then
   BUILD_SOURCE=$BUILD_BASE/source/$BUILD_TREE
+  if [ -d $BUILD_SOURCE/mozilla ]; then
+    BUILD_SOURCE=$BUILD_SOURCE/mozilla
+  fi
 fi
 
 export WIN32_REDIST_DIR
