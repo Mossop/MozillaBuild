@@ -48,6 +48,7 @@ if [ "$BUILD_WATCH" ]; then
   ac_add_options --enable-xterm-updates
 fi
 
+ac_add_options --enable-application=$BUILD_APP
 if [ -f $BUILD_SOURCE/$BUILD_APP/config/mozconfig ]; then
   . $BUILD_SOURCE/$BUILD_APP/config/mozconfig
 fi

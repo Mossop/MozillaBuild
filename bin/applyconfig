@@ -138,7 +138,7 @@ fi
 
 if [ ! "$BUILD_SOURCE" ]; then
   BUILD_SOURCE=$BUILD_BASE/source/$BUILD_TREE
-  if [ -d $BUILD_SOURCE/mozilla ]; then
+  if [ ! -f $BUILD_SOURCE/client.mk -a -f $BUILD_SOURCE/mozilla/client.mk ]; then
     BUILD_SOURCE=$BUILD_SOURCE/mozilla
   fi
 fi
