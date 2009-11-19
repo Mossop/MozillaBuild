@@ -45,11 +45,11 @@
 CONFIG=$BUILD_BASE/config
 
 if [ "$MOZ_MAKE_FLAGS" ]; then
-  mk_add_options MOZ_MAKE_FLAGS=$MOZ_MAKE_FLAGS
+  mk_add_options MOZ_MAKE_FLAGS="$MOZ_MAKE_FLAGS"
 fi
 
 if [ "$AUTOCONF" ]; then
-  mk_add_options AUTOCONF=$AUTOCONF
+  mk_add_options AUTOCONF="$AUTOCONF"
 fi
 
 if [ "$BUILD_WATCH" ]; then
