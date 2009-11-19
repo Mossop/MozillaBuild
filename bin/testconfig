@@ -66,5 +66,8 @@ echo MOZ_OBJDIR=$MOZ_OBJDIR
 echo
 echo MOZ_CO_TAG=$MOZ_CO_TAG
 echo
+echo BUILD_PYMAKE=$BUILD_PYMAKE
+echo BUILD_WATCH=$BUILD_WATCH
+echo
 
 . $BUILD_BASE/bin/mozconfig

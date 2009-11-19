@@ -94,6 +94,10 @@ if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
   . $BUILD_BASE/config/apps/$BUILD_APP.config
 fi
 
+if [ -f $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config ]; then
+  . $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
+fi
+
 if [ ! "$BUILD_TREE" ]; then
   if [ -f $BUILD_BASE/config/treemap ]; then
     exec 3<&0
@@ -126,7 +130,7 @@ if [ -f $BUILD_BASE/config/trees/$BUILD_TREE.local.config ]; then
   . $BUILD_BASE/config/trees/$BUILD_TREE.local.config
 fi
 
-if [ "$BUILD_WATCH" ] || [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
+if [ ! "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch ]; then
   BUILD_WATCH=1
 else
   unset BUILD_WATCH
@@ -145,6 +149,7 @@ fi
 
 export WIN32_REDIST_DIR
 export MOZ_OBJDIR
+export MOZ_MAKE_FLAGS
 export BUILD_TREE
 export BUILD_SOURCE
 export BUILD_WATCH

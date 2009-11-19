@@ -1,6 +1,3 @@
-mk_add_options MOZ_MAKE_FLAGS="-j4 -w"
-mk_add_options AUTOCONF=/opt/local/bin/autoconf213
-
 if [ "${OSTYPE:0:8}" == "darwin10" ]; then
   CC="gcc-4.2 -arch i386"
   CXX="g++-4.2 -arch i386"
