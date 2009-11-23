@@ -80,12 +80,12 @@ if [ "$BUILD_PYMAKE" ]; then
   SRC=`basename $BUILD_SOURCE`
   ../../source/$SRC/configure
   if [ "$BUILD_WATCH" = "1" ]; then
-    python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS | tee $LOGNAME | $BUILD_BASE/bin/buildwatch/buildwatch
+    python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
   else
     python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS | tee $LOGNAME
   fi
 elif [ "$BUILD_WATCH" = "1" ]; then
-  make -f client.mk 2>&1 build | tee $LOGNAME | $BUILD_BASE/bin/buildwatch/buildwatch
+  make -f client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
 else
   make -f client.mk 2>&1 build | tee $LOGNAME
 fi
