@@ -42,6 +42,13 @@
 # $Revision$
 #
 
+if [ -z "$ZSH_VERSION" ]; then
+  BUILD_SHELL="zsh"
+else
+  BUILD_SHELL="bash"
+fi
+export BUILD_SHELL
+
 function config() {
   if [ "$1" ]; then
     echo "Setting up build environment for $1."
@@ -59,14 +66,30 @@ if [ -d /opt/local/libexec/ccache ]; then
   PATH=/opt/local/libexec/ccache:$PATH
 fi
 
-if [ ${OSTYPE:0:5} = "linux" ]; then
-  BUILD_PLATFORM=linux
-elif [ ${OSTYPE:0:6} = "darwin" ]; then
-  BUILD_PLATFORM=mac
+if [ "$BUILD_SHELL" = "zsh" ]; then
+  if [ ${OSTYPE:0:5} = "linux" ]; then
+    BUILD_PLATFORM=linux
+  elif [ ${OSTYPE:0:6} = "darwin" ]; then
+    BUILD_PLATFORM=mac
+  else
+    BUILD_PLATFORM=win
+  fi
 else
-  BUILD_PLATFORM=win
+  if [ $OSTYPE[0,5] = "linux" ]; then
+    BUILD_PLATFORM=linux
+  elif [ $OSTYPE[0,6] = "darwin" ]; then
+    BUILD_PLATFORM=mac
+    if [ $OSTYPE[7,7] = "1" ]; then
+      BUILD_PLATFORM_VERSION=$OSTYPE[7,8]
+    else
+      BUILD_PLATFORM_VERSION=$OSTYPE[7,7]
+    fi
+  else
+    BUILD_PLATFORM=win
+  fi
 fi
 export BUILD_PLATFORM
+export BUILD_PLATFORM_VERSION
 
 export BUILD_BASE=`echo $BUILD_BASE | sed -e s/\\\\/$//g`
 
@@ -116,6 +139,5 @@ export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
 export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export MOZCONFIG=$BUILD_BASE/bin/mozconfig
-export -f config
 
 echo -e "\nUse \"build\" to build the tree."
