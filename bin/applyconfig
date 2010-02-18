@@ -42,26 +42,6 @@
 # $Revision$
 #
 
-if [ $OSTYPE = "cygwin" ]; then
-  VCREDIST=$(cygpath "$VCINSTALLDIR")/redist
-elif [ $OSTYPE = "msys" ]; then
-  VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
-fi
-
-if [ -d $BUILD_BASE/tools/redist ]; then
-  export BUILD_REDIST=$BUILD_BASE/tools/redist_std
-elif [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
-  export BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
-fi
-
-if [ -d $BUILD_BASE/tools/redist_debug ]; then
-  export BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
-elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
-  export BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
-fi
-
-WIN32_REDIST_DIR="\"$BUILD_REDIST\""
-
 BUILD_APP_ALIAS=`echo $BUILD_CONFIG | sed -e s/-.*//`
 if echo $BUILD_CONFIG | grep -q -- -; then BUILD_APP_OPTIONS=${BUILD_CONFIG#*-*}; fi
 
@@ -147,7 +127,6 @@ if [ ! "$BUILD_SOURCE" ]; then
   fi
 fi
 
-export WIN32_REDIST_DIR
 export MOZ_OBJDIR
 export MOZ_MAKE_FLAGS
 export BUILD_TREE

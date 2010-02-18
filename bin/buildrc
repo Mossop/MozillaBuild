@@ -117,6 +117,30 @@ if [ $BUILD_PLATFORM = "win" ]; then
     export GLIB_PREFIX=$MOZ_TOOLS
     export LIBIDL_PREFIX=$MOZ_TOOLS
   fi
+
+  if [ $OSTYPE = "cygwin" ]; then
+    VCREDIST=$(cygpath "$VCINSTALLDIR")/redist
+  elif [ $OSTYPE = "msys" ]; then
+    VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
+  fi
+  
+  if [ -d $BUILD_BASE/tools/redist ]; then
+    BUILD_REDIST=$BUILD_BASE/tools/redist_std
+  elif [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
+    BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
+  elif [ -d "$VCREDIST/x86/Microsoft.VC90.CRT" ]; then
+    BUILD_REDIST=$VCREDIST/x86/Microsoft.VC90.CRT
+  fi
+  
+  if [ -d $BUILD_BASE/tools/redist_debug ]; then
+    BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
+  elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
+    BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
+  elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT" ]; then
+    BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT
+  fi
+  
+  export WIN32_REDIST_DIR="$BUILD_REDIST"
 fi
 
 if [ "$MOZ_CVS_USER" ]; then
