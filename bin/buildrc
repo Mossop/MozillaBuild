@@ -43,9 +43,9 @@
 #
 
 if [ -z "$ZSH_VERSION" ]; then
-  BUILD_SHELL="zsh"
-else
   BUILD_SHELL="bash"
+else
+  BUILD_SHELL="zsh"
 fi
 export BUILD_SHELL
 
@@ -66,11 +66,16 @@ if [ -d /opt/local/libexec/ccache ]; then
   PATH=/opt/local/libexec/ccache:$PATH
 fi
 
-if [ "$BUILD_SHELL" = "zsh" ]; then
+if [ "$BUILD_SHELL" = "bash" ]; then
   if [ ${OSTYPE:0:5} = "linux" ]; then
     BUILD_PLATFORM=linux
   elif [ ${OSTYPE:0:6} = "darwin" ]; then
     BUILD_PLATFORM=mac
+    if [ ${OSTYPE:6:1} = "1" ]; then
+      BUILD_PLATFORM_VERSION=${OSTYPE:6:2}
+    else
+      BUILD_PLATFORM_VERSION=${OSTYPE:6:1}
+    fi
   else
     BUILD_PLATFORM=win
   fi
