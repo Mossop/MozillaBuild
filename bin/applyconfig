@@ -95,8 +95,8 @@ fi
 
 # Default to trunk setup
 if [ ! "$BUILD_TREE" ]; then
-  if [ -d $BUILD_BASE/source/$BUILD_CONFIG ]; then
-    BUILD_TREE=$BUILD_CONFIG
+  if [ -d $BUILD_BASE/source/$BUILD_APP_ALIAS ]; then
+    BUILD_TREE=$BUILD_APP_ALIAS
   else
     BUILD_TREE=trunk
   fi
