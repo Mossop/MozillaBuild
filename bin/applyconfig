@@ -42,6 +42,8 @@
 # $Revision$
 #
 
+BUILD_TARGET=$BUILD_PLATFORM
+
 BUILD_APP_ALIAS=`echo $BUILD_CONFIG | sed -e s/-.*//`
 if echo $BUILD_CONFIG | grep -q -- -; then BUILD_APP_OPTIONS=${BUILD_CONFIG#*-*}; fi
 
@@ -80,6 +82,10 @@ fi
 
 if [ -f $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config ]; then
   . $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
+fi
+
+if [ -f $BUILD_BASE/config/targets/$BUILD_TARGET.config ]; then
+  . $BUILD_BASE/config/targets/$BUILD_TARGET.config
 fi
 
 if [ ! "$BUILD_TREE" ]; then
@@ -140,3 +146,4 @@ export BUILD_APP
 export BUILD_APP_ALIAS
 export BUILD_APP_OPTIONS
 export BUILD_CONFIG
+export BUILD_TARGET

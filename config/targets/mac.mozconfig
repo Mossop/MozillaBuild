@@ -2,7 +2,6 @@ if [ "$BUILD_PLATFORM_VERSION" = "10" ]; then
   CC="gcc-4.2 -arch i386"
   CXX="g++-4.2 -arch i386"
   ac_add_options --target=i386-apple-darwin8.0.0
-  ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.5.sdk
   ac_add_options --enable-macos-target=10.5
 
   HOST_CC="gcc-4.2"
@@ -22,5 +21,4 @@ elif [ "$BUILD_PLATFORM_VERSION" = "9" ]; then
   ac_add_options --enable-dtrace
 fi
 
-ac_add_options --enable-shark
-ac_add_options --enable-debugger-info-modules
+#ac_add_options --enable-shark

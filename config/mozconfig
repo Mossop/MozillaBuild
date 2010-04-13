@@ -1,6 +1,5 @@
 if [ "$BUILD_APP_OPTIONS" = "debug" ]; then
   . $CONFIG/includes/debug.mozconfig
-#  ac_add_options --enable-debugger-info-modules=^editor,^view
 elif [ "$BUILD_APP_OPTIONS" = "gcov" ]; then
   . $CONFIG/includes/gcov.mozconfig
 else
