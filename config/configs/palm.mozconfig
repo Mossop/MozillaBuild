@@ -1,0 +1,26 @@
+ac_add_options --disable-ogg
+ac_add_options --disable-wave
+
+# mobile options
+ac_add_options --disable-installer
+ac_add_options --disable-crashreporter
+ac_add_options --disable-printing
+ac_add_options --disable-javaxpcom
+
+# webos options
+ac_add_options --target=arm-palm-eabi
+ac_add_options --disable-pedantic
+
+ac_add_options --with-palm-pdk="/opt/PalmPDK"
+ac_add_options --with-endian=little
+ac_add_options --enable-tree-freetype
+ac_add_options --enable-faststripe
+ac_add_options --disable-dbm
+ac_add_options --disable-ctypes
+
+# other options
+ac_add_options --disable-necko-wifi
+ac_add_options --disable-plugins
+
+# ssltunnel can't build because the ndk doesn't have string, vector, or algorithm headers
+ac_add_options --disable-tests

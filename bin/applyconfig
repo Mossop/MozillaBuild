@@ -74,6 +74,10 @@ if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
   . $BUILD_BASE/config/apps/$BUILD_APP.config
 fi
 
+if [ -f $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config ]; then
+  . $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config
+fi
+
 if [ -f $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config ]; then
   . $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
 fi
