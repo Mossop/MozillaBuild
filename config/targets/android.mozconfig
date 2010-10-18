@@ -1,0 +1,16 @@
+# Add the correct paths here:
+ac_add_options --with-android-ndk="/Users/dave/android-ndk-r4c"
+ac_add_options --with-android-sdk="/Users/dave/android-sdk-mac_x86/platforms/android-8"
+ac_add_options --with-android-tools="/Users/dave/android-sdk-mac_x86/tools"
+
+ac_add_options --target=arm-android-eabi
+ac_add_options --with-endian=little
+ac_add_options --with-system-zlib="/Users/dave/android-ndk-r4c/build/platforms/android-8/arch-arm/usr"
+
+# Uncomment to run on ARMv5 or ARMv6 devices, including the emulator
+#ac_add_options --disable-thumb2
+
+ac_add_options --disable-optimize
+ac_add_options --enable-debug-symbols
+
+ac_add_options --disable-tests

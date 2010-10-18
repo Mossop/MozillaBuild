@@ -79,8 +79,8 @@ if [ -f $CONFIG/platforms/$BUILD_PLATFORM.mozconfig ]; then
   . $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
 fi
 
-if [ -f $CONFIG/targets/$BUILD_TARGET.mozconfig ]; then
-  . $CONFIG/targets/$BUILD_TARGET.mozconfig
+if [ -f $CONFIG/targets/$COMPILE_TARGET.mozconfig ]; then
+  . $CONFIG/targets/$COMPILE_TARGET.mozconfig
 fi
 
 if [ -f $CONFIG/$BUILD_CONFIG.mozconfig ]; then
