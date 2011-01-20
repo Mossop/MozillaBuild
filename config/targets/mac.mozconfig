@@ -20,7 +20,7 @@ if [ "$BUILD_APP_OPTIONS" = "palm" ]; then
   LD=ld
   STRIP="strip -x -S"
   CROSS_COMPILE=1
-elif [ "$BUILD_PLATFORM_VERSION" = "10" ]; then
+elif [ "$BUILD_APP_OPTIONS" = "x86" ]; then
   CC="gcc-4.2 -arch i386"
   CXX="g++-4.2 -arch i386"
   ac_add_options --target=i386-apple-darwin8.0.0
@@ -35,12 +35,10 @@ elif [ "$BUILD_PLATFORM_VERSION" = "10" ]; then
   STRIP="strip -x -S"
   CROSS_COMPILE=1
 
-  ac_add_options --enable-dtrace
 elif [ "$BUILD_APP_OPTIONS" = "universal" ]; then
   . $topsrcdir/build/macosx/universal/mozconfig
   ac_add_app_options ppc --enable-prebinding
-elif [ "$BUILD_PLATFORM_VERSION" = "9" ]; then
-  ac_add_options --enable-dtrace
+#elif [ "$BUILD_PLATFORM_VERSION" = "9" ]; then
 fi
 
 #ac_add_options --enable-shark

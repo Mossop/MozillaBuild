@@ -83,6 +83,8 @@ if [ "$BUILD_PYMAKE" ]; then
   else
     ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME
   fi
+elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
+  make -f client.mk 2>&1 configure | tee $LOGNAME
 elif [ "$BUILD_WATCH" = "1" ]; then
   make -f client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
 else

@@ -2,6 +2,8 @@ if [ "$BUILD_APP_OPTIONS" = "debug" ]; then
   . $CONFIG/includes/debug.mozconfig
 elif [ "$BUILD_APP_OPTIONS" = "gcov" ]; then
   . $CONFIG/includes/gcov.mozconfig
+elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
+  . $CONFIG/includes/l10n.mozconfig
 else
   ac_add_options --enable-optimize
 fi
@@ -11,7 +13,7 @@ ac_add_options --disable-activex-scripting
 ac_add_options --disable-installer
 ac_add_options --disable-crashreporter
 
-#ac_add_options --enable-logrefcnt
+ac_add_options --enable-logrefcnt
 #ac_add_options --disable-tests
 #ac_add_options --disable-mochitest
 #ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk
