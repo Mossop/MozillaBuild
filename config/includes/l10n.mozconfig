@@ -1,0 +1,3 @@
+ac_add_options --disable-compile-environment
+ac_add_options --with-l10n-base=$BUILD_BASE/source/l10n
+ac_add_options --enable-application=browser
