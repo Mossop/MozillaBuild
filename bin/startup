@@ -18,7 +18,7 @@ fi
 export BUILD_BASE=`pwd`
 export PATH=$BUILD_BASE/bin:$PATH
 
-BUILD_CONFIG_DEFAULT=minefield
+BUILD_CONFIG_DEFAULT=nightly
 if [ -f config/localrc ]; then
   . config/localrc
 fi
