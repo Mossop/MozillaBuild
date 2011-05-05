@@ -72,16 +72,12 @@ fi
 LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 
 if [ "$BUILD_PYMAKE" ]; then
-  export SHELL
-  $AUTOCONF
-  cd $BUILD_SOURCE/js/src; $AUTOCONF;
-  cd $BUILD_SOURCE/nsprpub; $AUTOCONF;
   cd $MOZ_OBJDIR
   SRC=`basename $BUILD_SOURCE`
   if [ "$BUILD_WATCH" = "1" ]; then
-    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
+    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py -f $BUILD_SOURCE/client.mk $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
   else
-    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME
+    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py -f $BUILD_SOURCE/client.mk $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME
   fi
 elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
   make -f client.mk 2>&1 configure | tee $LOGNAME
