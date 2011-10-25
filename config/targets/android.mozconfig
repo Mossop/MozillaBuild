@@ -3,16 +3,21 @@ if [ $BUILD_PLATFORM = "mac" ]; then
 elif [ $BUILD_PLATFORM = "linux" ]; then
   SDK=${HOME}/android-sdk-linux_x86
 fi
-NDK=${HOME}/android-ndk-r4c
+NDK=${HOME}/android-ndk-r6
 
 # Add the correct paths here:
 ac_add_options --with-android-ndk="${NDK}"
-ac_add_options --with-android-sdk="${SDK}/platforms/android-8"
+ac_add_options --with-android-sdk="${SDK}/platforms/android-13"
+ac_add_options --with-android-version=9
 ac_add_options --with-android-tools="${SDK}/tools"
+ac_add_options --with-android-toolchain="${NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86"
+ac_add_options --with-android-platform="${NDK}/platforms/android-9/arch-arm"
 
-ac_add_options --target=arm-android-eabi
+ac_add_options --target=arm-linux-androideabi
 ac_add_options --with-endian=little
-#ac_add_options --with-system-zlib="${NDK}/build/platforms/android-8/arch-arm/usr"
+ac_add_options --with-ccache
+
+ac_add_options --disable-elf-hack
 
 # Uncomment to run on ARMv5 or ARMv6 devices, including the emulator
 #ac_add_options --disable-thumb2
