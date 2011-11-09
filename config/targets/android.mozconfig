@@ -1,16 +1,18 @@
+NDK=${HOME}/android-ndk-r6b
+
 if [ $BUILD_PLATFORM = "mac" ]; then
-  SDK=${HOME}/android-sdk-mac_x86
+  SDK=${HOME}/android-sdk-macosx
+  ac_add_options --with-android-toolchain="${NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/darwin-x86"
 elif [ $BUILD_PLATFORM = "linux" ]; then
   SDK=${HOME}/android-sdk-linux_x86
+  ac_add_options --with-android-toolchain="${NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86"
 fi
-NDK=${HOME}/android-ndk-r6
 
 # Add the correct paths here:
 ac_add_options --with-android-ndk="${NDK}"
 ac_add_options --with-android-sdk="${SDK}/platforms/android-13"
 ac_add_options --with-android-version=9
 ac_add_options --with-android-tools="${SDK}/tools"
-ac_add_options --with-android-toolchain="${NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86"
 ac_add_options --with-android-platform="${NDK}/platforms/android-9/arch-arm"
 
 ac_add_options --target=arm-linux-androideabi
@@ -28,4 +30,4 @@ fi
 
 ac_add_options --enable-debug-symbols
 
-ac_add_options --disable-tests
+#ac_add_options --disable-tests
