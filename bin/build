@@ -43,6 +43,13 @@
 # $Revision$
 #
 
+function runautoconf() {
+  if [ -f "$1/configure.in" ]; then
+    cd $1
+	$AUTOCONF
+  fi
+}
+
 if [ "$1" ]; then
   config $1
 fi
@@ -71,18 +78,27 @@ fi
 
 LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 
+runautoconf $BUILD_SOURCE
+runautoconf $BUILD_SOURCE/js/src
+runautoconf $BUILD_SOURCE/mozilla
+runautoconf $BUILD_SOURCE/mozilla/js/src
+runautoconf $BUILD_SOURCE/ldap/sdks/c-sdk
+
 if [ "$BUILD_PYMAKE" ]; then
-  cd $MOZ_OBJDIR
-  SRC=`basename $BUILD_SOURCE`
-  if [ "$BUILD_WATCH" = "1" ]; then
-    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py -f $BUILD_SOURCE/client.mk $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
+  if [ -d $BUILD_SOURCE/mozilla ]; then
+    BUILD_MAKE="python -OO $BUILD_SOURCE/mozilla/build/pymake/make.py"
   else
-    ( ../../source/$SRC/configure && python -O $BUILD_SOURCE/build/pymake/make.py -f $BUILD_SOURCE/client.mk $MOZ_MAKE_FLAGS ) 2>&1 | tee $LOGNAME
+    BUILD_MAKE="python -OO $BUILD_SOURCE/build/pymake/make.py"
   fi
-elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
-  make -f client.mk 2>&1 configure | tee $LOGNAME
-elif [ "$BUILD_WATCH" = "1" ]; then
-  make -f client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
 else
-  make -f client.mk 2>&1 build | tee $LOGNAME
+  BUILD_MAKE=make
+fi
+
+cd $BUILD_SOURCE
+if [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
+  $BUILD_MAKE -f client.mk 2>&1 configure | tee $LOGNAME
+elif [ "$BUILD_WATCH" = "1" ]; then
+  $BUILD_MAKE -f client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
+else
+  $BUILD_MAKE -f client.mk 2>&1 build | tee $LOGNAME
 fi
