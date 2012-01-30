@@ -94,11 +94,11 @@ else
   BUILD_MAKE=make
 fi
 
-cd $BUILD_SOURCE
+cd $MOZ_OBJDIR
 if [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
-  $BUILD_MAKE -f client.mk 2>&1 configure | tee $LOGNAME
+  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 configure | tee $LOGNAME
 elif [ "$BUILD_WATCH" = "1" ]; then
-  $BUILD_MAKE -f client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
+  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
 else
-  $BUILD_MAKE -f client.mk 2>&1 build | tee $LOGNAME
+  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 build | tee $LOGNAME
 fi

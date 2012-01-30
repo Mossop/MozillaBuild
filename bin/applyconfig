@@ -126,21 +126,28 @@ else
   unset BUILD_WATCH
 fi
 
-if [ ! "$MOZ_OBJDIR" ]; then
-  MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
-fi
-
 if [ ! "$BUILD_SOURCE" ]; then
   BUILD_SOURCE=$BUILD_BASE/source/$BUILD_TREE
+  BUILD_SOURCE_REL=../../source/$BUILD_TREE
   if [ ! -f $BUILD_SOURCE/client.mk -a -f $BUILD_SOURCE/mozilla/client.mk ]; then
     BUILD_SOURCE=$BUILD_SOURCE/mozilla
+	BUILD_SOURCE_REL=$BUILD_SOURCE_REL/mozilla
   fi
+else
+  BUILD_SOURCE_REL=$BUILD_SOURCE
+fi
+
+if [ ! "$MOZ_OBJDIR" ]; then
+  MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_CONFIG
+else
+  BUILD_SOURCE_REL=$BUILD_SOURCE
 fi
 
 export MOZ_OBJDIR
 export MOZ_MAKE_FLAGS
 export BUILD_TREE
 export BUILD_SOURCE
+export BUILD_SOURCE_REL
 export BUILD_WATCH
 export BUILD_APP
 export BUILD_APP_ALIAS
