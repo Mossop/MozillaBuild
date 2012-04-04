@@ -143,6 +143,10 @@ else
   BUILD_SOURCE_REL=$BUILD_SOURCE
 fi
 
+if [ "$BUILD_APP_OPTIONS" == "universal" ]; then
+  BUILD_SOURCE_REL=$BUILD_SOURCE
+fi
+
 export MOZ_OBJDIR
 export MOZ_MAKE_FLAGS
 export BUILD_TREE
