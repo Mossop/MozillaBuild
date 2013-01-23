@@ -44,6 +44,10 @@
 
 CONFIG=$BUILD_BASE/config
 
+if [ "$MOZ_OBJDIR" ]; then
+  mk_add_options MOZ_OBJDIR="$MOZ_OBJDIR"
+fi
+
 if [ "$MOZ_MAKE_FLAGS" ]; then
   mk_add_options MOZ_MAKE_FLAGS="$MOZ_MAKE_FLAGS"
 fi
