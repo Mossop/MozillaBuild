@@ -1,0 +1,13 @@
+build
+build.log
+build.log.old
+clean
+cvsco.log
+cvsco.log.old
+.bash_history
+.cvspass
+packages
+tools
+logs
+source
+patches
