@@ -146,6 +146,9 @@ if [ $BUILD_PLATFORM = "win" ]; then
   fi
   
   export WIN32_REDIST_DIR="$BUILD_REDIST"
+  export BUILD_PYTHON="${MOZBUILDDIR}python\\python.exe"
+else
+  export BUILD_PYTHON=python
 fi
 
 if [ "$MOZ_CVS_USER" ]; then

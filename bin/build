@@ -86,9 +86,9 @@ runautoconf $BUILD_SOURCE/ldap/sdks/c-sdk
 
 if [ "$BUILD_PYMAKE" ]; then
   if [ -d $BUILD_SOURCE/mozilla ]; then
-    BUILD_MAKE="python -OO $BUILD_SOURCE/mozilla/build/pymake/make.py"
+    BUILD_MAKE="$BUILD_PYTHON -OO $BUILD_SOURCE/mozilla/build/pymake/make.py"
   else
-    BUILD_MAKE="python -OO $BUILD_SOURCE/build/pymake/make.py"
+    BUILD_MAKE="$BUILD_PYTHON -OO $BUILD_SOURCE/build/pymake/make.py"
   fi
 else
   BUILD_MAKE=make
