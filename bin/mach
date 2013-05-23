@@ -45,4 +45,4 @@
 
 . $BUILD_BASE/bin/applyconfig
 
-$BUILD_SOURCE/mach "$@"
+$BUILD_PYTHON $BUILD_SOURCE/mach "$@"
