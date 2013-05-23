@@ -151,17 +151,6 @@ else
   export BUILD_PYTHON=python
 fi
 
-if [ "$MOZ_CVS_USER" ]; then
-  export CVS_RSH=ssh
-  export CVSROOT=$MOZ_CVS_USER@cvs.mozilla.org:/cvsroot
-else
-  export CVSROOT=:pserver:anonymous@cvs-mirror.mozilla.org:/cvsroot
-  if [ ! -f "$HOME/.cvspass" ]; then
-    echo -e "\nPlease press enter at the password prompt...\n"
-    cvs login 2>/dev/null
-  fi
-fi
-
 cd $BUILD_BASE
 
 export XPCOM_DEBUG_BREAK=warn
@@ -169,5 +158,3 @@ export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
 export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export MOZCONFIG=$BUILD_BASE/bin/mozconfig
-
-echo -e "\nUse \"build\" to build the tree."

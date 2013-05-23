@@ -1,1 +1,3 @@
-ac_add_options --enable-jemalloc
+if [ "$BUILD_APP_OPTIONS" != "debug" ]; then
+  ac_add_options --enable-jemalloc
+fi

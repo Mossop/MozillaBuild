@@ -1,5 +1,0 @@
-SDKVERSION=191
-. $CONFIG/includes/geckosdk.mozconfig
-
-ac_add_options --enable-update-channel=test
-ac_add_options --disable-crypto
