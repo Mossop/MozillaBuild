@@ -43,6 +43,10 @@
 # $Revision: 1434 $
 #
 
+function log() {
+  :
+}
+
 . $BUILD_BASE/bin/applyconfig
 
 $BUILD_PYTHON $BUILD_SOURCE/mach "$@"

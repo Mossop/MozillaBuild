@@ -43,6 +43,10 @@
 # $Revision: 1228 $
 #
 
+function log() {
+  echo \# $@
+}
+
 function ac_add_options() {
   echo ac_add_options $@
 }

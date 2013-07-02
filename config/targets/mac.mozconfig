@@ -1,5 +1,5 @@
 if [ "$BUILD_APP_OPTIONS" = "universal" ]; then
-  . $topsrcdir/build/macosx/universal/mozconfig
+  include $topsrcdir/build/macosx/universal/mozconfig
   ac_add_app_options ppc --enable-prebinding
 fi
 

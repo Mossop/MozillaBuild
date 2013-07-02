@@ -1,7 +1,7 @@
 if [ "$BUILD_APP_OPTIONS" = "debug" ]; then
-  . $CONFIG/includes/debug.mozconfig
+  include $CONFIG/includes/debug.mozconfig
 elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
-  . $CONFIG/includes/l10n.mozconfig
+  include $CONFIG/includes/l10n.mozconfig
 else
   ac_add_options --enable-optimize
 fi

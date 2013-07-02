@@ -42,6 +42,13 @@
 # $Revision$
 #
 
+function include() {
+  log include "$1"
+  if [ -f $1 ]; then
+    . $1
+  fi
+}
+
 CONFIG=$BUILD_BASE/config
 
 if [ "$MOZ_OBJDIR" ]; then
@@ -61,32 +68,14 @@ if [ "$BUILD_WATCH" ]; then
 fi
 
 ac_add_options --enable-application=$BUILD_APP
-if [ -f $BUILD_SOURCE/$BUILD_APP/config/mozconfig ]; then
-  . $BUILD_SOURCE/$BUILD_APP/config/mozconfig
-fi
 
-if [ -f $CONFIG/mozconfig ]; then
-  . $CONFIG/mozconfig
-fi
-
-if [ -f $CONFIG/apps/$BUILD_APP.mozconfig ]; then
-  . $CONFIG/apps/$BUILD_APP.mozconfig
-fi
-
-if [ -f $CONFIG/configs/$BUILD_APP_ALIAS.mozconfig ]; then
-  . $CONFIG/configs/$BUILD_APP_ALIAS.mozconfig
-fi
+include $BUILD_SOURCE/$BUILD_APP/config/mozconfig
+include $CONFIG/mozconfig
+include $CONFIG/apps/$BUILD_APP.mozconfig
+include $CONFIG/configs/$BUILD_APP_ALIAS.mozconfig
 
 mk_add_options RUN_AUTOCONF_LOCALLY=1
 
-if [ -f $CONFIG/platforms/$BUILD_PLATFORM.mozconfig ]; then
-  . $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
-fi
-
-if [ -f $CONFIG/targets/$COMPILE_TARGET.mozconfig ]; then
-  . $CONFIG/targets/$COMPILE_TARGET.mozconfig
-fi
-
-if [ -f $CONFIG/$BUILD_CONFIG.mozconfig ]; then
-  . $CONFIG/$BUILD_CONFIG.mozconfig
-fi
+include $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
+include $CONFIG/targets/$COMPILE_TARGET.mozconfig
+include $CONFIG/$BUILD_CONFIG.mozconfig

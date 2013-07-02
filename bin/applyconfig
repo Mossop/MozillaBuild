@@ -42,18 +42,20 @@
 # $Revision$
 #
 
+function include() {
+  log include "$1"
+  if [ -f $1 ]; then
+    . $1
+  fi
+}
+
 COMPILE_TARGET=$BUILD_PLATFORM
 
 BUILD_APP_ALIAS=`echo $BUILD_CONFIG | sed -e s/-.*//`
 if echo $BUILD_CONFIG | grep -q -- -; then BUILD_APP_OPTIONS=${BUILD_CONFIG#*-*}; fi
 
-if [ -f $BUILD_BASE/config/config ]; then
-  . $BUILD_BASE/config/config
-fi
-
-if [ -f $BUILD_BASE/config/$BUILD_CONFIG.config ]; then
-  . $BUILD_BASE/config/$BUILD_CONFIG.config
-fi
+include $BUILD_BASE/config/config
+include $BUILD_BASE/config/$BUILD_CONFIG.config
 
 if [ -f $BUILD_BASE/config/aliases ]; then
   exec 3<&0
@@ -72,21 +74,10 @@ if [ ! "$BUILD_APP" ]; then
   BUILD_APP=$BUILD_APP_ALIAS
 fi
 
-if [ -f $BUILD_BASE/config/apps/$BUILD_APP.config ]; then
-  . $BUILD_BASE/config/apps/$BUILD_APP.config
-fi
-
-if [ -f $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config ]; then
-  . $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config
-fi
-
-if [ -f $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config ]; then
-  . $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
-fi
-
-if [ -f $BUILD_BASE/config/targets/$COMPILE_TARGET.config ]; then
-  . $BUILD_BASE/config/targets/$COMPILE_TARGET.config
-fi
+include $BUILD_BASE/config/apps/$BUILD_APP.config
+include $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config
+include $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
+include $BUILD_BASE/config/targets/$COMPILE_TARGET.config
 
 if [ ! "$BUILD_TREE" ]; then
   if [ -f $BUILD_BASE/config/treemap ]; then
@@ -112,13 +103,8 @@ if [ ! "$BUILD_TREE" ]; then
   fi
 fi
  
-if [ -f $BUILD_BASE/config/trees/$BUILD_TREE.config ]; then
-  . $BUILD_BASE/config/trees/$BUILD_TREE.config
-fi
-
-if [ -f $BUILD_BASE/config/trees/$BUILD_TREE.local.config ]; then
-  . $BUILD_BASE/config/trees/$BUILD_TREE.local.config
-fi
+include $BUILD_BASE/config/trees/$BUILD_TREE.config
+include $BUILD_BASE/config/trees/$BUILD_TREE.local.config
 
 if [ ! "$BUILD_WATCH" ] && [ -f $BUILD_BASE/bin/buildwatch/buildwatch.py ]; then
   BUILD_WATCH=1
