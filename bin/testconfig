@@ -43,19 +43,19 @@
 # $Revision: 1228 $
 #
 
-function log() {
+log() {
   echo \# $@
 }
 
-function ac_add_options() {
+ac_add_options() {
   echo ac_add_options $@
 }
 
-function ac_add_app_options() {
+ac_add_app_options() {
   echo ac_add_app_options $@
 }
 
-function mk_add_options() {
+mk_add_options() {
   echo mk_add_options $@
 }
 

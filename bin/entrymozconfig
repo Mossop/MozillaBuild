@@ -42,7 +42,7 @@
 # $Revision$
 #
 
-function log() {
+log() {
   :
 }
 

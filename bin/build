@@ -43,11 +43,11 @@
 # $Revision$
 #
 
-function log() {
+log() {
   :
 }
 
-function runautoconf() {
+runautoconf() {
   if [ -f "$1/configure.in" ]; then
     cd $1
 	$AUTOCONF

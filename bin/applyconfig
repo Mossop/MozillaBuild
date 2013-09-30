@@ -42,7 +42,7 @@
 # $Revision$
 #
 
-function include() {
+include() {
   log include "$1"
   if [ -f $1 ]; then
     . $1
