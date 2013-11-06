@@ -60,18 +60,6 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-if [ -f $BUILD_SOURCE/client.mk ]; then
-  cd $BUILD_SOURCE
-else
-  echo "No client.mk in source directory."
-  exit
-fi
-
-if [ -f $BUILD_SOURCE/../codate ]; then
-  . $BUILD_SOURCE/../codate
-  export MOZ_BUILD_DATE
-fi
-
 if [ ! -d $MOZ_OBJDIR ]; then
   mkdir $MOZ_OBJDIR
 fi
@@ -82,27 +70,5 @@ fi
 
 LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 
-runautoconf $BUILD_SOURCE
-runautoconf $BUILD_SOURCE/js/src
-runautoconf $BUILD_SOURCE/mozilla
-runautoconf $BUILD_SOURCE/mozilla/js/src
-runautoconf $BUILD_SOURCE/ldap/sdks/c-sdk
-
-if [ "$BUILD_PYMAKE" ]; then
-  if [ -d $BUILD_SOURCE/mozilla ]; then
-    BUILD_MAKE="$BUILD_PYTHON -OO $BUILD_SOURCE/mozilla/build/pymake/make.py"
-  else
-    BUILD_MAKE="$BUILD_PYTHON -OO $BUILD_SOURCE/build/pymake/make.py"
-  fi
-else
-  BUILD_MAKE=make
-fi
-
-cd $MOZ_OBJDIR
-if [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
-  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 configure | tee $LOGNAME
-elif [ "$BUILD_WATCH" = "1" ]; then
-  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 build | tee $LOGNAME | python $BUILD_BASE/bin/buildwatch/buildwatch.py
-else
-  $BUILD_MAKE -f $BUILD_SOURCE_REL/client.mk 2>&1 build | tee $LOGNAME
-fi
+cd $BUILD_SOURCE
+$BUILD_PYTHON mach -l $LOGNAME build
