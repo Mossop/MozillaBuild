@@ -75,6 +75,7 @@ include $CONFIG/apps/$BUILD_APP.mozconfig
 include $CONFIG/configs/$BUILD_APP_ALIAS.mozconfig
 
 mk_add_options RUN_AUTOCONF_LOCALLY=1
+mk_add_options AUTOCLOBBER=1
 
 include $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
 include $CONFIG/targets/$COMPILE_TARGET.mozconfig
