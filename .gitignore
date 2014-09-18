@@ -11,3 +11,5 @@ tools
 logs
 source
 patches
+*~
+.DS_Store

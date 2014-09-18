@@ -1,0 +1,3 @@
+if [ -x /usr/local/bin/ccache ]; then
+  ac_add_options --with-ccache=/usr/local/bin/ccache
+fi
