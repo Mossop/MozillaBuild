@@ -1,4 +1,14 @@
 #! /bin/sh
 
+link() {
+  rm -f $BUILD_BASE/source/$1/.hg/$2
+  ln $BUILD_BASE/source/unified/.hg/$2 $BUILD_BASE/source/$1/.hg/$2
+}
+
+updaterepo() {
+  link $1 bookmarks
+  link $1 localtags
+}
+
 hg -R $BUILD_BASE/source/unified pull baserepo
 hg -R $BUILD_BASE/source/unified pull syncrepo

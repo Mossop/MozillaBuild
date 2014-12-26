@@ -1,9 +1,15 @@
 #! /bin/sh
 
+link() {
+  rm -f $BUILD_BASE/source/$1/.hg/$2
+  ln $BUILD_BASE/source/unified/.hg/$2 $BUILD_BASE/source/$1/.hg/$2
+}
+
 buildrepo() {
-  hg share $BUILD_BASE/source/unified $BUILD_BASE/source/$2
-  ln $BUILD_BASE/source/unified/.hg/localtags $BUILD_BASE/source/$2/.hg/localtags
-  hg -R $BUILD_BASE/source/$2 update $1
+  hg share $BUILD_BASE/source/unified $BUILD_BASE/source/$1
+  link $1 bookmarks
+  link $1 localtags
+  hg -R $BUILD_BASE/source/$1 update $2
 }
 
 mkdir -p $BUILD_BASE/source/unified
@@ -14,7 +20,11 @@ rm $BUILD_BASE/source/mozilla-central.hg
 hg -R $BUILD_BASE/source/unified pull baserepo
 hg -R $BUILD_BASE/source/unified pull syncrepo
 
-buildrepo fx-team trunk
-buildrepo aurora aurora
-buildrepo beta beta
-buildrepo release release
+exec 3<&0
+exec 0<"$BUILD_BASE/config/treetags"
+while read TREE TAG
+do
+  buildrepo $TREE $TAG
+done
+exec 0<&3
+exec 3<&-

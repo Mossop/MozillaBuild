@@ -1,0 +1,8 @@
+#! /bin/sh
+
+. $BUILD_BASE/bin/repoutils
+
+BOOKMARK=`current_bookmark $1` || exit
+TAG=`base_tag` || exit
+
+hg diff --rev "ancestor($TAG,$BOOKMARK)" --rev $BOOKMARK

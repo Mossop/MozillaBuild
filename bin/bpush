@@ -1,0 +1,6 @@
+#! /bin/sh
+
+. $BUILD_BASE/bin/repoutils
+
+BOOKMARK=`current_bookmark $1` || exit
+hg push syncrepo -B $BOOKMARK

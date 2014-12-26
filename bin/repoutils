@@ -1,0 +1,39 @@
+base_tag() {
+  if [ "$1" ]; then
+    REPO=$1
+  else
+    REPO_ROOT=`hg root` || exit 1
+    REPO=`basename $REPO_ROOT`
+  fi
+
+  exec 3<&0
+  exec 0<"$BUILD_BASE/config/treetags"
+  while read TREE TAG
+  do
+    if [ "$TREE" = "$REPO" ]; then
+      BASE_TAG=$TAG
+    fi
+  done
+  exec 0<&3
+  exec 3<&-
+
+  if [ "$BASE_TAG" ]; then
+    echo $BASE_TAG
+  else
+    echo "I don't know the base tag for this repository" >&2
+    exit 1
+  fi
+}
+
+current_bookmark() {
+  REPO_ROOT=`hg root` || exit 1
+
+  if [ "$1" ]; then
+    echo $1
+  elif [ -f "$REPO_ROOT/.hg/bookmarks.current" ]; then
+   cat $REPO_ROOT/.hg/bookmarks.current
+  else
+    echo "No active bookmark in this repository" >&2
+    exit 1
+  fi
+}
