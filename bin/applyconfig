@@ -71,28 +71,13 @@ if [ -f $BUILD_BASE/config/aliases ]; then
 fi
 
 if [ ! "$BUILD_APP" ]; then
-  BUILD_APP=$BUILD_APP_ALIAS
+  BUILD_APP=browser
 fi
 
 include $BUILD_BASE/config/apps/$BUILD_APP.config
 include $BUILD_BASE/config/configs/$BUILD_APP_ALIAS.config
 include $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
 include $BUILD_BASE/config/targets/$COMPILE_TARGET.config
-
-if [ ! "$BUILD_TREE" ]; then
-  if [ -f $BUILD_BASE/config/treemap ]; then
-    exec 3<&0
-    exec 0<"$BUILD_BASE/config/treemap"
-    while read ALIAS TREE
-    do
-      if [ $BUILD_APP_ALIAS = "$ALIAS" ]; then
-        BUILD_TREE=$TREE
-      fi
-    done
-    exec 0<&3
-    exec 3<&-
-  fi
-fi
 
 # Default to trunk setup
 if [ ! "$BUILD_TREE" ]; then
