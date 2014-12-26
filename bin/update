@@ -12,3 +12,12 @@ updaterepo() {
 
 hg -R $BUILD_BASE/source/unified pull baserepo
 hg -R $BUILD_BASE/source/unified pull syncrepo
+
+exec 3<&0
+exec 0<"$BUILD_BASE/config/treetags"
+while read TREE TAG
+do
+  updaterepo $TREE $TAG
+done
+exec 0<&3
+exec 3<&-

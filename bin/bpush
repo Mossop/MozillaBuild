@@ -4,3 +4,4 @@
 
 BOOKMARK=`current_bookmark $1` || exit
 hg push syncrepo -B $BOOKMARK
+update
