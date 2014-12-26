@@ -1,0 +1,20 @@
+#! /bin/sh
+
+buildrepo() {
+  hg share $BUILD_BASE/source/unified $BUILD_BASE/source/$2
+  ln $BUILD_BASE/source/unified/.hg/localtags $BUILD_BASE/source/$2/.hg/localtags
+  hg -R $BUILD_BASE/source/$2 update $1
+}
+
+mkdir -p $BUILD_BASE/source/unified
+curl curl ftp://ftp.mozilla.org/pub/firefox/bundles/mozilla-central.hg >$BUILD_BASE/source/mozilla-central.hg
+hg init $BUILD_BASE/source/unified
+hg -R $BUILD_BASE/source/unified unbundle $BUILD_BASE/source/mozilla-central.hg
+rm $BUILD_BASE/source/mozilla-central.hg
+hg -R $BUILD_BASE/source/unified pull baserepo
+hg -R $BUILD_BASE/source/unified pull syncrepo
+
+buildrepo fx-team trunk
+buildrepo aurora aurora
+buildrepo beta beta
+buildrepo release release

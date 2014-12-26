@@ -1,0 +1,4 @@
+#! /bin/sh
+
+hg -R $BUILD_BASE/source/unified pull baserepo
+hg -R $BUILD_BASE/source/unified pull syncrepo
