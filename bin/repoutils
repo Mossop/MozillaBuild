@@ -1,16 +1,21 @@
+current_tree() {
+  REPO=`hg root` || exit 1
+  ROOT=`basename $REPO`
+  echo $ROOT
+}
+
 base_tag() {
   if [ "$1" ]; then
-    REPO=$1
+    TARGET=$1
   else
-    REPO_ROOT=`hg root` || exit 1
-    REPO=`basename $REPO_ROOT`
+    TARGET=`current_tree` || exit 1
   fi
 
   exec 3<&0
   exec 0<"$BUILD_BASE/config/treetags"
-  while read TREE TAG
+  while read TREE TAG BUNDLE REPO
   do
-    if [ "$TREE" = "$REPO" ]; then
+    if [ "$TREE" == "$TARGET" ]; then
       BASE_TAG=$TAG
     fi
   done
@@ -21,6 +26,32 @@ base_tag() {
     echo $BASE_TAG
   else
     echo "I don't know the base tag for this repository" >&2
+    exit 1
+  fi
+}
+
+repo_url() {
+  if [ "$1" ]; then
+    TARGET=$1
+  else
+    TARGET=`current_tree` || exit 1
+  fi
+
+  exec 3<&0
+  exec 0<"$BUILD_BASE/config/treetags"
+  while read TREE TAG BUNDLE REPO
+  do
+    if [ "$TREE" = "$TARGET" ]; then
+      TREE_REPO=$REPO
+    fi
+  done
+  exec 0<&3
+  exec 3<&-
+
+  if [ "$TREE_REPO" ]; then
+    echo $TREE_REPO
+  else
+    echo "I don't know the url for this repository" >&2
     exit 1
   fi
 }

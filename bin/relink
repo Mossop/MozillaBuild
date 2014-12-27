@@ -1,0 +1,12 @@
+#! /bin/sh
+
+exec 3<&0
+exec 0<"$BUILD_BASE/config/treetags"
+while read TREE TAG BUNDLE REPO
+do
+  if [ "$TREE" != "trunk" ]; then
+    hg -R $BUILD_BASE/source/$TREE relink $BUILD_BASE/source/trunk
+  fi
+done
+exec 0<&3
+exec 3<&-

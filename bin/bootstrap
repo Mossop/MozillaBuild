@@ -1,30 +1,21 @@
 #! /bin/sh
 
-link() {
-  rm -f $BUILD_BASE/source/$1/.hg/$2
-  ln $BUILD_BASE/source/unified/.hg/$2 $BUILD_BASE/source/$1/.hg/$2
-}
-
-buildrepo() {
-  hg share $BUILD_BASE/source/unified $BUILD_BASE/source/$1
-  link $1 bookmarks
-  link $1 localtags
-  hg -R $BUILD_BASE/source/$1 update $2
-}
-
-mkdir -p $BUILD_BASE/source/unified
-curl curl ftp://ftp.mozilla.org/pub/firefox/bundles/mozilla-central.hg >$BUILD_BASE/source/mozilla-central.hg
-hg init $BUILD_BASE/source/unified
-hg -R $BUILD_BASE/source/unified unbundle $BUILD_BASE/source/mozilla-central.hg
-rm $BUILD_BASE/source/mozilla-central.hg
-hg -R $BUILD_BASE/source/unified pull baserepo
-hg -R $BUILD_BASE/source/unified pull syncrepo
-
 exec 3<&0
 exec 0<"$BUILD_BASE/config/treetags"
-while read TREE TAG
+while read TREE TAG BUNDLE REPO
 do
-  buildrepo $TREE $TAG
+  echo Bootstrapping ${TREE}...
+  curl ftp://ftp.mozilla.org/pub/firefox/bundles/$BUNDLE.hg >$BUILD_BASE/source/$BUNDLE.hg
+  mkdir -p $BUILD_BASE/source/$TREE
+  hg init $BUILD_BASE/source/$TREE
+  hg -R $BUILD_BASE/source/$TREE unbundle $BUILD_BASE/source/$BUNDLE.hg
+  #rm $BUILD_BASE/source/$BUNDLE.hg
+  hg -R $BUILD_BASE/source/$TREE pull https://hg.mozilla.org/$REPO
+  hg -R $BUILD_BASE/source/$TREE update $TAG
+
+  if [ "$TREE" != "trunk" ]; then
+    hg -R $BUILD_BASE/source/$TREE relink $BUILD_BASE/source/trunk
+  fi
 done
 exec 0<&3
 exec 3<&-

@@ -1,23 +1,28 @@
 #! /bin/sh
 
-link() {
-  rm -f $BUILD_BASE/source/$1/.hg/$2
-  ln $BUILD_BASE/source/unified/.hg/$2 $BUILD_BASE/source/$1/.hg/$2
-}
+. $BUILD_BASE/bin/repoutils
 
 updaterepo() {
-  link $1 bookmarks
-  link $1 localtags
+  echo Updating ${1}...
+  hg -R $BUILD_BASE/source/$1 pull https://hg.mozilla.org/$2
 }
 
-hg -R $BUILD_BASE/source/unified pull baserepo
-hg -R $BUILD_BASE/source/unified pull syncrepo
-
-exec 3<&0
-exec 0<"$BUILD_BASE/config/treetags"
-while read TREE TAG
-do
-  updaterepo $TREE $TAG
-done
-exec 0<&3
-exec 3<&-
+if [ "$1" ]; then
+  if [ "$1" == "all" ]; then
+    exec 3<&0
+    exec 0<"$BUILD_BASE/config/treetags"
+    while read TREE TAG BUNDLE REPO
+    do
+      updaterepo $TREE $REPO
+    done
+    exec 0<&3
+    exec 3<&-
+  else
+    REPO=`repo_url $1` || exit 1
+    updaterepo $1 $REPO
+  fi
+else
+  TREE=`current_tree` || exit 1
+  REPO=`repo_url $1` || exit 1
+  updaterepo $TREE $REPO
+fi
