@@ -4,25 +4,22 @@
 
 updaterepo() {
   echo Updating ${1}...
-  hg -R $BUILD_BASE/source/$1 pull https://hg.mozilla.org/$2
+  info=`tree_info $1` || exit 1
+  repo=`repo_url $info`
+  hg -R $BUILD_BASE/source/$1 pull $repo
 }
 
 if [ "$1" ]; then
   if [ "$1" == "all" ]; then
-    exec 3<&0
-    exec 0<"$BUILD_BASE/config/treetags"
-    while read TREE TAG BUNDLE REPO
+    for tree in `trees`
     do
-      updaterepo $TREE $REPO
+      updaterepo $tree
     done
-    exec 0<&3
-    exec 3<&-
   else
-    REPO=`repo_url $1` || exit 1
-    updaterepo $1 $REPO
+    updaterepo $1
   fi
 else
-  TREE=`current_tree` || exit 1
-  REPO=`repo_url $1` || exit 1
-  updaterepo $TREE $REPO
+  info=`tree_info` || exit 1
+  tree=`tree $info`
+  updaterepo $tree
 fi

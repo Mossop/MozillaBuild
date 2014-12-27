@@ -2,6 +2,13 @@
 
 . $BUILD_BASE/bin/repoutils
 
-BOOKMARK=`current_bookmark $1` || exit
-hg push syncrepo -B $BOOKMARK
-update
+info=`tree_info` || exit
+tree=`tree $info`
+repo=`repo_url $info` || exit
+if [ "$1" ]; then
+  bookmark=$1
+else
+  bookmark=`current_bookmark $tree` || exit
+fi
+
+hg -R $BUILD_BASE/source/$tree push $repo -B $bookmark

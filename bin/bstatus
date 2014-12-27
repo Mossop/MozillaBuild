@@ -2,7 +2,13 @@
 
 . $BUILD_BASE/bin/repoutils
 
-BOOKMARK=`current_bookmark $1` || exit
-TAG=`base_tag` || exit
+info=`tree_info` || exit
+tree=`tree $info`
+tag=`base_tag $info` || exit
+if [ "$1" ]; then
+  bookmark=$1
+else
+  bookmark=`current_bookmark $tree` || exit
+fi
 
-hg status --rev "ancestor($TAG,$BOOKMARK)" --rev $BOOKMARK
+hg -R $BUILD_BASE/source/$tree status --rev "ancestor($tag,$bookmark)" --rev $bookmark

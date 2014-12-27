@@ -1,21 +1,30 @@
 #! /bin/sh
 
-exec 3<&0
-exec 0<"$BUILD_BASE/config/treetags"
-while read TREE TAG BUNDLE REPO
-do
-  echo Bootstrapping ${TREE}...
-  curl ftp://ftp.mozilla.org/pub/firefox/bundles/$BUNDLE.hg >$BUILD_BASE/source/$BUNDLE.hg
-  mkdir -p $BUILD_BASE/source/$TREE
-  hg init $BUILD_BASE/source/$TREE
-  hg -R $BUILD_BASE/source/$TREE unbundle $BUILD_BASE/source/$BUNDLE.hg
-  #rm $BUILD_BASE/source/$BUNDLE.hg
-  hg -R $BUILD_BASE/source/$TREE pull https://hg.mozilla.org/$REPO
-  hg -R $BUILD_BASE/source/$TREE update $TAG
+. $BUILD_BASE/bin/repoutils
 
-  if [ "$TREE" != "trunk" ]; then
-    hg -R $BUILD_BASE/source/$TREE relink $BUILD_BASE/source/trunk
+for tree in `trees`
+do
+  echo Bootstrapping ${tree}...
+  info=`tree_info $tree` || exit 1
+  bundle=`bundle_url $info`
+  repo=`repo_url $info`
+  tag=`base_tag $info`
+
+  curl $bundle >$BUILD_BASE/source/$tree.hg
+  mkdir -p $BUILD_BASE/source/$tree
+  hg init $BUILD_BASE/source/$tree
+  hg -R $BUILD_BASE/source/$tree unbundle $BUILD_BASE/source/$tree.hg
+  rm $BUILD_BASE/source/$tree.hg
+
+  cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
+[paths]
+default = $repo
+EOF
+
+  hg -R $BUILD_BASE/source/$tree pull $repo
+  hg -R $BUILD_BASE/source/$tree update $tag
+
+  if [ "$tree" != "trunk" ]; then
+    hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
   fi
 done
-exec 0<&3
-exec 3<&-

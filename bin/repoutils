@@ -1,14 +1,23 @@
-current_tree() {
-  REPO=`hg root` || exit 1
-  ROOT=`basename $REPO`
-  echo $ROOT
+trees() {
+  TREES=""
+
+  exec 3<&0
+  exec 0<"$BUILD_BASE/config/treetags"
+  while read TREE TAG BUNDLE REPO
+  do
+    TREES="$TREES $TREE"
+  done
+  exec 0<&3
+  exec 3<&-
+  echo $TREES
 }
 
-base_tag() {
+tree_info() {
   if [ "$1" ]; then
     TARGET=$1
   else
-    TARGET=`current_tree` || exit 1
+    REPO=`hg root` || exit 1
+    TARGET=`basename $REPO`
   fi
 
   exec 3<&0
@@ -16,53 +25,43 @@ base_tag() {
   while read TREE TAG BUNDLE REPO
   do
     if [ "$TREE" == "$TARGET" ]; then
-      BASE_TAG=$TAG
+      RESULT="$TREE $TAG $BUNDLE $REPO"
     fi
   done
   exec 0<&3
   exec 3<&-
 
-  if [ "$BASE_TAG" ]; then
-    echo $BASE_TAG
+  if [ "$RESULT" ]; then
+    echo $RESULT
   else
-    echo "I don't know the base tag for this repository" >&2
+    echo "Unknown tree $TARGET"
     exit 1
   fi
+}
+
+tree() {
+  echo $1
+}
+
+base_tag() {
+  echo $2
+}
+
+bundle_url() {
+  echo "ftp://ftp.mozilla.org/pub/firefox/bundles/$3"
 }
 
 repo_url() {
-  if [ "$1" ]; then
-    TARGET=$1
-  else
-    TARGET=`current_tree` || exit 1
-  fi
+  echo "ssh://peano/hg/repos/$2"
+}
 
-  exec 3<&0
-  exec 0<"$BUILD_BASE/config/treetags"
-  while read TREE TAG BUNDLE REPO
-  do
-    if [ "$TREE" = "$TARGET" ]; then
-      TREE_REPO=$REPO
-    fi
-  done
-  exec 0<&3
-  exec 3<&-
-
-  if [ "$TREE_REPO" ]; then
-    echo $TREE_REPO
-  else
-    echo "I don't know the url for this repository" >&2
-    exit 1
-  fi
+moz_repo_url() {
+  echo "https://hg.mozilla.org/$4"
 }
 
 current_bookmark() {
-  REPO_ROOT=`hg root` || exit 1
-
-  if [ "$1" ]; then
-    echo $1
-  elif [ -f "$REPO_ROOT/.hg/bookmarks.current" ]; then
-   cat $REPO_ROOT/.hg/bookmarks.current
+  if [ -f "$BUILD_BASE/source/$1/.hg/bookmarks.current" ]; then
+   cat $BUILD_BASE/source/$1/.hg/bookmarks.current
   else
     echo "No active bookmark in this repository" >&2
     exit 1
