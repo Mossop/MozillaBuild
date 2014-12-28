@@ -10,7 +10,7 @@ updaterepo() {
 }
 
 if [ "$1" ]; then
-  if [ "$1" == "all" ]; then
+  if [ "$1" = "all" ]; then
     for tree in `trees`
     do
       updaterepo $tree

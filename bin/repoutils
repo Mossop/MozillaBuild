@@ -24,7 +24,7 @@ tree_info() {
   exec 0<"$BUILD_BASE/config/treetags"
   while read TREE TAG BUNDLE REPO
   do
-    if [ "$TREE" == "$TARGET" ]; then
+    if [ "$TREE" = "$TARGET" ]; then
       RESULT="$TREE $TAG $BUNDLE $REPO"
     fi
   done

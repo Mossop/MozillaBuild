@@ -2,6 +2,8 @@
 
 . $BUILD_BASE/bin/repoutils
 
+mkdir -p $BUILD_BASE/source
+
 for tree in `trees`
 do
   echo Bootstrapping ${tree}...
