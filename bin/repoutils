@@ -52,7 +52,7 @@ bundle_url() {
 }
 
 repo_url() {
-  echo "ssh://peano/hg/repos/$2"
+  echo "ssh://dave@peano/hg/repos/$2"
 }
 
 moz_repo_url() {
