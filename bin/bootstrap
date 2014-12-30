@@ -6,29 +6,31 @@ mkdir -p $BUILD_BASE/source
 
 for tree in `trees`
 do
-  echo Bootstrapping ${tree}...
-  info=`tree_info $tree` || exit 1
-  bundle=`bundle_url $info`
-  repo=`repo_url $info`
-  tag=`base_tag $info`
+  if [ ! -d $BUILD_BASE/source/$tree ]; then
+    echo Bootstrapping ${tree}...
+    info=`tree_info $tree` || exit 1
+    bundle=`bundle_url $info`
+    repo=`repo_url $info`
+    tag=`base_tag $info`
 
-  if [ ! -f $BUILD_BASE/source/$tree.hg ]; then
-    curl $bundle >$BUILD_BASE/source/$tree.hg
-  fi
-  mkdir -p $BUILD_BASE/source/$tree
-  hg init $BUILD_BASE/source/$tree
-  hg -R $BUILD_BASE/source/$tree unbundle $BUILD_BASE/source/$tree.hg
-  rm $BUILD_BASE/source/$tree.hg
+    if [ ! -f $BUILD_BASE/source/$tree.hg ]; then
+      curl $bundle >$BUILD_BASE/source/$tree.hg
+    fi
+    mkdir -p $BUILD_BASE/source/$tree
+    hg init $BUILD_BASE/source/$tree
+    hg -R $BUILD_BASE/source/$tree unbundle $BUILD_BASE/source/$tree.hg
+    rm $BUILD_BASE/source/$tree.hg
 
-  cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
+    cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
 [paths]
 default = $repo
 EOF
 
-  hg -R $BUILD_BASE/source/$tree pull $repo
-  hg -R $BUILD_BASE/source/$tree update $tag
+    hg -R $BUILD_BASE/source/$tree pull $repo
+    hg -R $BUILD_BASE/source/$tree update $tag
 
-  if [ "$tree" != "trunk" ]; then
-    hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
+    if [ "$tree" != "trunk" ]; then
+      hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
+    fi
   fi
 done
