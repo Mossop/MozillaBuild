@@ -12,7 +12,9 @@ do
   repo=`repo_url $info`
   tag=`base_tag $info`
 
-  curl $bundle >$BUILD_BASE/source/$tree.hg
+  if [ ! -f $BUILD_BASE/source/$tree.hg ]; then
+    curl $bundle >$BUILD_BASE/source/$tree.hg
+  fi
   mkdir -p $BUILD_BASE/source/$tree
   hg init $BUILD_BASE/source/$tree
   hg -R $BUILD_BASE/source/$tree unbundle $BUILD_BASE/source/$tree.hg
