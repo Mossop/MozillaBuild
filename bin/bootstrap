@@ -4,14 +4,14 @@
 
 mkdir -p $BUILD_BASE/source
 
-for tree in `trees`
-do
+bootstraprepo() {
+  tree=$1
   if [ ! -d $BUILD_BASE/source/$tree ]; then
-    echo Bootstrapping ${tree}...
     info=`tree_info $tree` || exit 1
     bundle=`bundle_url $info`
     repo=`repo_url $info`
     tag=`base_tag $info`
+    echo Bootstrapping ${tree}...
 
     if [ ! -f $BUILD_BASE/source/$tree.hg ]; then
       curl $bundle >$BUILD_BASE/source/$tree.hg
@@ -33,4 +33,13 @@ EOF
       hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
     fi
   fi
-done
+}
+
+if [ "$1" ]; then
+  bootstraprepo $1
+else
+  for tree in `trees`
+  do
+    bootstraprepo $tree
+  done
+fi

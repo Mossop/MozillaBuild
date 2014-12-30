@@ -5,6 +5,8 @@
 for tree in `trees`
 do
   if [ "$tree" != "trunk" ]; then
-    hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
+    if [ -d $BUILD_BASE/source/$tree ]; then
+      hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
+    fi
   fi
 done

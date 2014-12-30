@@ -3,10 +3,12 @@
 . $BUILD_BASE/bin/repoutils
 
 updaterepo() {
-  echo Updating ${1}...
-  info=`tree_info $1` || exit 1
-  repo=`repo_url $info`
-  hg -R $BUILD_BASE/source/$1 pull $repo
+  if [ -d $BUILD_BASE/source/$1 ]; then
+    echo Updating ${1}...
+    info=`tree_info $1` || exit 1
+    repo=`repo_url $info`
+    hg -R $BUILD_BASE/source/$1 pull $repo
+  fi
 }
 
 if [ "$1" ]; then
