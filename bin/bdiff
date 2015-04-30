@@ -5,10 +5,5 @@
 info=`tree_info` || exit
 tree=`tree $info`
 tag=`base_tag $info` || exit
-if [ "$1" ]; then
-  bookmark=$1
-else
-  bookmark=`current_bookmark $tree` || exit
-fi
 
-hg -R $BUILD_BASE/source/$tree diff --rev "ancestor($tag,$bookmark)" --rev $bookmark
+hg -R $BUILD_BASE/source/$tree diff --rev "ancestor($tag,.)" $@
