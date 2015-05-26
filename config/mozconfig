@@ -9,8 +9,10 @@ fi
 ac_add_options --disable-activex
 ac_add_options --disable-activex-scripting
 ac_add_options --disable-installer
-ac_add_options --enable-crashreporter
 ac_add_options --disable-angle
+
+#ac_add_options --enable-official-branding
+#ac_add_options --enable-update-channel=release
 
 #ac_add_options --enable-update-channel=aurora
 #ac_add_options --disable-libxul

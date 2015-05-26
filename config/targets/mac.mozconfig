@@ -3,4 +3,4 @@ if [ "$BUILD_APP_OPTIONS" = "universal" ]; then
   ac_add_app_options ppc --enable-prebinding
 fi
 
-#ac_add_options --enable-shark
+ac_add_options --enable-crashreporter
