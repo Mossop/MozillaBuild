@@ -34,3 +34,8 @@ if [ "$MOZ_CVS_USER" ]; then
 fi
 
 . bin/buildrc
+
+if [ -f "$BUILD_BASE/bin/activate" ]; then
+  VIRTUAL_ENV_DISABLE_PROMPT=1
+  . $BUILD_BASE/bin/activate
+fi
