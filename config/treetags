@@ -1,4 +1,4 @@
-trunk      fx-team    fx-team.hg            integration/fx-team
-aurora     aurora     mozilla-aurora.hg     releases/mozilla-aurora
-beta       beta       mozilla-beta.hg       releases/mozilla-beta
-release    release    mozilla-release.hg    releases/mozilla-release
+trunk      fx-team    integration/fx-team
+aurora     aurora     releases/mozilla-aurora
+beta       beta       releases/mozilla-beta
+release    release    releases/mozilla-release

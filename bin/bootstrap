@@ -8,26 +8,19 @@ bootstraprepo() {
   tree=$1
   if [ ! -d $BUILD_BASE/source/$tree ]; then
     info=`tree_info $tree` || exit 1
-    bundle=`bundle_url $info`
     repo=`repo_url $info`
     tag=`base_tag $info`
+    working=`working_url $info`
     echo Bootstrapping ${tree}...
 
-    if [ ! -f $BUILD_BASE/source/$tree.hg ]; then
-      curl $bundle >$BUILD_BASE/source/$tree.hg
-    fi
-    mkdir -p $BUILD_BASE/source/$tree
-    hg init $BUILD_BASE/source/$tree
-    hg -R $BUILD_BASE/source/$tree unbundle $BUILD_BASE/source/$tree.hg
-    rm $BUILD_BASE/source/$tree.hg
+    mkdir -p $BUILD_BASE/source
+    hg clone $repo $BUILD_BASE/source/$tree
+    hg -R $BUILD_BASE/source/$tree update $tag
 
     cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
 [paths]
-default = $repo
+working = $working
 EOF
-
-    hg -R $BUILD_BASE/source/$tree pull $repo
-    hg -R $BUILD_BASE/source/$tree update $tag
 
     if [ "$tree" != "trunk" ]; then
       hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk

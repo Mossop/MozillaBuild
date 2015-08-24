@@ -158,3 +158,5 @@ export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
 export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
+
+export AUTOTRY_PLATFORM_HINT="linux,linux64,linux64-asan,macosx64,win32,win64"

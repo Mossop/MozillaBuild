@@ -3,7 +3,7 @@ trees() {
 
   exec 3<&0
   exec 0<"$BUILD_BASE/config/treetags"
-  while read TREE TAG BUNDLE REPO
+  while read TREE TAG REPO
   do
     TREES="$TREES $TREE"
   done
@@ -22,10 +22,10 @@ tree_info() {
 
   exec 3<&0
   exec 0<"$BUILD_BASE/config/treetags"
-  while read TREE TAG BUNDLE REPO
+  while read TREE TAG REPO
   do
     if [ "$TREE" = "$TARGET" ]; then
-      RESULT="$TREE $TAG $BUNDLE $REPO"
+      RESULT="$TREE $TAG $REPO"
     fi
   done
   exec 0<&3
@@ -47,16 +47,12 @@ base_tag() {
   echo $2
 }
 
-bundle_url() {
-  echo "ftp://ftp.mozilla.org/pub/firefox/bundles/$3"
+working_url() {
+  echo "ssh://julia/mozilla/source/$2"
 }
 
 repo_url() {
-  echo "ssh://dave@peano/hg/repos/$2"
-}
-
-moz_repo_url() {
-  echo "https://hg.mozilla.org/$4"
+  echo "https://hg.mozilla.org/$3"
 }
 
 current_bookmark() {
