@@ -6,25 +6,25 @@ mkdir -p $BUILD_BASE/source
 
 bootstraprepo() {
   tree=$1
-  if [ ! -d $BUILD_BASE/source/$tree ]; then
-    info=`tree_info $tree` || exit 1
-    repo=`repo_url $info`
-    tag=`base_tag $info`
-    working=`working_url $info`
-    echo Bootstrapping ${tree}...
+  info=`tree_info $tree` || exit 1
+  repo=`repo_url $info`
+  tag=`base_tag $info`
+  working=`working_url $info`
+  echo Bootstrapping ${tree}...
 
+  if [ ! -d $BUILD_BASE/source/$tree ]; then
     mkdir -p $BUILD_BASE/source
     hg clone $repo $BUILD_BASE/source/$tree
     hg -R $BUILD_BASE/source/$tree update $tag
+  fi
 
-    cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
+  cat <<EOF >$BUILD_BASE/source/$tree/.hg/hgrc
 [paths]
 working = $working
 EOF
 
-    if [ "$tree" != "trunk" ]; then
-      hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
-    fi
+  if [ "$tree" != "trunk" ]; then
+    hg -R $BUILD_BASE/source/$tree relink $BUILD_BASE/source/trunk
   fi
 }
 
