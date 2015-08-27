@@ -48,7 +48,7 @@ base_tag() {
 }
 
 working_url() {
-  echo "ssh://julia/mozilla/source/$2"
+  echo "ssh://julia/mozilla/source/$1"
 }
 
 repo_url() {
