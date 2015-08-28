@@ -48,7 +48,7 @@ base_tag() {
 }
 
 working_url() {
-  echo "ssh://julia/mozilla/source/$1"
+  echo "ssh://hg.mozilla.org/users/dtownsend_mozilla.com/working/$1"
 }
 
 repo_url() {
