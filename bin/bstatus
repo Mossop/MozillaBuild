@@ -4,6 +4,5 @@
 
 info=`tree_info` || exit
 tree=`tree $info`
-tag=`base_tag $info` || exit
 
-hg -R $BUILD_BASE/source/$tree status --rev "ancestor($tag,.)"
+hg -R $BUILD_BASE/source/$tree status --rev "parents(roots(branch))"
