@@ -1,9 +1,0 @@
-#! /bin/sh
-
-. $BUILD_BASE/bin/repoutils
-
-info=`tree_info` || exit
-tree=`tree $info`
-tag=`base_tag $info`
-
-hg -R $BUILD_BASE/source/$tree rebase --rev branch -d $tag
