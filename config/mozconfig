@@ -2,23 +2,11 @@ if [ "$BUILD_APP_OPTIONS" = "debug" ]; then
   include $CONFIG/includes/debug.mozconfig
 elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
   include $CONFIG/includes/l10n.mozconfig
-else
+elif [ "$BUILD_APP_OPTIONS" = "full" ]; then
   ac_add_options --enable-optimize
+else
+  ac_add_options --enable-artifact-builds
 fi
 
-ac_add_options --disable-activex
-ac_add_options --disable-activex-scripting
 ac_add_options --disable-installer
 ac_add_options --disable-angle
-
-#ac_add_options --enable-official-branding
-#ac_add_options --enable-update-channel=release
-
-#ac_add_options --enable-update-channel=aurora
-#ac_add_options --disable-libxul
-#ac_add_options --disable-ipc
-#ac_add_options --enable-chrome-format=flat
-#ac_add_options --enable-logrefcnt
-#ac_add_options --disable-tests
-#ac_add_options --disable-mochitest
-#ac_add_options --with-macos-sdk=/Developer/SDKs/MacOSX10.4u.sdk
