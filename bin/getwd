@@ -1,0 +1,9 @@
+#! /bin/bash
+
+log() {
+  :
+}
+
+. $BUILD_BASE/bin/applyconfig
+
+echo $BUILD_SOURCE
