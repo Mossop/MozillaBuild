@@ -1,0 +1,26 @@
+#! /bin/bash
+
+escape() {
+  echo $1 | sed -e s/\"/\\\\\"/
+}
+
+VALUE1=`escape $2`
+VALUE2=`escape $3`
+VALUE3=`escape $4`
+DATA="{ \"value1\": \"${VALUE1}\", \"value2\": \"${VALUE2}\", \"value3\": \"${VALUE3}\" }"
+
+WGET=`which wget`
+CURL=`which curl`
+
+if [ -x "${WGET}" ]; then
+  ${WGET} \
+    --method=POST --header="Content-Type: application/json" \
+    --body-data="${DATA}" -O /dev/null -q \
+    https://maker.ifttt.com/trigger/$1/with/key/${IFTTT_KEY} >/dev/null
+elif [ -x "${CURL}" ]; then
+  curl \
+  -H "Content-Type: application/json" --data "${DATA}" -s \
+  https://maker.ifttt.com/trigger/$1/with/key/${IFTTT_KEY} >/dev/null
+else
+  echo "Could not find wget or curl"
+fi

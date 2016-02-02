@@ -73,6 +73,4 @@ LOGNAME=$BUILD_BASE/logs/$BUILD_CONFIG.log
 cd $BUILD_SOURCE
 $BUILD_PYTHON mach -l $LOGNAME build
 
-curl \
- --data-urlencode "value1=`hostname`" \
- -s https://maker.ifttt.com/trigger/build_complete/with/key/${IFTTT_KEY} >/dev/null
+${BUILD_BASE}/bin/ifttt build_complete `hostname`
