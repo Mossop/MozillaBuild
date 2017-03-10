@@ -1,62 +1,21 @@
-#
-# ***** BEGIN LICENSE BLOCK *****
-# Version: MPL 1.1/GPL 2.0/LGPL 2.1
-#
-# The contents of this file are subject to the Mozilla Public License Version
-# 1.1 (the "License"); you may not use this file except in compliance with
-# the License. You may obtain a copy of the License at
-# http://www.mozilla.org/MPL/
-#
-# Software distributed under the License is distributed on an "AS IS" basis,
-# WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
-# for the specific language governing rights and limitations under the
-# License.
-#
-# The Original Code is Mossop's Mozilla Build Environment.
-#
-# The Initial Developer of the Original Code is
-#      Dave Townsend <dave.townsend@blueprintit.co.uk>.
-#
-# Portions created by the Initial Developer are Copyright (C) 2006
-# the Initial Developer. All Rights Reserved.
-#
-# Contributor(s):
-#
-# Alternatively, the contents of this file may be used under the terms of
-# either the GNU General Public License Version 2 or later (the "GPL"), or
-# the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
-# in which case the provisions of the GPL or the LGPL are applicable instead
-# of those above. If you wish to allow use of your version of this file only
-# under the terms of either the GPL or the LGPL, and not to allow others to
-# use your version of this file under the terms of the MPL, indicate your
-# decision by deleting the provisions above and replace them with the notice
-# and other provisions required by the GPL or the LGPL. If you do not delete
-# the provisions above, a recipient may use your version of this file under
-# the terms of any one of the MPL, the GPL or the LGPL.
-#
-# ***** END LICENSE BLOCK *****
-#
-# $HeadURL$
-# $LastChangedBy$
-# $Date$
-# $Revision$
-#
+app() {
+  export BUILD_APP=$1
+}
 
-if [ -z "$ZSH_VERSION" ]; then
-  BUILD_SHELL="bash"
-else
-  BUILD_SHELL="zsh"
-fi
-export BUILD_SHELL
+source() {
+  export BUILD_SOURCE=$1
+}
 
-config() {
-  if [ "$1" ]; then
-    echo "Setting up build environment for $1."
-    export BUILD_CONFIG=$1
-  else
-    echo "Changing to default build environment."
-    export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
-  fi
+options() {
+  export BUILD_OPTIONS=$@
+}
+
+target() {
+  export BUILD_TARGET=$1
+}
+
+objdir() {
+  export BUILD_OBJDIR=$1
 }
 
 if [ -d /usr/lib/ccache ]; then
@@ -66,32 +25,17 @@ if [ -d /opt/local/libexec/ccache ]; then
   PATH=/opt/local/libexec/ccache:$PATH
 fi
 
-if [ "$BUILD_SHELL" = "bash" ]; then
-  if [ ${OSTYPE:0:5} = "linux" ]; then
-    BUILD_PLATFORM=linux
-  elif [ ${OSTYPE:0:6} = "darwin" ]; then
-    BUILD_PLATFORM=mac
-    if [ ${OSTYPE:6:1} = "1" ]; then
-      BUILD_PLATFORM_VERSION=${OSTYPE:6:2}
-    else
-      BUILD_PLATFORM_VERSION=${OSTYPE:6:1}
-    fi
+if [ ${OSTYPE:0:5} = "linux" ]; then
+  BUILD_PLATFORM=linux
+elif [ ${OSTYPE:0:6} = "darwin" ]; then
+  BUILD_PLATFORM=mac
+  if [ ${OSTYPE:6:1} = "1" ]; then
+    BUILD_PLATFORM_VERSION=${OSTYPE:6:2}
   else
-    BUILD_PLATFORM=win
+    BUILD_PLATFORM_VERSION=${OSTYPE:6:1}
   fi
 else
-  if [ $OSTYPE[0,5] = "linux" ]; then
-    BUILD_PLATFORM=linux
-  elif [ $OSTYPE[0,6] = "darwin" ]; then
-    BUILD_PLATFORM=mac
-    if [ $OSTYPE[7,7] = "1" ]; then
-      BUILD_PLATFORM_VERSION=$OSTYPE[7,8]
-    else
-      BUILD_PLATFORM_VERSION=$OSTYPE[7,7]
-    fi
-  else
-    BUILD_PLATFORM=win
-  fi
+  BUILD_PLATFORM=win
 fi
 export BUILD_PLATFORM
 export BUILD_PLATFORM_VERSION
@@ -104,42 +48,19 @@ if [ ! -d $BUILD_BASE/build ]; then
 fi
 
 if [ $BUILD_PLATFORM = "win" ]; then
-  if [ $MOZ_TOOLS = "" ]; then
-    export MOZ_TOOLS=$BUILD_BASE/tools/moztools
-
-    if [ ! -d $BUILD_BASE/tools ]; then
-      mkdir $BUILD_BASE/tools
-    fi
-
-    if [ ! -d $MOZ_TOOLS ]; then
-      cd $BUILD_BASE/tools
-      echo -e "\nDownloading Mozilla Tools..."
-      wget -q http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/moztools-static.zip
-      echo "Extracting Mozilla Tools..."
-      unzip moztools-static.zip >/dev/null
-      rm -f moztools-static.zip
-    fi
-    export GLIB_PREFIX=$MOZ_TOOLS
-    export LIBIDL_PREFIX=$MOZ_TOOLS
-  fi
-
   if [ $OSTYPE = "cygwin" ]; then
     VCREDIST=$(cygpath "$VCINSTALLDIR")/redist
   elif [ $OSTYPE = "msys" ]; then
     VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
   fi
   
-  if [ -d $BUILD_BASE/tools/redist ]; then
-    BUILD_REDIST=$BUILD_BASE/tools/redist_std
-  elif [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
+  if [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
     BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
   elif [ -d "$VCREDIST/x86/Microsoft.VC90.CRT" ]; then
     BUILD_REDIST=$VCREDIST/x86/Microsoft.VC90.CRT
   fi
   
-  if [ -d $BUILD_BASE/tools/redist_debug ]; then
-    BUILD_REDIST_DEBUG=$BUILD_BASE/tools/redist_debug
-  elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
+  if [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
     BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
   elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT" ]; then
     BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT
@@ -156,9 +77,12 @@ cd $BUILD_BASE
 export XPCOM_DEBUG_BREAK=warn
 export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
 export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
-export BUILD_CONFIG=$BUILD_CONFIG_DEFAULT
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
 
-export AUTOTRY_PLATFORM_HINT="linux,linux64,linux64-asan,macosx64,win32,win64"
+export BUILD_APP="browser"
+export BUILD_SOURCE="trunk"
+export BUILD_OPTIONS="artifact"
+export BUILD_TARGET="$BUILD_PLATFORM"
+export BUILD_OBJDIR="nightly"
 
-cd `$BUILD_BASE/bin/getwd`
+cd $BUILD_BASE/source/$BUILD_SOURCE

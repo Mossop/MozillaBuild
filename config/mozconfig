@@ -1,12 +1,10 @@
-if [ "$BUILD_APP_OPTIONS" = "debug" ]; then
-  include $CONFIG/includes/debug.mozconfig
-elif [ "$BUILD_APP_OPTIONS" = "l10n" ]; then
-  include $CONFIG/includes/l10n.mozconfig
-elif [ "$BUILD_APP_OPTIONS" = "full" ]; then
-  ac_add_options --enable-optimize
+if [[ $BUILD_OPTIONS == *debug* ]]; then
+  ac_add_options --enable-debug
+  ac_add_options --disable-optimize
 else
-  ac_add_options --enable-artifact-builds
+  ac_add_options --enable-optimize
 fi
 
-ac_add_options --disable-installer
-ac_add_options --disable-angle
+if [[ $BUILD_OPTIONS == *artifact* ]]; then
+  ac_add_options --enable-artifact-builds
+fi

@@ -1,6 +1,0 @@
-if [ "$BUILD_APP_OPTIONS" = "universal" ]; then
-  include $topsrcdir/build/macosx/universal/mozconfig
-  ac_add_app_options ppc --enable-prebinding
-fi
-
-ac_add_options --enable-crashreporter
