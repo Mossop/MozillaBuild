@@ -1,0 +1,7 @@
+#ac_add_options --with-libclang-path="c:\Users\Dave\.mozbuild\clang\bin"
+#ac_add_options --with-clang-path="c:\Users\Dave\.mozbuild\clang\bin\clang.exe"
+
+if [ "${TOOLCHAIN}" == "64-bit" ]; then
+  ac_add_options --target=x86_64-pc-mingw32
+  ac_add_options --host=x86_64-pc-mingw32
+fi
