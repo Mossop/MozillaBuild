@@ -10,5 +10,6 @@ include $BUILD_BASE/config/apps/$BUILD_APP.config
 include $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
 include $BUILD_BASE/config/targets/$BUILD_TARGET.config
 
-MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_OBJDIR
+OPTIONS=`echo "${BUILD_OPTIONS}" | sed -e "s/ /-/g"`
+MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_OBJDIR-$OPTIONS
 export MOZ_OBJDIR
