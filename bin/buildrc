@@ -6,46 +6,28 @@ source() {
   export BUILD_SOURCE=$1
 }
 
-options() {
-  export BUILD_OPTIONS=$@
+level() {
+  export BUILD_LEVEL=$1
+}
+
+type() {
+  export BUILD_TYPE=$1
 }
 
 target() {
   export BUILD_TARGET=$1
 }
 
-objdir() {
-  export BUILD_OBJDIR=$1
-}
-
-if [ -d /usr/lib/ccache ]; then
-  PATH=/usr/lib/ccache:$PATH
-fi
-if [ -d /opt/local/libexec/ccache ]; then
-  PATH=/opt/local/libexec/ccache:$PATH
-fi
-
 if [ ${OSTYPE:0:5} = "linux" ]; then
   BUILD_PLATFORM=linux
 elif [ ${OSTYPE:0:6} = "darwin" ]; then
   BUILD_PLATFORM=mac
-  if [ ${OSTYPE:6:1} = "1" ]; then
-    BUILD_PLATFORM_VERSION=${OSTYPE:6:2}
-  else
-    BUILD_PLATFORM_VERSION=${OSTYPE:6:1}
-  fi
 else
   BUILD_PLATFORM=win
 fi
 export BUILD_PLATFORM
-export BUILD_PLATFORM_VERSION
 
 export BUILD_BASE=`echo $BUILD_BASE | sed -e s/\\\\/$//g`
-
-# Make sure the build dir exists
-if [ ! -d $BUILD_BASE/build ]; then
-  mkdir $BUILD_BASE/build
-fi
 
 if [ $BUILD_PLATFORM = "win" ]; then
   if [ $OSTYPE = "cygwin" ]; then
@@ -75,14 +57,12 @@ fi
 cd $BUILD_BASE
 
 export XPCOM_DEBUG_BREAK=warn
-export CHOWN_ROOT=$BUILD_BASE/bin/chown_root
-export CHOWN_REVERT=$BUILD_BASE/bin/chown_revert
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
 
 export BUILD_APP="browser"
 export BUILD_SOURCE="trunk"
-export BUILD_OPTIONS="artifact"
+export BUILD_LEVEL="opt"
+export BUILD_TYPE="artifact"
 export BUILD_TARGET="$BUILD_PLATFORM"
-export BUILD_OBJDIR="nightly"
 
 cd $BUILD_BASE/source/$BUILD_SOURCE

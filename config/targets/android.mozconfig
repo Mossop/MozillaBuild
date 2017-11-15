@@ -1,8 +1,2 @@
-NDK=${HOME}/android-ndk-r8e
-SDK=${HOME}/android-sdk
-
-# Add the correct paths here:
-ac_add_options --with-android-ndk="${NDK}"
-ac_add_options --with-android-sdk="${SDK}/platforms/android-21"
-
+ac_add_options --with-android-sdk="/Users/dave/.mozbuild/android-sdk-macosx"
 ac_add_options --target=arm-linux-androideabi

@@ -19,8 +19,3 @@ export BUILD_BASE=`pwd`
 export PATH=$BUILD_BASE/bin:$PATH
 
 . bin/buildrc
-
-if [ -f "$BUILD_BASE/bin/activate" ]; then
-  VIRTUAL_ENV_DISABLE_PROMPT=1
-  . $BUILD_BASE/bin/activate
-fi

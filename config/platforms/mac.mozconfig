@@ -1,4 +1,4 @@
-if [ "${BUILD_OPTIONS#*artifact}" == "$BUILD_OPTIONS" ]; then
+if [ "${BUILD_TYPE}" = "full" ]; then
   if [ -x /usr/local/bin/ccache ]; then
     ac_add_options --with-ccache=/usr/local/bin/ccache
   fi
