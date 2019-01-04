@@ -2,5 +2,5 @@ ac_add_options --target=arm-linux-androideabi
 
 ac_add_options --with-java-bin-path="/Library/Java/Home/bin"
 
-ac_add_options --with-android-sdk="/Users/dave/.mozbuild/android-sdk-macosx"
-ac_add_options --with-android-ndk="/Users/dave/.mozbuild/android-ndk-r17b"
+ac_add_options --with-android-sdk="$HOME/.mozbuild/android-sdk-macosx"
+ac_add_options --with-android-ndk="$HOME/.mozbuild/android-ndk-r17b"
