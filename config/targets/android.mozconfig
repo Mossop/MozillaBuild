@@ -1,4 +1,5 @@
-ac_add_options --target=arm-linux-androideabi
+ac_add_options --target=i686-linux-android
+ac_add_options --enable-linker=lld
 
 ac_add_options --with-java-bin-path="/Library/Java/Home/bin"
 
