@@ -2,6 +2,10 @@ if [ "${BUILD_TYPE}" = "full" ]; then
   export CC="clang-cl.exe"
   export CXX="clang-cl.exe"
   export LINKER="lld-link.exe"
+
+  if [ -x $HOME/.cargo/bin/sccache.exe ]; then
+    ac_add_options --with-ccache=c:/Users/Dave/.cargo/bin/sccache.exe
+  fi
 fi
 
 if [ "${TOOLCHAIN}" = "64-bit" ]; then
