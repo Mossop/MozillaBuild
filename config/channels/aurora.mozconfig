@@ -1,0 +1,3 @@
+MOZ_REQUIRE_SIGNING=0
+ac_add_options --with-branding=browser/branding/aurora
+ac_add_options "MOZ_ALLOW_LEGACY_EXTENSIONS=1"

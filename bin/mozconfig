@@ -24,7 +24,12 @@ mk_add_options AUTOCLOBBER=1
 
 ac_add_options --enable-application=$BUILD_APP
 
+if [ "$BUILD_CHANNEL" != "default" ]; then
+  ac_add_options --enable-update-channel=$BUILD_CHANNEL
+fi
+
 include $CONFIG/mozconfig
 include $CONFIG/apps/$BUILD_APP.mozconfig
+include $CONFIG/channels/$BUILD_CHANNEL.mozconfig
 include $CONFIG/platforms/$BUILD_PLATFORM.mozconfig
 include $CONFIG/targets/$BUILD_TARGET.mozconfig

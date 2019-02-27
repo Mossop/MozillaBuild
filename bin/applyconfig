@@ -7,8 +7,14 @@ include() {
 
 include $BUILD_BASE/config/config
 include $BUILD_BASE/config/apps/$BUILD_APP.config
+include $BUILD_BASE/config/channels/$BUILD_CHANNEL.config
 include $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
 include $BUILD_BASE/config/targets/$BUILD_TARGET.config
 
-MOZ_OBJDIR=$BUILD_BASE/source/$BUILD_SOURCE/obj-${BUILD_APP}-${BUILD_LEVEL}-${BUILD_TYPE}
+CHANNEL=""
+if [ "$BUILD_CHANNEL" != "default" ]; then
+  CHANNEL="${BUILD_CHANNEL}-"
+fi
+
+MOZ_OBJDIR=$BUILD_BASE/source/$BUILD_SOURCE/obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-${BUILD_TYPE}
 export MOZ_OBJDIR

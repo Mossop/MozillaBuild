@@ -18,6 +18,10 @@ target() {
   export BUILD_TARGET=$1
 }
 
+channel() {
+  export BUILD_CHANNEL=$1
+}
+
 if [ ${OSTYPE:0:5} = "linux" ]; then
   BUILD_PLATFORM=linux
 elif [ ${OSTYPE:0:6} = "darwin" ]; then
@@ -64,5 +68,6 @@ export BUILD_SOURCE="trunk"
 export BUILD_LEVEL="opt"
 export BUILD_TYPE="artifact"
 export BUILD_TARGET="$BUILD_PLATFORM"
+export BUILD_CHANNEL="default"
 
 cd $BUILD_BASE/source/$BUILD_SOURCE
