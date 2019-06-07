@@ -70,4 +70,5 @@ export BUILD_TYPE="artifact"
 export BUILD_TARGET="$BUILD_PLATFORM"
 export BUILD_CHANNEL="default"
 
+mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
 cd $BUILD_BASE/source/$BUILD_SOURCE

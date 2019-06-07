@@ -2,11 +2,13 @@
   "files.exclude": {
       "**/.git": true,
       "**/.hg": true,
+      "build": true,
       "source": true
   },
   "files.watcherExclude": {
       "**/.hg/**": true,
       "**/.git/**": true,
+      "**/build/**": true,
       "**/source/**": true
   },
 }

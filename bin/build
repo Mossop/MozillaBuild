@@ -7,7 +7,7 @@ log() {
 . $BUILD_BASE/bin/applyconfig
 
 if [ ! -d $MOZ_OBJDIR ]; then
-  mkdir $MOZ_OBJDIR
+  mkdir -p $MOZ_OBJDIR
 fi
 	
 cd $BUILD_BASE/source/$BUILD_SOURCE
