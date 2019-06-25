@@ -31,7 +31,7 @@ else
 fi
 export BUILD_PLATFORM
 
-export BUILD_BASE=`echo $BUILD_BASE | sed -e s/\\\\/$//g`
+export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]}") && cd .. && pwd | sed -e s/\\/$//g)
 
 if [ $BUILD_PLATFORM = "win" ]; then
   if [ $OSTYPE = "cygwin" ]; then
@@ -39,19 +39,19 @@ if [ $BUILD_PLATFORM = "win" ]; then
   elif [ $OSTYPE = "msys" ]; then
     VCREDIST=$(echo $VCINSTALLDIR | sed -e s/\\\\/\\//g | sed -e s/c:/\\/c/gi)/redist
   fi
-  
+
   if [ -d "$VCREDIST/x86/Microsoft.VC80.CRT" ]; then
     BUILD_REDIST=$VCREDIST/x86/Microsoft.VC80.CRT
   elif [ -d "$VCREDIST/x86/Microsoft.VC90.CRT" ]; then
     BUILD_REDIST=$VCREDIST/x86/Microsoft.VC90.CRT
   fi
-  
+
   if [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT" ]; then
     BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC80.DebugCRT
   elif [ -d "$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT" ]; then
     BUILD_REDIST_DEBUG=$VCREDIST/Debug_NonRedist/x86/Microsoft.VC90.DebugCRT
   fi
-  
+
   export WIN32_REDIST_DIR="$BUILD_REDIST"
   export BUILD_PYTHON="${MOZILLABUILD}python\\python.exe"
 else
@@ -63,12 +63,21 @@ cd $BUILD_BASE
 export XPCOM_DEBUG_BREAK=warn
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
 
-export BUILD_APP="browser"
-export BUILD_SOURCE="trunk"
-export BUILD_LEVEL="opt"
-export BUILD_TYPE="artifact"
-export BUILD_TARGET="$BUILD_PLATFORM"
-export BUILD_CHANNEL="default"
-
-mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
-cd $BUILD_BASE/source/$BUILD_SOURCE
+if [ -z "$BUILD_APP" ]; then
+  export BUILD_APP="browser"
+fi
+if [ -z "$BUILD_SOURCE" ]; then
+  export BUILD_SOURCE="trunk"
+fi
+if [ -z "$BUILD_LEVEL" ]; then
+  export BUILD_LEVEL="opt"
+fi
+if [ -z "$BUILD_TYPE" ]; then
+  export BUILD_TYPE="artifact"
+fi
+if [ -z "$BUILD_TARGET" ]; then
+  export BUILD_TARGET="$BUILD_PLATFORM"
+fi
+if [ -z "$BUILD_CHANNEL" ]; then
+  export BUILD_CHANNEL="default"
+fi
