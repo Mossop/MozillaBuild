@@ -1,25 +1,53 @@
+build_prompt() {
+  INFO="level:$BUILD_LEVEL type:$BUILD_TYPE"
+
+  if [ "$BUILD_APP" != "browser" ]; then
+    INFO="$INFO app:$BUILD_APP"
+  fi
+
+  if [ "$BUILD_TARGET" != "$BUILD_PLATFORM" ]; then
+    INFO="$INFO target:$BUILD_TARGET"
+  fi
+
+  if [ "$BUILD_CHANNEL" != "default" ]; then
+    INFO="$INFO channel:$BUILD_CHANNEL"
+  fi
+
+  if [ "$BUILD_SOURCE" != "trunk" ]; then
+    INFO="$INFO source:$BUILD_SOURCE"
+  fi
+
+  export PS1="\[\033[1;33m\]$INFO\[\033[0m\]\n$DEFAULT_PROMPT"
+}
+
 app() {
   export BUILD_APP=$1
+  build_prompt
 }
 
 source() {
   export BUILD_SOURCE=$1
+  build_prompt
 }
 
 level() {
   export BUILD_LEVEL=$1
+  build_prompt
 }
 
 type() {
   export BUILD_TYPE=$1
+  build_prompt
 }
 
 target() {
   export BUILD_TARGET=$1
+  build_prompt
 }
 
 channel() {
   export BUILD_CHANNEL=$1
+  build_prompt
 }
 
 if [ ${OSTYPE:0:5} = "linux" ]; then
@@ -81,3 +109,7 @@ fi
 if [ -z "$BUILD_CHANNEL" ]; then
   export BUILD_CHANNEL="default"
 fi
+
+DEFAULT_PROMPT=$PS1
+build_prompt
+

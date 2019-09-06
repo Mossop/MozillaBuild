@@ -14,7 +14,7 @@ fi
 if [ ! -d $MOZ_OBJDIR ]; then
   mkdir -p $MOZ_OBJDIR
 fi
-	
+
 cd $BUILD_BASE/source/$BUILD_SOURCE
 $BUILD_PYTHON mach build
 

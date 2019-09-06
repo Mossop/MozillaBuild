@@ -1,5 +1,0 @@
-if [ "${BUILD_TYPE}" = "full" ]; then
-  if [ -x /usr/bin/ccache ]; then
-    ac_add_options --with-ccache=/usr/bin/ccache
-  fi
-fi

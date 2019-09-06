@@ -1,13 +1,22 @@
 if [ "${BUILD_TYPE}" = "artifact" ]; then
   ac_add_options --enable-artifact-builds
+
   if [ "${BUILD_LEVEL}" = "dbg" ]; then
     ac_add_options --enable-debug
   fi
 else
+  ac_add_options --enable-clang-plugin
+
   if [ "${BUILD_LEVEL}" = "dbg" ]; then
     ac_add_options --enable-debug
     ac_add_options --disable-optimize
   else
     ac_add_options --enable-optimize
   fi
+
+  if [ -x $HOME/.mozbuild/sccache/sccache ]; then
+    ac_add_options --with-ccache=$HOME/.mozbuild/sccache/sccache
+  fi
+
+  ac_add_options --enable-warnings-as-errors
 fi
