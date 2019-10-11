@@ -17,7 +17,12 @@ build_prompt() {
     INFO="$INFO source:$BUILD_SOURCE"
   fi
 
-  export PS1="\[\033[1;33m\]$INFO\[\033[0m\]\n$DEFAULT_PROMPT"
+  if [ -z "$ZSH_NAME" ]; then
+    export PS1="\[\033[1;33m\]$INFO\[\033[0m\]\n$DEFAULT_PROMPT"
+  else
+    export PS1="%F{yellow}%B$INFO%b%f
+$DEFAULT_PROMPT"
+  fi
 }
 
 app() {
@@ -59,7 +64,7 @@ else
 fi
 export BUILD_PLATFORM
 
-export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]}") && cd .. && pwd | sed -e s/\\/$//g)
+export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}") && cd .. && pwd | sed -e s/\\/$//g)
 
 if [ $BUILD_PLATFORM = "win" ]; then
   if [ $OSTYPE = "cygwin" ]; then
