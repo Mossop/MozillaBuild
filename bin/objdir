@@ -11,4 +11,8 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-$BUILD_BASE/source/$BUILD_SOURCE/mach "$@"
+if [ ! -d $MOZ_OBJDIR ]; then
+  mkdir -p $MOZ_OBJDIR
+fi
+
+cd $MOZ_OBJDIR
