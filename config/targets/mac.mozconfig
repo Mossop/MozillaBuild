@@ -1,3 +1,9 @@
 if [ "${BUILD_TYPE}" = "full" ]; then
-  ac_add_options --with-macos-sdk=/Users/dave/.mozbuild/MacOSX10.13.sdk
+  export CFLAGS="--target=x86_64-apple-darwin19.0.0"
+  export CXXFLAGS="${CFLAGS}"
+  export HOST_CFLAGS="${CFLAGS}"
+  export HOST_CXXFLAGS="${CXXFLAGS}"
+
+  export MACOS_DEVELOPMENT_TARGET=10.11
+  ac_add_options --with-macos-sdk=/Users/dave/.mozbuild/MacOSX10.11.sdk
 fi
