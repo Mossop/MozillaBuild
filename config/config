@@ -1,0 +1,2 @@
+export MOZ_QUIET=1
+export MOZ_DISABLE_STACK_FIX=1
