@@ -5,7 +5,7 @@ if [ "${BUILD_TYPE}" = "artifact" ]; then
     ac_add_options --enable-debug
   fi
 else
-  ac_add_options --enable-clang-plugin
+  #ac_add_options --enable-clang-plugin
 
   if [ "${BUILD_LEVEL}" = "dbg" ]; then
     ac_add_options --enable-debug
@@ -14,9 +14,20 @@ else
     ac_add_options --enable-optimize
   fi
 
-  if [ -x $HOME/.mozbuild/sccache/sccache ]; then
-    ac_add_options --with-ccache=$HOME/.mozbuild/sccache/sccache
-  fi
+  #ac_add_options --enable-warnings-as-errors
 
-  ac_add_options --enable-warnings-as-errors
+  if [ "${BUILD_TYPE}" = "asan" ]; then
+    ac_add_options --enable-address-sanitizer
+    ac_add_options --enable-debug-symbols
+    ac_add_options --disable-install-strip
+    ac_add_options --disable-jemalloc
+    ac_add_options --disable-crashreporter
+    ac_add_options --disable-profiling
+  else
+    if [ "${BUILD_PLATFORM}" = "win" ]; then
+      ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
+    else
+      ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
+    fi
+  fi
 fi

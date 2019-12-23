@@ -16,6 +16,6 @@ if [ ! -d $MOZ_OBJDIR ]; then
 fi
 
 cd $BUILD_BASE/source/$BUILD_SOURCE
-./mach build
+./mach build $@
 
 ${BUILD_BASE}/bin/ifttt build_complete $(hostname)

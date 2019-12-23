@@ -1,2 +1,15 @@
 export MOZ_QUIET=1
 export MOZ_DISABLE_STACK_FIX=1
+
+if [ "${BUILD_TYPE}" = "asan" ]; then
+  if [ "${BUILD_PLATFORM}" = "win" ]; then
+    CLANG_LIB_DIR="$(cd ~/.mozbuild/clang/lib/clang/*/lib/windows && pwd)"
+
+    export LIB=$LIB:$CLANG_LIB_DIR
+    export LDFLAGS="clang_rt.asan_dynamic-x86_64.lib clang_rt.asan_dynamic_runtime_thunk-x86_64.lib"
+
+    export MOZ_COPY_PDBS=1
+    export LLVM_SYMBOLIZER="~/.mozbuild/clang/bin/llvm-symbolizer.exe"
+    export MOZ_CLANG_RT_ASAN_LIB_PATH="${CLANG_LIB_DIR}/clang_rt.asan_dynamic-x86_64.dll"
+  fi
+fi

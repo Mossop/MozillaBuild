@@ -87,8 +87,12 @@ if [ $BUILD_PLATFORM = "win" ]; then
 
   export WIN32_REDIST_DIR="$BUILD_REDIST"
   export BUILD_PYTHON="${MOZILLABUILD}python\\python.exe"
+  export BUILD_EXE_SUFFIX=".exe"
+  export MINIDUMP_STACKWALK=$BUILD_BASE/bin/win/minidump_stackwalk.exe
 else
   export BUILD_PYTHON=python
+  export BUILD_EXE_SUFFIX=""
+  export MINIDUMP_STACKWALK=$BUILD_BASE/bin/$BUILD_PLATFORM/minidump_stackwalk
 fi
 
 cd $BUILD_BASE
