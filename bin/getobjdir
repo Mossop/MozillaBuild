@@ -11,8 +11,4 @@ fi
 
 . $BUILD_BASE/bin/applyconfig
 
-if [ ! -d $MOZ_OBJDIR ]; then
-  mkdir -p $MOZ_OBJDIR
-fi
-
-cd $MOZ_OBJDIR
+echo $MOZ_OBJDIR

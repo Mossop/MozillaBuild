@@ -1,4 +1,4 @@
-if [ "${BUILD_TYPE}" = "full" ]; then
+if [ "${BUILD_TYPE}" != "artifact" ]; then
   export CFLAGS="--target=x86_64-apple-darwin19.0.0"
   export CXXFLAGS="${CFLAGS}"
   export HOST_CFLAGS="${CFLAGS}"

@@ -1,5 +1,4 @@
 export MOZ_QUIET=1
-export MOZ_DISABLE_STACK_FIX=1
 
 if [ "${BUILD_TYPE}" = "asan" ]; then
   if [ "${BUILD_PLATFORM}" = "win" ]; then

@@ -1,11 +1,5 @@
 #! /bin/bash
 
-if [ "$BUILD_BASE" ]; then
-  echo "Build environment already initialised"
-  cd $BUILD_BASE/source/$BUILD_SOURCE
-  return
-fi
-
 if [ -f "/c/mozilla/bin/buildrc" ]; then
   . /c/mozilla/bin/buildrc
 elif [ -f "$HOME/mozilla/bin/buildrc" ]; then
@@ -18,3 +12,4 @@ fi
 export PATH=$BUILD_BASE/bin:$PATH
 mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
 cd $BUILD_BASE/source/$BUILD_SOURCE
+bash
