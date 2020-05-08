@@ -17,6 +17,4 @@ fi
 
 cd $BUILD_BASE/source/$BUILD_SOURCE
 echo -ne "\033]0;Building ${BUILD_LEVEL} ${BUILD_TYPE}\007"
-./mach build $@
-
-${BUILD_BASE}/bin/ifttt build_complete $(hostname)
+exec ./mach build $@
