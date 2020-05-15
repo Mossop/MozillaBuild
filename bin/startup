@@ -1,12 +1,12 @@
 #! /bin/bash
 
 if [ -f "/c/mozilla/bin/buildrc" ]; then
- . /c/mozilla/bin/buildrc
+  export BUILD_BASE="/c/mozilla"
 elif [ -f "$HOME/mozilla/bin/buildrc" ]; then
- . "$HOME/mozilla/bin/buildrc"
+  export BUILD_BASE="$HOME/mozilla"
 else
  echo "Could not find build environment"
  return
 fi
 
-exec bash
+exec bash --rcfile "$BUILD_BASE/bin/buildrc"

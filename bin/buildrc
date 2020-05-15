@@ -24,48 +24,40 @@ build_prompt() {
     export PS1="\[\033[1;33m\]$INFO\[\033[0m\]\n$DEFAULT_PROMPT${TITLE}"
   fi
 }
-typeset -fx build_prompt
 
 build_app() {
   export BUILD_APP=$1
   build_prompt
 }
-typeset -fx build_app
 
 build_source() {
   export BUILD_SOURCE=$1
   build_prompt
 }
-typeset -fx build_source
 
 build_level() {
   export BUILD_LEVEL=$1
   build_prompt
 }
-typeset -fx build_level
 
 build_type() {
   export BUILD_TYPE=$1
   build_prompt
 }
-typeset -fx build_type
 
 build_target() {
   export BUILD_TARGET=$1
   build_prompt
 }
-typeset -fx build_target
 
 build_channel() {
   export BUILD_CHANNEL=$1
   build_prompt
 }
-typeset -fx build_channel
 
 objdir() {
   cd `${BUILD_BASE}/bin/getobjdir`
 }
-typeset -fx objdir
 
 if [ ${OSTYPE:0:5} = "linux" ]; then
   BUILD_PLATFORM=linux
@@ -137,3 +129,7 @@ build_prompt
 export PATH=$BUILD_BASE/bin:$PATH
 mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
 cd $BUILD_BASE/source/$BUILD_SOURCE
+
+if [ -f "$BUILD_BASE/source/$BUILD_SOURCE/python/mach/bash-completion.sh" ]; then
+  . "$BUILD_BASE/source/$BUILD_SOURCE/python/mach/bash-completion.sh"
+fi
