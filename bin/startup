@@ -5,8 +5,8 @@ if [ -f "/c/mozilla/bin/buildrc" ]; then
 elif [ -f "$HOME/mozilla/bin/buildrc" ]; then
   export BUILD_BASE="$HOME/mozilla"
 else
- echo "Could not find build environment"
- return
+  echo "Could not find build environment"
+  return
 fi
 
 exec bash --rcfile "$BUILD_BASE/bin/buildrc"
