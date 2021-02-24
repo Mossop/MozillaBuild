@@ -123,14 +123,17 @@ fi
 
 export GIT_PROMPT_DISABLE=1
 DEFAULT_PROMPT=$PS1
-build_prompt
 
 if [ $BUILD_PLATFORM = "mac" -a $TERM_PROGRAM = "iTerm.app" -a -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
   . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
 fi
 
+build_prompt
+
 export PATH=$BUILD_BASE/bin:$PATH
 mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
 cd $BUILD_BASE/source/$BUILD_SOURCE
 
-mach mach-completion bash -f $(brew --prefix)/etc/bash_completion.d/mach.bash-completion >/dev/null 2>/dev/null &
+if [ $BUILD_PLATFORM = "mac" ]; then
+  mach mach-completion bash -f $(brew --prefix)/etc/bash_completion.d/mach.bash-completion >/dev/null 2>/dev/null &
+fi
