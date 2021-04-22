@@ -124,8 +124,12 @@ fi
 export GIT_PROMPT_DISABLE=1
 DEFAULT_PROMPT=$PS1
 
-if [ $BUILD_PLATFORM = "mac" -a $TERM_PROGRAM = "iTerm.app" -a -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
-  . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
+if [ $BUILD_PLATFORM = "mac" ]; then
+  if [ $TERM_PROGRAM = "iTerm.app" ]; then
+    if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
+      . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
+    fi
+  fi
 fi
 
 build_prompt
