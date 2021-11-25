@@ -23,11 +23,9 @@ else
     ac_add_options --disable-jemalloc
     ac_add_options --disable-crashreporter
     ac_add_options --disable-profiling
-  else
-    if [ "${BUILD_PLATFORM}" = "win" ]; then
-      ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
-    else
-      ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
-    fi
+  elif [ -f "C:/Users/Dave/.mozbuild/sccache/sccache.exe" ]; then
+    ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
+  elif [ -f "$HOME/.mozbuild/sccache/sccache" ]; then
+    ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
   fi
 fi
