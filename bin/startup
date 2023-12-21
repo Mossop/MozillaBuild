@@ -1,12 +1,5 @@
 #! /bin/bash
 
-if [ -f "/c/mozilla/bin/buildrc" ]; then
-  export BUILD_BASE="/c/mozilla"
-elif [ -f "$HOME/mozilla/bin/buildrc" ]; then
-  export BUILD_BASE="$HOME/mozilla"
-else
-  echo "Could not find build environment"
-  return
-fi
+export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}")/.. && pwd | sed -e s/\\/$//g)
 
 exec bash --rcfile "$BUILD_BASE/bin/buildrc"
