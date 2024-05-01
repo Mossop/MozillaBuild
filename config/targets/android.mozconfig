@@ -1,1 +1,2 @@
 ac_add_options --disable-warnings-as-errors
+ac_add_options --target=aarch64
