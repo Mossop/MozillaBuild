@@ -1,31 +1,43 @@
-if [ "${BUILD_TYPE}" = "artifact" ]; then
-  ac_add_options --enable-artifact-builds
+ac_add_options --enable-warnings-as-errors
 
-  if [ "${BUILD_LEVEL}" = "dbg" ]; then
-    ac_add_options --enable-debug
-  fi
+if [ "${BUILD_LEVEL}" = "dbg" ]; then
+  ac_add_options --enable-debug
+  ac_add_options --disable-optimize
 else
-  if [ "${BUILD_LEVEL}" = "dbg" ]; then
-    ac_add_options --enable-debug
-    ac_add_options --disable-optimize
+  if [ "${BUILD_TYPE}" = "tsan" ]; then
+    ac_add_options --enable-optimize="-O2 -gline-tables-only"
   else
     ac_add_options --enable-optimize
   fi
 
-  ac_add_options --enable-warnings-as-errors
+  export MOZ_DEBUG_SYMBOLS=1
+  ac_add_options --enable-debug-symbols
+  ac_add_options --disable-install-strip
+fi
 
-  if [ "${BUILD_TYPE}" = "asan" ]; then
-    ac_add_options --enable-address-sanitizer
-    ac_add_options --enable-debug-symbols
-    ac_add_options --disable-install-strip
-    ac_add_options --disable-jemalloc
-    ac_add_options --disable-crashreporter
-    ac_add_options --disable-profiling
-  elif [ -f "C:/Users/Dave/.mozbuild/sccache/sccache.exe" ]; then
-    ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
-  elif [ -f "$HOME/.mozbuild/sccache/sccache" ]; then
-    ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
-  fi
+if [ "${BUILD_TYPE}" = "artifact" ]; then
+  ac_add_options --enable-artifact-builds
+elif [ "${BUILD_TYPE}" = "asan" ]; then
+  ac_add_options --enable-address-sanitizer
+  ac_add_options --disable-jemalloc
+  ac_add_options --disable-crashreporter
+  ac_add_options --disable-profiling
+elif [ "${BUILD_TYPE}" = "tsan" ]; then
+  ac_add_options --enable-thread-sanitizer
+  export RUSTFLAGS="-Zsanitizer=thread"
+  unset RUSTFMT
+  ac_add_options --disable-warnings-as-errors
+  ac_add_options --disable-jemalloc
+  ac_add_options --disable-crashreporter
+  ac_add_options --disable-elf-hack
+  ac_add_options --disable-profiling
+  ac_add_options --disable-sandbox
+fi
+
+if [ -f "C:/Users/Dave/.mozbuild/sccache/sccache.exe" ]; then
+  ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
+elif [ -f "$HOME/.mozbuild/sccache/sccache" ]; then
+  ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
 fi
 
 ac_add_options --enable-bootstrap
