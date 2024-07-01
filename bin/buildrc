@@ -117,7 +117,6 @@ if [ -z "$BUILD_CHANNEL" ]; then
   export BUILD_CHANNEL="default"
 fi
 
-export GIT_PROMPT_DISABLE=1
 DEFAULT_PROMPT=$PS1
 
 if [ $BUILD_PLATFORM = "mac" ]; then
@@ -125,6 +124,10 @@ if [ $BUILD_PLATFORM = "mac" ]; then
     if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
       . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
     fi
+  fi
+
+  if [ -f "/opt/homebrew/bin/mise" ]; then
+    eval "$(/opt/homebrew/bin/mise activate bash)"
   fi
 fi
 
