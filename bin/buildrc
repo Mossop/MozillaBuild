@@ -119,13 +119,12 @@ fi
 
 DEFAULT_PROMPT=$PS1
 
-if [ $BUILD_PLATFORM = "mac" ]; then
-  if [ $TERM_PROGRAM = "iTerm.app" ]; then
-    if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
-      . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
-    fi
-  fi
+if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
+  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=1
+  . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
+fi
 
+if [ $BUILD_PLATFORM = "mac" ]; then
   if [ -f "/opt/homebrew/bin/mise" ]; then
     eval "$(/opt/homebrew/bin/mise activate bash)"
   fi
