@@ -1,8 +1,3 @@
-if [ "${BUILD_TYPE}" != "artifact" ]; then
+#if [ "${BUILD_TYPE}" != "artifact" ]; then
   ac_add_options --disable-launcher-process
-
-  export CC="~/.mozbuild/clang/bin/clang-cl.exe --driver-mode=cl"
-  export CXX="~/.mozbuild/clang/bin/clang-cl.exe --driver-mode=cl"
-  export HOST_CC="~/.mozbuild/clang/bin/clang-cl.exe --driver-mode=cl"
-  export HOST_CXX="~/.mozbuild/clang/bin/clang-cl.exe --driver-mode=cl"
-fi
+#fi
