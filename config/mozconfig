@@ -42,3 +42,7 @@ ac_add_options --enable-bootstrap
 #ac_add_options --enable-clang-plugin
 #ac_add_options --enable-unverified-updates
 ac_add_options MOZ_SELECTABLE_PROFILES=1
+
+#export MOZILLA_OFFICIAL=1
+#ac_add_options --enable-official-branding
+#ac_add_options --enable-update-channel=release
