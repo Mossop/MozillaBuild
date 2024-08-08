@@ -26,13 +26,13 @@ mv .git/hooks/fsmonitor-watchman.sample .git/hooks/query-watchman
 git config core.fsmonitor .git/hooks/query-watchman
 git config fetch.prune true
 
-git remote add unified hg::https://hg.mozilla.org/mozilla-unified
+git remote add unified hg://hg.mozilla.org/mozilla-unified
 git config remote.unified.cinnabar-refs bookmarks,tips
 git fetch unified
 git cinnabar fetch --tags
 
-git remote add working hg::https://hg.mozilla.org/users/dtownsend_mozilla.com/working/unified/
-git remote set-url --push working hg::ssh://hg.mozilla.org/users/dtownsend_mozilla.com/working/unified
+git remote add working hg://hg.mozilla.org/users/dtownsend_mozilla.com/working/unified/
+git remote set-url --push working hg://hg.mozilla.org/users/dtownsend_mozilla.com/working/unified
 git config remote.working.cinnabar-refs bookmarks
 git fetch working
 
