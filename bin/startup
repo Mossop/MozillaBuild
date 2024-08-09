@@ -1,5 +1,0 @@
-#! /bin/bash
-
-export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}")/.. && pwd | sed -e s/\\/$//g)
-
-exec bash --rcfile "$BUILD_BASE/bin/buildrc"
