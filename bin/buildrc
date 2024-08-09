@@ -26,32 +26,32 @@ build_prompt() {
 }
 
 build_app() {
-  export BUILD_APP=$1
+  export BUILD_APP=${1:-browser}
   build_prompt
 }
 
 build_source() {
-  export BUILD_SOURCE=$1
+  export BUILD_SOURCE=${1:-trunk}
   build_prompt
 }
 
 build_level() {
-  export BUILD_LEVEL=$1
+  export BUILD_LEVEL=${1:-opt}
   build_prompt
 }
 
 build_type() {
-  export BUILD_TYPE=$1
+  export BUILD_TYPE=${1:-artifact}
   build_prompt
 }
 
 build_target() {
-  export BUILD_TARGET=$1
+  export BUILD_TARGET=${1:-$BUILD_PLATFORM}
   build_prompt
 }
 
 build_channel() {
-  export BUILD_CHANNEL=$1
+  export BUILD_CHANNEL=${1:-default}
   build_prompt
 }
 
@@ -98,25 +98,6 @@ fi
 export XPCOM_DEBUG_BREAK=warn
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
 
-if [ -z "$BUILD_APP" ]; then
-  export BUILD_APP="browser"
-fi
-if [ -z "$BUILD_SOURCE" ]; then
-  export BUILD_SOURCE="trunk"
-fi
-if [ -z "$BUILD_LEVEL" ]; then
-  export BUILD_LEVEL="opt"
-fi
-if [ -z "$BUILD_TYPE" ]; then
-  export BUILD_TYPE="artifact"
-fi
-if [ -z "$BUILD_TARGET" ]; then
-  export BUILD_TARGET="$BUILD_PLATFORM"
-fi
-if [ -z "$BUILD_CHANNEL" ]; then
-  export BUILD_CHANNEL="default"
-fi
-
 DEFAULT_PROMPT=$PS1
 
 if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
@@ -132,7 +113,12 @@ elif [ -f "$HOME/.local/bin/mise" ]; then
   eval "$($HOME/.local/bin/mise activate bash)"
 fi
 
-build_prompt
+build_app
+build_source
+build_level
+build_type
+build_target
+build_channel
 
 export PATH=$BUILD_BASE/bin:$PATH
 mkdir -p "$BUILD_BASE/source/$BUILD_SOURCE"
