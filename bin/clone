@@ -33,8 +33,8 @@ git remote add unified hg://hg.mozilla.org/mozilla-unified
 git config remote.unified.cinnabar-refs bookmarks
 git fetch unified
 
+git reset --hard unified/central
 git branch -u unified/central
-git pull
 
 git remote add working git@github.com:Mossop/gecko-dev.git
 git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
