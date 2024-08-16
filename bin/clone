@@ -21,23 +21,25 @@ echo "Cloning into $BUILD_BASE/source/${TARGET}..."
 mkdir "$BUILD_BASE/source/$TARGET"
 cd "$BUILD_BASE/source/$TARGET"
 
-git init .
+git init -b central .
 mv .git/hooks/fsmonitor-watchman.sample .git/hooks/query-watchman
 git config core.fsmonitor .git/hooks/query-watchman
 git config fetch.prune true
 
+git remote add gecko-dev https://github.com/mozilla/gecko-dev.git
+git fetch gecko-dev
+
 git remote add unified hg://hg.mozilla.org/mozilla-unified
 git config remote.unified.cinnabar-refs bookmarks
 git fetch unified
-git cinnabar fetch --tags
 
-git remote add working hg://hg.mozilla.org/users/dtownsend_mozilla.com/working/unified/
-git remote set-url --push working hg://hg.mozilla.org:ssh/users/dtownsend_mozilla.com/working/unified
-git config remote.working.cinnabar-refs bookmarks
+git branch -u unified/central
+git pull
+
+git remote add working git@github.com:Mossop/gecko-dev.git
+git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
+git config remote.working.push 'refs/heads/work/*:refs/heads/work/*'
+git config --add remote.working.push 'refs/remotes/unified/central:refs/heads/central'
 git fetch working
-
-git branch --track beta unified/bookmarks/beta
-git branch --track release unified/bookmarks/release
-git checkout --track -b central unified/bookmarks/central
 
 git status
