@@ -39,7 +39,7 @@ fi
 
 ac_add_options --enable-bootstrap
 #ac_add_options --disable-unified-build
-ac_add_options --enable-clang-plugin
+#ac_add_options --enable-clang-plugin
 #ac_add_options --enable-unverified-updates
 ac_add_options MOZ_SELECTABLE_PROFILES=1
 
