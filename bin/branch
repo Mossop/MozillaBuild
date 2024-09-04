@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ -z "$1" ]; then
+  echo "Must pass a bug number."
+  exit
+fi
+
+git checkout -b work/bug$1
+curl -s https://bugzilla.mozilla.org/rest/bug?id=$1 | jq -r '"Bug \(.bugs[0].id): \(.bugs[0].summary)"' | git commit --allow-empty -F -
+

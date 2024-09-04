@@ -1,0 +1,23 @@
+#! /bin/bash
+
+set -e
+
+TARGET=$1
+if [ -z "$TARGET" ]; then
+  echo "Must pass a remote on the command line."
+  exit 1
+fi
+
+REMOTE=gecko-dev
+BRANCHES="$(git branch -r --list "$REMOTE/esr*" | sort -b -V | sed "s@$REMOTE\/@@" | xargs echo) release beta"
+
+for branch in $BRANCHES;
+do
+  echo "Pushing $branch..."
+  git push $TARGET +refs/remotes/$REMOTE/$branch:refs/heads/$branch
+  echo ""
+done
+
+echo "Pushing central..."
+git push $TARGET +refs/remotes/$REMOTE/master:refs/heads/central
+
