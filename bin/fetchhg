@@ -1,0 +1,7 @@
+#! /bin/bash
+
+echo Updating from Mercurial...
+git fetch -q hg://hg.mozilla.org/mozilla-unified \
+  +refs/heads/bookmarks/central:refs/remotes/hg/central \
+  +refs/heads/bookmarks/beta:refs/remotes/hg/beta \
+  +refs/heads/bookmarks/release:refs/remotes/hg/release

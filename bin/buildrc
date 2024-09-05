@@ -92,7 +92,7 @@ if [ $BUILD_PLATFORM = "win" ]; then
   export WIN32_REDIST_DIR="$BUILD_REDIST"
   export BUILD_PYTHON="${MOZILLABUILD}python\\python.exe"
 else
-  export BUILD_PYTHON=python
+  export BUILD_PYTHON="${BUILD_BASE}/.venv/bin/python"
 fi
 
 export XPCOM_DEBUG_BREAK=warn
@@ -127,3 +127,5 @@ cd $BUILD_BASE/source/$BUILD_SOURCE
 if [ $BUILD_PLATFORM = "mac" ]; then
   mach mach-completion bash -f $(brew --prefix)/etc/bash_completion.d/mach.bash-completion >/dev/null 2>/dev/null &
 fi
+
+alias moz-phab=$BUILD_BASE/bin/moz-phab

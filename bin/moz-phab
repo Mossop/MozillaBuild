@@ -1,0 +1,7 @@
+#! /bin/bash
+
+if [ $(git cinnabar git2hg central) = "0000000000000000000000000000000000000000" ]; then
+  fetchhg
+fi
+
+exec $(dirname $BUILD_PYTHON)/moz-phab $@
