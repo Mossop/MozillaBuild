@@ -22,9 +22,8 @@ git clone -o working git@github.com:Mossop/gecko-working.git "$BUILD_BASE/source
 
 cd "$BUILD_BASE/source/$TARGET"
 
-mv .git/hooks/fsmonitor-watchman.sample .git/hooks/query-watchman
-git config core.fsmonitor .git/hooks/query-watchman
-git config fetch.prune true
+git config core.hooksPath $BUILD_BASE/githooks
+git config core.fsmonitor $BUILD_BASE/githooks/query-watchman
 
 git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
 git config remote.working.push 'refs/heads/work/*:refs/heads/work/*'

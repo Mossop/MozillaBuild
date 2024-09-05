@@ -1,0 +1,8 @@
+#!/bin/bash
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "central" ]; then
+  echo "You can't commit to central" >/dev/stderr
+  exit 1
+fi
