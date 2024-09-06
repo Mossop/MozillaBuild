@@ -100,19 +100,6 @@ export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
 
 DEFAULT_PROMPT=$PS1
 
-if [ -f "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash" ]; then
-  export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=1
-  . "$HOME/dotfiles/platforms/macos/iterm2_shell_integration.bash"
-fi
-
-if [ $BUILD_PLATFORM = "mac" ]; then
-  if [ -f "/opt/homebrew/bin/mise" ]; then
-    eval "$(/opt/homebrew/bin/mise activate bash)"
-  fi
-elif [ -f "$HOME/.local/bin/mise" ]; then
-  eval "$($HOME/.local/bin/mise activate bash)"
-fi
-
 build_app
 build_source
 build_level
