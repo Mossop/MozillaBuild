@@ -16,7 +16,6 @@ fi
 cd $BUILD_BASE/source
 
 TARGET="${1:-$BUILD_SOURCE}"
-echo "Cloning into $BUILD_BASE/source/${TARGET}..."
 
 git clone -o working git@github.com:Mossop/gecko-working.git "$BUILD_BASE/source/$TARGET"
 
@@ -29,5 +28,7 @@ git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
 git config remote.working.push 'refs/heads/work/*:refs/heads/work/*'
 git config --add remote.working.push 'refs/heads/central:refs/heads/central'
 git fetch working
+
+fetchhg
 
 git status
