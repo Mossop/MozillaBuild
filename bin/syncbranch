@@ -1,0 +1,54 @@
+#! /bin/bash
+
+REMOTE="working"
+GITDIR=$(git rev-parse --absolute-git-dir)
+CURRENT=$(git rev-parse --abbrev-ref HEAD)
+BRANCH=${1:-$CURRENT}
+
+if [[ "$BRANCH" =~ ^bug\d+$ ]]; then
+  BRANCH="work/$BRANCH"
+elif [[ "$BRANCH" =~ ^\d+$ ]]; then
+  BRANCH="work/bug$BRANCH"
+fi
+
+if [ ! -d "$GITDIR/refs/remotes/$REMOTE" ]; then
+  echo "Missing remote $REMOTE"
+  exit 1
+fi
+
+git fetch -q --refmap="" $REMOTE +refs/heads/*:refs/remotes/$REMOTE/*
+
+DECISION="missing"
+if [ -f "$GITDIR/refs/heads/$BRANCH" ]; then
+  if [ -f "$GITDIR/refs/remotes/$REMOTE/$BRANCH" ]; then
+    # Both exist
+    LOCALREF=($(git for-each-ref refs/heads/$BRANCH '--format=%(objectname) %(committerdate:unix)'))
+    REMOTEREF=($(git for-each-ref refs/remotes/$REMOTE/$BRANCH '--format=%(objectname) %(committerdate:unix)'))
+
+    if [ "${LOCALREF[0]}" = "${REMOTEREF[0]}" ]; then
+      echo "Branch $BRANCH is already in sync."
+    elif [ "${LOCALREF[1]}" -gt "${REMOTEREF[1]}" ]; then
+      echo "Force pushing $BRANCH to $REMOTE..."
+      git push $REMOTE +refs/heads/$BRANCH:refs/heads/$BRANCH
+    else
+      if [ "$BRANCH" = "$CURRENT" ]; then
+        echo "Attempting to reset branch $BRANCH to $REMOTE's version..."
+        git reset --keep "${REMOTEREF[0]}"
+      else
+        echo "Force pulling $BRANCH from $REMOTE..."
+        git fetch $REMOTE +refs/heads/$BRANCH:refs/heads/$BRANCH
+      fi
+    fi
+  else
+    # Only local exists
+    echo Pushing branch $BRANCH to $REMOTE
+    git push $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
+  fi
+elif [ -f "$GITDIR/refs/remotes/$REMOTE/$BRANCH" ]; then
+  # Only remote exists
+    echo Pulling branch $BRANCH from $REMOTE
+    git fetch $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
+else
+  echo "Branch $BRANCH doesn't seem to exist locally or remotely."
+  exit 1
+fi

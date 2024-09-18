@@ -26,7 +26,6 @@ git config core.fsmonitor $BUILD_BASE/githooks/query-watchman
 
 git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
 git config remote.working.push 'refs/heads/work/*:refs/heads/work/*'
-git config --add remote.working.push 'refs/heads/central:refs/heads/central'
 git fetch working
 
 fetchhg

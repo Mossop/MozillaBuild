@@ -16,6 +16,6 @@ if [ ! -d $MOZ_OBJDIR ]; then
 fi
 
 cd $BUILD_BASE/source/$BUILD_SOURCE
-fetchhg
+fetchhg central
 echo -ne "\033]0;Building ${BUILD_LEVEL} ${BUILD_TYPE}\007"
 exec ./mach build $@

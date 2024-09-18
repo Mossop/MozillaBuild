@@ -5,6 +5,17 @@ if [ -z "$1" ]; then
   exit
 fi
 
-git checkout -b work/bug$1
-curl -s https://bugzilla.mozilla.org/rest/bug?id=$1 | jq -r '"Bug \(.bugs[0].id): \(.bugs[0].summary)"' | git commit --allow-empty -F -
+REMOTE=working
+BRANCH=work/bug$1
 
+git fetch $REMOTE
+
+if [ -f "$(git rev-parse --absolute-git-dir)/refs/remotes/working/$BRANCH" ]; then
+  git checkout $BRANCH
+elif [ -f "$(git rev-parse --absolute-git-dir)/refs/remotes/working/$BRANCH" ]; then
+  git checkout -b $BRANCH working/$BRANCH
+else
+  git checkout -b $BRANCH
+  curl -s https://bugzilla.mozilla.org/rest/bug?id=$1 | jq -r '"Bug \(.bugs[0].id): \(.bugs[0].summary)"' | git commit --allow-empty -F -
+  git push working refs/heads/$BRANCH:refs/heads/$BRANCH
+fi

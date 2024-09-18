@@ -1,0 +1,17 @@
+#! /bin/bash
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "Must pass a working branch name to delete"
+  exit 1
+fi
+
+BRANCH="work/${1#"work/"}"
+if [ ! -f "$(git rev-parse --absolute-git-dir)/refs/heads/$BRANCH" ]; then
+  echo "Must pass a working branch name to delete"
+  exit 1
+fi
+
+git branch -D $BRANCH
+git push working :$BRANCH
