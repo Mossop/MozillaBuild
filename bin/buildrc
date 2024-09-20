@@ -1,4 +1,8 @@
 __build_prompt() {
+  if [ -z "$BUILD_BASE" ]; then
+    return
+  fi
+
   INFO="level:$BUILD_LEVEL type:$BUILD_TYPE"
   TITLE="\\[\\033]0;${BUILD_LEVEL} ${BUILD_TYPE}\\007"
 
