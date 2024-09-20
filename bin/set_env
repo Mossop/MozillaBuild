@@ -1,0 +1,4 @@
+#! /bin/bash
+
+sed -i "/$1=/d" $BUILD_BASE/.env
+echo "$1=\"$2\"" >> $BUILD_BASE/.env

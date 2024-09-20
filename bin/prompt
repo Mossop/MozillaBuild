@@ -1,0 +1,25 @@
+#! /bin/bash
+
+if [ -z "$BUILD_BASE" ]; then
+  echo ""
+fi
+
+INFO="level:$BUILD_LEVEL type:$BUILD_TYPE"
+
+if [ "$BUILD_APP" != "browser" ]; then
+  INFO="$INFO app:$BUILD_APP"
+fi
+
+if [ "$BUILD_TARGET" != "$BUILD_PLATFORM" ]; then
+  INFO="$INFO target:$BUILD_TARGET"
+fi
+
+if [ "$BUILD_CHANNEL" != "default" ]; then
+  INFO="$INFO channel:$BUILD_CHANNEL"
+fi
+
+if [ "$BUILD_SOURCE" != "trunk" ]; then
+  INFO="$INFO source:$BUILD_SOURCE"
+fi
+
+echo "$INFO "

@@ -1,0 +1,3 @@
+#! /bin/bash
+
+$BUILD_BASE/bin/set_env BUILD_CHANNEL ${1:-default}

@@ -1,7 +1,0 @@
-if [ -z "$BUILDRC_RUN" ]; then
-  BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}")/.. && pwd | sed -e s/\\/$//g)
-
-  . "$BUILD_BASE/bin/buildrc"
-else
-  cd $BUILD_BASE/source/$BUILD_SOURCE
-fi
