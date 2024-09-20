@@ -5,6 +5,13 @@ include() {
   fi
 }
 
+export BUILD_LEVEL=${BUILD_LEVEL:-opt}
+export BUILD_TYPE=${BUILD_TYPE:-artifact}
+export BUILD_APP=${BUILD_APP:-browser}
+export BUILD_TARGET=${BUILD_TARGET:$BUILD_PLATFORM}
+export BUILD_CHANNEL=${BUILD_CHANNEL:-default}
+export BUILD_SOURCE=${BUILD_SOURCE:-trunk}
+
 include $BUILD_BASE/config/config
 include $BUILD_BASE/config/apps/$BUILD_APP.config
 include $BUILD_BASE/config/channels/$BUILD_CHANNEL.config
