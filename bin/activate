@@ -1,5 +1,5 @@
-if [ -z "$BUILD_BASE" ]; then
-  export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}")/.. && pwd | sed -e s/\\/$//g)
+if [ -z "$BUILDRC_RUN" ]; then
+  BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}")/.. && pwd | sed -e s/\\/$//g)
 
   . "$BUILD_BASE/bin/buildrc"
 else

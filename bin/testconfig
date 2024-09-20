@@ -4,11 +4,6 @@ log() {
   echo \# $@
 }
 
-if [ -z "$BUILD_BASE" ]; then
-  PARENT=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-  . $PARENT/buildrc
-fi
-
 ac_add_options() {
   echo ac_add_options $@
 }
@@ -21,7 +16,6 @@ mk_add_options() {
   echo mk_add_options $@
 }
 
-. $BUILD_BASE/bin/applyconfig
 export topsrcdir=$BUILD_SOURCE
 
 echo BUILD_APP=$BUILD_APP

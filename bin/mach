@@ -1,14 +1,3 @@
 #! /bin/bash
 
-log() {
-  :
-}
-
-if [ -z "$BUILD_BASE" ]; then
-  PARENT=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-  . $PARENT/buildrc
-fi
-
-. $BUILD_BASE/bin/applyconfig
-
 $BUILD_BASE/source/$BUILD_SOURCE/mach "$@"

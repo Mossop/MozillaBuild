@@ -2,4 +2,11 @@
 python = "3.11"
 
 [env]
+BUILD_BASE = "{{config_root}}"
+BUILD_PLATFORM = "{{os()}}"
 _.python.venv = { path = ".venv", create = true }
+_.file = "{{config_root}}/.env"
+_.source = "{{config_root}}/bin/buildenv"
+_.path = [
+  "{{config_root}}/bin"
+]

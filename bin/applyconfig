@@ -20,3 +20,6 @@ if [ -z "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_SOURCE/obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-${BUILD_TYPE}
   export MOZ_OBJDIR
 fi
+
+export XPCOM_DEBUG_BREAK=warn
+export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
