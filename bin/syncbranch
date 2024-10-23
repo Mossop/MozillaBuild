@@ -1,7 +1,6 @@
 #! /bin/bash
 
 REMOTE="working"
-GITDIR=$(git rev-parse --absolute-git-dir)
 CURRENT=$(git rev-parse --abbrev-ref HEAD)
 BRANCH=${1:-$CURRENT}
 
@@ -11,7 +10,7 @@ elif [[ "$BRANCH" =~ ^\d+$ ]]; then
   BRANCH="work/bug$BRANCH"
 fi
 
-if [ ! -d "$GITDIR/refs/remotes/$REMOTE" ]; then
+if ! git remote get-url $REMOTE >/dev/null 2>/dev/null; then
   echo "Missing remote $REMOTE"
   exit 1
 fi
@@ -19,8 +18,8 @@ fi
 git fetch -q --refmap="" $REMOTE +refs/heads/*:refs/remotes/$REMOTE/*
 
 DECISION="missing"
-if [ -f "$GITDIR/refs/heads/$BRANCH" ]; then
-  if [ -f "$GITDIR/refs/remotes/$REMOTE/$BRANCH" ]; then
+if git show-ref refs/heads/$BRANCH >/dev/null 2>/dev/null; then
+  if git show-ref refs/remotes/$REMOTE/$BRANCH >/dev/null 2>/dev/null; then
     # Both exist
     LOCALREF=($(git for-each-ref refs/heads/$BRANCH '--format=%(objectname) %(committerdate:unix)'))
     REMOTEREF=($(git for-each-ref refs/remotes/$REMOTE/$BRANCH '--format=%(objectname) %(committerdate:unix)'))
@@ -44,10 +43,10 @@ if [ -f "$GITDIR/refs/heads/$BRANCH" ]; then
     echo Pushing branch $BRANCH to $REMOTE
     git push $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
   fi
-elif [ -f "$GITDIR/refs/remotes/$REMOTE/$BRANCH" ]; then
+elif git show-ref refs/remotes/$REMOTE/$BRANCH >/dev/null 2>/dev/null; then
   # Only remote exists
-    echo Pulling branch $BRANCH from $REMOTE
-    git fetch $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
+  echo Pulling branch $BRANCH from $REMOTE
+  git fetch $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
 else
   echo "Branch $BRANCH doesn't seem to exist locally or remotely."
   exit 1
