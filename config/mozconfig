@@ -1,12 +1,11 @@
 if [ "${BUILD_LEVEL}" = "dbg" ]; then
   ac_add_options --enable-debug
-  ac_add_options --disable-optimize
-  ac_add_options --enable-warnings-as-errors
 elif [ "${BUILD_TYPE}" != "artifact" ]; then
   ac_add_options --enable-optimize
   export MOZ_DEBUG_SYMBOLS=1
   ac_add_options --enable-debug-symbols
   ac_add_options --disable-install-strip
+  ac_add_options --enable-clang-plugin
 fi
 
 if [ "${BUILD_TYPE}" = "artifact" ]; then
@@ -27,6 +26,10 @@ elif [ "${BUILD_TYPE}" = "tsan" ]; then
   ac_add_options --disable-elf-hack
   ac_add_options --disable-profiling
   ac_add_options --disable-sandbox
+else
+  ac_add_options --enable-clang-plugin
+  ac_add_options --disable-optimize
+  ac_add_options --enable-warnings-as-errors
 fi
 
 if [ "${BUILD_TYPE}" = "full" ]; then
@@ -39,7 +42,6 @@ fi
 
 ac_add_options --enable-bootstrap
 #ac_add_options --disable-unified-build
-ac_add_options --enable-clang-plugin
 #ac_add_options --enable-unverified-updates
 ac_add_options MOZ_SELECTABLE_PROFILES=1
 

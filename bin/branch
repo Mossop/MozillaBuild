@@ -1,21 +1,30 @@
 #! /bin/bash
 
+set -e
+
 if [ -z "$1" ]; then
   echo "Must pass a bug number."
   exit
 fi
 
-REMOTE=working
-BRANCH=work/bug$1
+SRCDIR=$(git rev-parse --show-toplevel)
+MESSAGE=$(curl -s https://bugzilla.mozilla.org/rest/bug?id=$1 | jq -r '"Bug \(.bugs[0].id): \(.bugs[0].summary)"')
 
-git fetch $REMOTE
-
-if git show-ref refs/heads/$BRANCH >/dev/null 2>/dev/null; then
-  git checkout $BRANCH
-elif git show-ref refs/remotes/$REMOTE/$BRANCH >/dev/null 2>/dev/null; then
-  git checkout -b $BRANCH $REMOTE/$BRANCH
+if [ -d "$SRCDIR/.jj" ]; then
+  jj new -m "$MESSAGE" ${2:-central}
 else
-  git checkout -b $BRANCH
-  curl -s https://bugzilla.mozilla.org/rest/bug?id=$1 | jq -r '"Bug \(.bugs[0].id): \(.bugs[0].summary)"' | git commit --allow-empty -F -
-  git push $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
+  REMOTE=working
+  BRANCH=work/bug$1
+
+  git fetch $REMOTE
+
+  if git show-ref refs/heads/$BRANCH >/dev/null 2>/dev/null; then
+    git checkout $BRANCH
+  elif git show-ref refs/remotes/$REMOTE/$BRANCH >/dev/null 2>/dev/null; then
+    git checkout -b $BRANCH $REMOTE/$BRANCH
+  else
+    git checkout -b $BRANCH
+    git commit --allow-empty -m "$MESSAGE"
+    git push $REMOTE refs/heads/$BRANCH:refs/heads/$BRANCH
+  fi
 fi

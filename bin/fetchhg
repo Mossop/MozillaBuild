@@ -1,10 +1,22 @@
 #! /bin/bash
 
+SRCDIR=$(git rev-parse --show-toplevel)
+
 if [ $(git cinnabar git2hg ${1:-0}) = "0000000000000000000000000000000000000000" ]; then
   echo Updating from Mercurial...
-  git fetch -q hg://hg.mozilla.org/mozilla-unified \
-    +refs/heads/bookmarks/autoland:refs/remotes/hg/autoland \
-    +refs/heads/bookmarks/central:refs/remotes/hg/central \
-    +refs/heads/bookmarks/beta:refs/remotes/hg/beta \
-    +refs/heads/bookmarks/release:refs/remotes/hg/release
+
+  if git remote get-url hg >/dev/null; then
+    git fetch -q hg
+  else
+    git for-each-ref refs/remotes/hg/* --format="%(refname)" | xargs -n 1 git update-ref -d
+    git fetch -q hg://hg.mozilla.org/mozilla-unified \
+      +refs/heads/bookmarks/autoland:refs/remotes/hg/autoland \
+      +refs/heads/bookmarks/central:refs/remotes/hg/central \
+      +refs/heads/bookmarks/beta:refs/remotes/hg/beta \
+      +refs/heads/bookmarks/release:refs/remotes/hg/release
+  fi
+
+  if [ -d "$SRCDIR/.jj" ]; then
+    jj git import --quiet
+  fi
 fi
