@@ -1,3 +1,4 @@
 #! /bin/bash
 
-$BUILD_BASE/bin/set_env BUILD_TYPE ${1:-artifact}
+. $BUILD_BASE/bin/defaults
+$BUILD_BASE/bin/set_env BUILD_TYPE "$1" $BUILD_TYPE_DEFAULT

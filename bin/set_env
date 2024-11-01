@@ -1,4 +1,7 @@
 #! /bin/bash
 
 sed -i "/$1=/d" $BUILD_BASE/.env
-echo "$1=\"$2\"" >> $BUILD_BASE/.env
+
+if [ -n "$2" -a "$2" != "$3" ]; then
+  echo "$1=\"$2\"" >> $BUILD_BASE/.env
+fi

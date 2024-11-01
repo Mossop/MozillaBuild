@@ -4,21 +4,23 @@ if [ -z "$BUILD_BASE" ]; then
   echo ""
 fi
 
+. $BUILD_BASE/bin/defaults
+
 INFO="level:$BUILD_LEVEL type:$BUILD_TYPE"
 
-if [ "$BUILD_APP" != "browser" ]; then
+if [ -n "$BUILD_APP" -a "$BUILD_APP" != "$BUILD_APP_DEFAULT" ]; then
   INFO="$INFO app:$BUILD_APP"
 fi
 
-if [ "$BUILD_TARGET" != "$BUILD_PLATFORM" ]; then
+if [ -n "$BUILD_TARGET" -a "$BUILD_TARGET" != "$BUILD_TARGET_DEFAULT" ]; then
   INFO="$INFO target:$BUILD_TARGET"
 fi
 
-if [ "$BUILD_CHANNEL" != "default" ]; then
+if [ -n "$BUILD_CHANNEL" -a "$BUILD_CHANNEL" != "$BUILD_CHANNEL_DEFAULT" ]; then
   INFO="$INFO channel:$BUILD_CHANNEL"
 fi
 
-if [ "$BUILD_SOURCE" != "trunk" ]; then
+if [ -n "$BUILD_SOURCE" -a "$BUILD_SOURCE" != "$BUILD_SOURCE_DEFAULT" ]; then
   INFO="$INFO source:$BUILD_SOURCE"
 fi
 

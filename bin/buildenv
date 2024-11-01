@@ -5,5 +5,9 @@ log() {
 }
 
 if [ ! -z "$BUILD_BASE" ]; then
+  if [ ! -f "$BUILD_BASE/.env" ]; then
+    touch "$BUILD_BASE/.env"
+  fi
+
   . $BUILD_BASE/bin/applyconfig
 fi

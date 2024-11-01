@@ -1,3 +1,4 @@
 #! /bin/bash
 
-$BUILD_BASE/bin/set_env BUILD_TARGET ${1:-$BUILD_PLATFORM}
+. $BUILD_BASE/bin/defaults
+$BUILD_BASE/bin/set_env BUILD_TARGET "$1" $BUILD_TARGET_DEFAULT
