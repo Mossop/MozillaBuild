@@ -1,0 +1,8 @@
+ac_add_options --enable-clang-plugin
+ac_add_options --enable-warnings-as-errors
+
+if [ -f "C:/Users/Dave/.mozbuild/sccache/sccache.exe" ]; then
+  ac_add_options --with-ccache="C:/Users/Dave/.mozbuild/sccache/sccache.exe"
+elif [ -f "$HOME/.mozbuild/sccache/sccache" ]; then
+  ac_add_options --with-ccache="$HOME/.mozbuild/sccache/sccache"
+fi

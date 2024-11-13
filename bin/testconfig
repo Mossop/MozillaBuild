@@ -1,19 +1,21 @@
 #! /bin/bash
 
+PREFIX=""
+
 log() {
-  echo \# $@
+  echo "${PREFIX}# $@"
 }
 
 ac_add_options() {
-  echo ac_add_options $@
+  echo "${PREFIX}ac_add_options $@"
 }
 
 ac_add_app_options() {
-  echo ac_add_app_options $@
+  echo "${PREFIX}ac_add_app_options $@"
 }
 
 mk_add_options() {
-  echo mk_add_options $@
+  echo "${PREFIX}mk_add_options $@"
 }
 
 export topsrcdir=$BUILD_SOURCE

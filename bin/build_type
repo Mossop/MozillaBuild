@@ -1,4 +1,10 @@
 #! /bin/bash
 
 . $BUILD_BASE/bin/defaults
+
+if [ ! -f "$BUILD_BASE/config/types/${1:-$BUILD_TYPE_DEFAULT}.mozconfig" ]; then
+  echo "Unknown build type ${1:-$BUILD_TYPE_DEFAULT}"
+  exit 1
+fi
+
 $BUILD_BASE/bin/set_env BUILD_TYPE "$1" $BUILD_TYPE_DEFAULT
