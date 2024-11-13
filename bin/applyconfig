@@ -32,3 +32,4 @@ fi
 
 export XPCOM_DEBUG_BREAK=warn
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
+export MOZ_PURGE_CACHES=1
