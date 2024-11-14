@@ -1,2 +1,5 @@
 ac_add_options --enable-debug
-ac_add_options --disable-optimize
+
+if [ "${BUILD_TYPE}" != "artifact" ]; then
+  ac_add_options --disable-optimize
+fi
