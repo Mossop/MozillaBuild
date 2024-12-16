@@ -3,4 +3,9 @@
 cd $BUILD_BASE/source/$BUILD_SOURCE
 fetchhg central
 echo -ne "\033]0;Building ${BUILD_LEVEL} ${BUILD_TYPE}\007"
+
+if [ -x "$HOME/.mozbuild/sccache/sccache" ]; then
+  $HOME/.mozbuild/sccache/sccache --start-server 2>&1 >/dev/null
+fi
+
 exec ./mach build $@

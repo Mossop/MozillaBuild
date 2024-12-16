@@ -7,6 +7,10 @@ include() {
 
 . $BUILD_BASE/bin/defaults
 
+if [ -d "$HOME/.mozbuild/git-cinnabar" ]; then
+  export PATH=$PATH:$HOME/.mozbuild/git-cinnabar
+fi
+
 export BUILD_LEVEL=${BUILD_LEVEL:-$BUILD_LEVEL_DEFAULT}
 export BUILD_TYPE=${BUILD_TYPE:-$BUILD_TYPE_DEFAULT}
 export BUILD_APP=${BUILD_APP:-$BUILD_APP_DEFAULT}
