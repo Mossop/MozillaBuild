@@ -2,4 +2,8 @@
 
 fetchhg central
 
-exec $(dirname $BUILD_PYTHON)/moz-phab $@
+if [ "$BUILD_PLATFORM" == "win" ]; then
+  exec $(dirname $BUILD_PYTHON)\\Scripts\\moz-phab.exe $@
+else
+  exec $(dirname $BUILD_PYTHON)/moz-phab $@
+fi
