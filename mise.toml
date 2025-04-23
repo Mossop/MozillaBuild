@@ -6,7 +6,9 @@ BUILD_BASE = "{{config_root}}"
 BUILD_PLATFORM = "{{os()}}"
 _.python.venv = { path = ".venv", create = true }
 _.file = "{{config_root}}/.env"
-_.source = "{{config_root}}/bin/buildenv"
 _.path = [
-  "{{config_root}}/bin"
+  "{{config_root}}/bin",
+  "{{env.HOME}}/.mozbuild/git-cinnabar",
+  "{{env.HOME}}/.mozbuild/sccache",
 ]
+_.source = "{{config_root}}/bin/buildenv"
