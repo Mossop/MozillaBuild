@@ -2,22 +2,28 @@
 
 set -e
 
-TARGET=$1
-if [ -z "$TARGET" ]; then
-  echo "Must pass a remote on the command line."
+REMOTE=$1
+if [ -z "$REMOTE" ]; then
+  echo "Must pass a source remote on the command line."
   exit 1
 fi
 
-REMOTE=gecko-dev
-BRANCHES="$(git branch -r --list "$REMOTE/esr*" | sort -b -V | sed "s@$REMOTE\/@@" | xargs echo) release beta"
+TARGET=$2
+if [ -z "$TARGET" ]; then
+  TARGET="$REMOTE"
+  BRANCHES="$(git branch --list "esr*" | sort -b -V | xargs echo) release beta"
+  REFBASE="heads"
+else
+  BRANCHES="$(git branch -r --list "$REMOTE/esr*" | sort -b -V | sed "s@$REMOTE\/@@" | xargs echo) release beta"
+  REFBASE="remotes/$REMOTE"
+fi
 
 for branch in $BRANCHES;
 do
   echo "Pushing $branch..."
-  git push $TARGET +refs/remotes/$REMOTE/$branch:refs/heads/$branch
+  git push $TARGET +refs/$REFBASE/$branch:refs/heads/$branch
   echo ""
 done
 
 echo "Pushing central..."
-git push $TARGET +refs/remotes/$REMOTE/master:refs/heads/central
-
+git push $TARGET +refs/$REFBASE/master:refs/heads/central
