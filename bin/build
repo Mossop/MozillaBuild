@@ -1,7 +1,6 @@
 #! /bin/bash
 
 cd $BUILD_BASE/source/$BUILD_SOURCE
-fetchhg central
 echo -ne "\033]0;Building ${BUILD_LEVEL} ${BUILD_TYPE}\007"
 
 exec ./mach build $@

@@ -17,6 +17,4 @@ git config --add remote.working.fetch 'refs/heads/work/*:refs/heads/work/*'
 git config remote.working.push 'refs/heads/work/*:refs/heads/work/*'
 git fetch working
 
-fetchhg
-
 git status
