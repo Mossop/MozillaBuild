@@ -1,5 +1,9 @@
 [tools]
-"pipx:git+https://github.com/erichdongubler-mozilla/review.git" = "refs/pull/11/head"
+"cargo:searchfox-cli" = "latest"
+node = "22"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:web-ext" = "latest"
+"pipx:MozPhab" = "latest"
 "pipx:mozregression" = "latest"
 python = "3.11"
 
