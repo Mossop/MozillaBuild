@@ -34,8 +34,6 @@ fi
 mk_add_options RUN_AUTOCONF_LOCALLY=1
 mk_add_options AUTOCLOBBER=1
 
-ac_add_options --enable-application=$BUILD_APP
-
 if [ "$BUILD_CHANNEL" != "default" ]; then
   ac_add_options --enable-update-channel=$BUILD_CHANNEL
 fi
