@@ -14,6 +14,8 @@ export BUILD_TARGET=${BUILD_TARGET:-$BUILD_TARGET_DEFAULT}
 export BUILD_CHANNEL=${BUILD_CHANNEL:-$BUILD_CHANNEL_DEFAULT}
 export BUILD_SOURCE=${BUILD_SOURCE:-$BUILD_SOURCE_DEFAULT}
 
+MOZ_OBJDIR=""
+
 include $BUILD_BASE/config/config
 include $BUILD_BASE/config/apps/$BUILD_APP.config
 include $BUILD_BASE/config/channels/$BUILD_CHANNEL.config
@@ -27,8 +29,12 @@ fi
 
 if [ -z "$MOZ_OBJDIR" ]; then
   MOZ_OBJDIR=$BUILD_BASE/build/$BUILD_SOURCE/obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-${BUILD_TYPE}
-  export MOZ_OBJDIR
 fi
+
+mkdir -p $MOZ_OBJDIR
+rm -f $BUILD_BASE/build/current
+ln -sf $MOZ_OBJDIR $BUILD_BASE/build/current
+export MOZ_OBJDIR=$BUILD_BASE/build/current
 
 export XPCOM_DEBUG_BREAK=warn
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig
