@@ -1,14 +1,20 @@
 {
   "files.exclude": {
-      "**/.git": true,
-      "**/.hg": true,
-      "build": true,
-      "source": true
+    "**/.git": true,
+    "**/.hg": true,
+    "build": true,
+    "source": true,
+    ".fseventsd": true,
+    ".Spotlight-V100": true,
+    ".Trashes": true,
   },
   "files.watcherExclude": {
-      "**/.hg/**": true,
-      "**/.git/**": true,
-      "**/build/**": true,
-      "**/source/**": true
+    "**/.hg/**": true,
+    "**/.git/**": true,
+    "**/build/**": true,
+    "**/source/**": true,
+    "**/.fseventsd/**": true,
+    "**/.Spotlight-V100/**": true,
+    "**/.Trashes/**": true,
   },
 }
