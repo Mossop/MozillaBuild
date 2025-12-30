@@ -1,11 +1,11 @@
 [tools]
 "cargo:searchfox-cli" = "latest"
 node = "22"
-"npm:@anthropic-ai/claude-code" = "latest"
 "npm:web-ext" = "latest"
 "pipx:MozPhab" = "latest"
 "pipx:mozregression" = "latest"
 python = "3.11"
+uv = "latest"
 
 [env]
 BUILD_BASE = "{{config_root}}"
