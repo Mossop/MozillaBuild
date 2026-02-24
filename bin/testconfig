@@ -18,14 +18,10 @@ mk_add_options() {
   echo "${PREFIX}mk_add_options $@"
 }
 
-export topsrcdir=$BUILD_SOURCE
-
 echo BUILD_APP=$BUILD_APP
-echo BUILD_SOURCE=$BUILD_SOURCE
 echo BUILD_LEVEL=$BUILD_LEVEL
 echo BUILD_TYPE=$BUILD_TYPE
 echo BUILD_TARGET=$BUILD_TARGET
 echo BUILD_CHANNEL=$BUILD_CHANNEL
-echo MOZ_OBJDIR=$MOZ_OBJDIR
 
 . $BUILD_BASE/bin/mozconfig

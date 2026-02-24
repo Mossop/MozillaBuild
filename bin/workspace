@@ -1,0 +1,62 @@
+#! /bin/bash
+
+COMMAND=$1
+
+if [ -z "$COMMAND" ]; then
+  echo "Must pass a name for the workspace"
+  return
+fi
+
+if [ $COMMAND == "add" ]; then
+  NAME=$2
+  REVISION=$3
+
+  if [ -z "$NAME" ]; then
+    echo "Must pass a name for the workspace"
+    return
+  fi
+
+  JJ_ROOT=$(jj root 2>/dev/null)
+  if [[ -z "$JJ_ROOT" || "$JJ_ROOT" != "$BUILD_BASE/source"* ]]; then
+    JJ_REPO="-R $BUILD_BASE/source/trunk"
+  else
+    JJ_REPO=""
+  fi
+
+  if [ -z "$REVISION" ]; then
+    REVISION=`jj $JJ_REPO log --no-graph --template 'change_id.short()' -r 'heads(::@ & ~empty())'`
+  fi
+
+  jj $JJ_REPO workspace add --name $NAME -r $REVISION $BUILD_BASE/source/$NAME
+  cd $BUILD_BASE/source/$NAME
+
+  mkdir -p .claude .vscode
+  ln $BUILD_BASE/source/trunk/.claude/CLAUDE.local.md .claude
+  cp $BUILD_BASE/source/trunk/.vscode/settings.json $BUILD_BASE/source/trunk/.vscode/launch.json .vscode
+elif [ $COMMAND == "delete" ]; then
+  NAME=$2
+
+  if [ -z "$NAME" ]; then
+    NAME=`workspace name`
+  fi
+
+  jj workspace forget $NAME
+  cd $BUILD_BASE/source/trunk
+  rm -rf $BUILD_BASE/source/$NAME
+elif [ $COMMAND == "name" ]; then
+  current_root=`jj root`
+  for name in `jj workspace list --ignore-working-copy --template 'name ++ " "'`; do
+    if [ $name != "default" ]; then
+      workspace_root=`jj workspace root --name $name`
+      if [ $workspace_root == $current_root ]; then
+        echo $name
+        return
+      fi
+    fi
+  done
+
+  return
+else
+  echo "Command must be 'add', 'name', or 'delete'"
+  return
+fi

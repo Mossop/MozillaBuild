@@ -9,10 +9,6 @@ if [ ! -z "$BUILD_BASE" ]; then
     export BUILD_BASE=`cygpath -u $BUILD_BASE`
   fi
 
-  if [ ! -f "$BUILD_BASE/.env" ]; then
-    touch "$BUILD_BASE/.env"
-  fi
-
   . $BUILD_BASE/bin/applyconfig
 fi
 

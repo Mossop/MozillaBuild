@@ -1,0 +1,13 @@
+#! /bin/bash
+
+JJ_ROOT=$(jj root 2>/dev/null)
+if [[ -z "$JJ_ROOT" || "$JJ_ROOT" != "$BUILD_BASE/source"* ]]; then
+  BUILD_SOURCE="$BUILD_BASE/source/trunk"
+else
+  BUILD_SOURCE=$JJ_ROOT
+fi
+
+COMMANDS_DIR=`mise exec -- bash -c 'echo $BUILD_SOURCE/obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-full/clangd'`
+exec $HOME/.mozbuild/clang-tools/clang-tidy/bin/clangd \
+  --compile-commands-dir $COMMANDS_DIR \
+  $@

@@ -1,6 +1,13 @@
 #! /bin/bash
 
-cd $BUILD_BASE/source/$BUILD_SOURCE
+JJ_ROOT=$(jj root 2>/dev/null)
+if [[ -z "$JJ_ROOT" || "$JJ_ROOT" != "$BUILD_BASE/source"* ]]; then
+  BUILD_SOURCE="$BUILD_BASE/source/trunk"
+else
+  BUILD_SOURCE=$JJ_ROOT
+fi
+
+cd $BUILD_SOURCE
 echo -ne "\033]0;Building ${BUILD_LEVEL} ${BUILD_TYPE}\007"
 
 exec ./mach build $@

@@ -1,7 +1,12 @@
 #! /bin/bash
 
 if [ -z "$BUILD_BASE" ]; then
-  echo ""
+  exit 0
+fi
+
+JJ_ROOT=$(jj root 2>/dev/null)
+if [[ -z "$JJ_ROOT" || "$JJ_ROOT" != "$BUILD_BASE/source"* ]]; then
+  exit 0
 fi
 
 . $BUILD_BASE/bin/defaults
@@ -18,10 +23,6 @@ fi
 
 if [ -n "$BUILD_CHANNEL" -a "$BUILD_CHANNEL" != "$BUILD_CHANNEL_DEFAULT" ]; then
   INFO="$INFO channel:$BUILD_CHANNEL"
-fi
-
-if [ -n "$BUILD_SOURCE" -a "$BUILD_SOURCE" != "$BUILD_SOURCE_DEFAULT" ]; then
-  INFO="$INFO source:$BUILD_SOURCE"
 fi
 
 echo "$INFO "

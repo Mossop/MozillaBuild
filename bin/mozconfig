@@ -19,8 +19,17 @@ must_include() {
 
 CONFIG=$BUILD_BASE/config
 
+JJ_ROOT=$(jj root 2>/dev/null)
+if [[ -z "$JJ_ROOT" || "$JJ_ROOT" != "$BUILD_BASE/source"* ]]; then
+  BUILD_SOURCE="$BUILD_BASE/source/trunk"
+else
+  BUILD_SOURCE=$JJ_ROOT
+fi
+
 if [ "$MOZ_OBJDIR" ]; then
   mk_add_options MOZ_OBJDIR="$MOZ_OBJDIR"
+else
+  mk_add_options MOZ_OBJDIR="$BUILD_SOURCE/obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-${BUILD_TYPE}"
 fi
 
 if [ "$MOZ_MAKE_FLAGS" ]; then

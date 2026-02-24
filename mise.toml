@@ -9,12 +9,15 @@ python = "3.11"
 uv = "latest"
 
 [env]
+MISE_ENV_FILE = ".env"
 BUILD_BASE = "{{config_root}}"
 BUILD_PLATFORM = "{{os()}}"
-_.file = "{{config_root}}/.env"
 _.path = [
   "{{config_root}}/bin",
   "{{env.HOME}}/.mozbuild/git-cinnabar",
   "{{env.HOME}}/.mozbuild/sccache",
 ]
 _.source = { path = "{{config_root}}/bin/buildenv", tools = true }
+
+[shell_alias]
+workspace = "source {{config_root}}/bin/workspace"
