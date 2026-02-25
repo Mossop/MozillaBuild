@@ -20,4 +20,4 @@ _.path = [
 _.source = { path = "{{config_root}}/bin/buildenv", tools = true }
 
 [shell_alias]
-workspace = "source {{config_root}}/bin/workspace"
+workspace = "source $BUILD_BASE/bin/workspace"
