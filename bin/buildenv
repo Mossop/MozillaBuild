@@ -5,9 +5,15 @@ log() {
 }
 
 if [ ! -z "$BUILD_BASE" ]; then
+  if [ $BUILD_PLATFORM == "windows" ]; then
+    export BUILD_BASE=`cygpath -u $BUILD_BASE`
+  fi
+
   if [ ! -f "$BUILD_BASE/.env" ]; then
     touch "$BUILD_BASE/.env"
   fi
 
   . $BUILD_BASE/bin/applyconfig
 fi
+
+export PATH="$BUILD_BASE/bin:$HOME/.mozbuild/git-cinnabar:$HOME/.mozbuild/sccache:$PATH"

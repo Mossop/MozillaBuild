@@ -17,4 +17,4 @@ _.path = [
   "{{env.HOME}}/.mozbuild/git-cinnabar",
   "{{env.HOME}}/.mozbuild/sccache",
 ]
-_.source = "{{config_root}}/bin/buildenv"
+_.source = { path = "{{config_root}}/bin/buildenv", tools = true }
