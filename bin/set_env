@@ -7,10 +7,31 @@ else
   BUILD_SOURCE=$JJ_ROOT
 fi
 
-if [ -f "$BUILD_SOURCE/.env" ]; then
-  sed -i "/$1=/d" $BUILD_SOURCE/.env
+SETTING=$1
+VALUE=$2
+
+. $BUILD_BASE/bin/defaults
+
+eval "DEFAULT=\$${SETTING}_DEFAULT"
+
+if [ -n "$VALUE" ]; then
+  if [ "$SETTING" == "BUILD_LEVEL" ]; then
+    if [ ! -f "$BUILD_BASE/config/levels/${VALUE}.mozconfig" ]; then
+      echo "Unknown build level ${VALUE}"
+      exit 1
+    fi
+  elif [ "$SETTING" == "BUILD_TYPE" ]; then
+    if [ ! -f "$BUILD_BASE/config/types/${VALUE}.mozconfig" ]; then
+      echo "Unknown build type ${VALUE}"
+      exit 1
+    fi
+  fi
 fi
 
-if [ -n "$2" -a "$2" != "$3" ]; then
-  echo "$1=\"$2\"" >> $BUILD_SOURCE/.env
+if [ -f "$BUILD_SOURCE/.env" ]; then
+  sed -i "/$SETTING=/d" $BUILD_SOURCE/.env
+fi
+
+if [ -n "$VALUE" -a "$VALUE" != "$DEFAULT" ]; then
+  echo "$SETTING=\"$VALUE\"" >> $BUILD_SOURCE/.env
 fi

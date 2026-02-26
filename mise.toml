@@ -21,3 +21,8 @@ _.source = { path = "{{config_root}}/bin/buildenv", tools = true }
 
 [shell_alias]
 workspace = "source $BUILD_BASE/bin/workspace"
+build_app = "$BUILD_BASE/bin/set_env BUILD_APP"
+build_channel = "$BUILD_BASE/bin/set_env BUILD_CHANNEL"
+build_level = "$BUILD_BASE/bin/set_env BUILD_LEVEL"
+build_target = "$BUILD_BASE/bin/set_env BUILD_TARGET"
+build_type = "$BUILD_BASE/bin/set_env BUILD_TYPE"

@@ -1,4 +1,0 @@
-#! /bin/bash
-
-. $BUILD_BASE/bin/defaults
-$BUILD_BASE/bin/set_env BUILD_APP "$1" $BUILD_APP_DEFAULT
