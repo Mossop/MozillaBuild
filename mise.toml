@@ -10,7 +10,6 @@ uv = "latest"
 
 [env]
 MISE_ENV_FILE = ".env"
-BUILD_BASE = "{{config_root}}"
 BUILD_PLATFORM = "{{os()}}"
 _.path = [
   "{{config_root}}/bin",

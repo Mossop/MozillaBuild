@@ -4,12 +4,8 @@ log() {
   :
 }
 
-if [ ! -z "$BUILD_BASE" ]; then
-  if [ $BUILD_PLATFORM == "windows" ]; then
-    export BUILD_BASE=`cygpath -u $BUILD_BASE`
-  fi
+export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]:-$0}") && cd .. && pwd | sed -e s/\\/$//g)
 
-  . $BUILD_BASE/bin/applyconfig
-fi
+. $BUILD_BASE/bin/applyconfig
 
 export PATH="$BUILD_BASE/bin:$HOME/.mozbuild/git-cinnabar:$HOME/.mozbuild/sccache:$PATH"
