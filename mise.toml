@@ -8,8 +8,10 @@ node = "22"
 python = "3.11"
 uv = "latest"
 
+[settings]
+env_file = ".env"
+
 [env]
-MISE_ENV_FILE = ".env"
 BUILD_PLATFORM = "{{os()}}"
 _.path = [
   "{{config_root}}/bin",
