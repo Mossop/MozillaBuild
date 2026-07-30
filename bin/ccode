@@ -1,0 +1,35 @@
+#! /bin/bash
+
+export MOZCONFIG=$(mktemp)
+export CCODE_EXTRA_BIN_DIR=$(mktemp -d)
+
+cp $(mise which jj) $CCODE_EXTRA_BIN_DIR/jj
+
+log() {
+  :
+}
+
+ac_add_options() {
+  echo "ac_add_options $@" >> $MOZCONFIG
+}
+
+ac_add_app_options() {
+  echo "ac_add_app_options $@" >> $MOZCONFIG
+}
+
+mk_add_options() {
+  echo "mk_add_options $@" >> $MOZCONFIG
+}
+
+_env_before=$(env)
+
+. $BUILD_BASE/bin/mozconfig
+
+diff <(echo "$_env_before" | sort) <(env | sort) | grep '^>' | sed 's/^> /export /' >> $MOZCONFIG
+
+export CCODE_SRC="$BUILD_BASE/source"
+
+$BUILD_BASE/moz-local-sandbox/ccode-macos $@
+
+rm -f $MOZCONFIG
+rm -rf $CCODE_EXTRA_BIN_DIR

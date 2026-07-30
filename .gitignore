@@ -9,3 +9,5 @@
 /.python-version
 /.venv
 /.env
+/stmo
+/moz-local-sandbox
