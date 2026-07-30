@@ -1,12 +1,14 @@
 [tools]
 "cargo:searchfox-cli" = "latest"
 "cargo:treeherder-cli" = "latest"
+"cargo:lrv" = "latest"
 node = "22"
 "npm:web-ext" = "latest"
 "pipx:MozPhab" = "latest"
 "pipx:mozregression" = "latest"
 python = "3.11"
 uv = "latest"
+"cargo:jj-cli" = "latest"
 
 [settings]
 env_file = ".env"
