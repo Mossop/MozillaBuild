@@ -38,9 +38,9 @@ fi
 
 if [ "$AUTOCONF" ]; then
   mk_add_options AUTOCONF="$AUTOCONF"
+  mk_add_options RUN_AUTOCONF_LOCALLY=1
 fi
 
-mk_add_options RUN_AUTOCONF_LOCALLY=1
 mk_add_options AUTOCLOBBER=1
 
 if [ "$BUILD_CHANNEL" != "default" ]; then

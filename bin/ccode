@@ -3,29 +3,22 @@
 export MOZCONFIG=$(mktemp)
 export CCODE_EXTRA_BIN_DIR=$(mktemp -d)
 
-cp $(mise which jj) $CCODE_EXTRA_BIN_DIR/jj
+CCODE_EXTRA_BINS=(
+  jj
+  lrv
+)
 
-log() {
-  :
-}
+for bin in "${CCODE_EXTRA_BINS[@]}"; do
+  cp $(mise which $bin) $CCODE_EXTRA_BIN_DIR
+done
 
-ac_add_options() {
-  echo "ac_add_options $@" >> $MOZCONFIG
-}
+if [ -n "$DOTFILES" ]; then
+  REPO=$(git rev-parse --git-dir)
+  mkdir -p "$REPO/info"
+  ln -f "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude" 2>/dev/null || cp "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude"
+fi
 
-ac_add_app_options() {
-  echo "ac_add_app_options $@" >> $MOZCONFIG
-}
-
-mk_add_options() {
-  echo "mk_add_options $@" >> $MOZCONFIG
-}
-
-_env_before=$(env)
-
-. $BUILD_BASE/bin/mozconfig
-
-diff <(echo "$_env_before" | sort) <(env | sort) | grep '^>' | sed 's/^> /export /' >> $MOZCONFIG
+$BUILD_BASE/bin/gen_mozconfig > $MOZCONFIG
 
 export CCODE_SRC="$BUILD_BASE/source"
 
