@@ -1,7 +1,7 @@
 #! /bin/bash
 
-export MOZCONFIG=$(mktemp)
 export CCODE_EXTRA_BIN_DIR=$(mktemp -d)
+export MOZCONFIG=$CCODE_EXTRA_BIN_DIR/mozconfig
 
 CCODE_EXTRA_BINS=(
   jj
@@ -18,11 +18,15 @@ if [ -n "$DOTFILES" ]; then
   ln -f "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude" 2>/dev/null || cp "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude"
 fi
 
-$BUILD_BASE/bin/gen_mozconfig > $MOZCONFIG
+$BUILD_BASE/bin/gen_mozconfig > $CCODE_EXTRA_BIN_DIR/mozconfig
 
 export CCODE_SRC="$BUILD_BASE/source"
 
-$BUILD_BASE/moz-local-sandbox/ccode-macos $@
+if [[ "${1:-}" != "--exec" ]]; then
+  cp $BUILD_BASE/config/claude.json $CCODE_EXTRA_BIN_DIR/claude.json
+  $BUILD_BASE/moz-local-sandbox/ccode-macos --settings $CCODE_EXTRA_BIN_DIR/claude.json $@
+else
+  $BUILD_BASE/moz-local-sandbox/ccode-macos $@
+fi
 
-rm -f $MOZCONFIG
 rm -rf $CCODE_EXTRA_BIN_DIR
