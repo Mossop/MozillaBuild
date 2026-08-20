@@ -9,6 +9,11 @@ else
   BUILD_SOURCE=$JJ_ROOT
 fi
 
+CHANNEL=""
+if [ "$BUILD_CHANNEL" != "default" ]; then
+  CHANNEL="${BUILD_CHANNEL}-"
+fi
+
 OBJ_DIR=`mise exec -- bash -c 'echo obj-${BUILD_APP}-${CHANNEL}${BUILD_LEVEL}-full/clangd'`
 exec $HOME/.mozbuild/clang-tools/clang-tidy/bin/clangd \
   --compile-commands-dir $BUILD_SOURCE/$OBJ_DIR \

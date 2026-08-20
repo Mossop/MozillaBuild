@@ -1,0 +1,11 @@
+export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]}") && cd .. && pwd)
+
+if [ ${OSTYPE:0:5} = "linux" ]; then
+  BUILD_PLATFORM=linux
+elif [ ${OSTYPE:0:6} = "darwin" ]; then
+  BUILD_PLATFORM=mac
+else
+  BUILD_PLATFORM=win
+fi
+
+. $BUILD_BASE/bin/applyconfig

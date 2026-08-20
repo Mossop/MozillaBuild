@@ -1,6 +1,7 @@
 {
   "env": {
     "XPCOM_DEBUG_BREAK": "warn",
-    "MOZ_PURGE_CACHES": "1"
+    "MOZ_PURGE_CACHES": "1",
+    "DISABLE_AUTOUPDATER": "1"
   }
 }

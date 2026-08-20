@@ -5,7 +5,19 @@ log() {
 if [ -z "$BUILD_BASE" ]; then
   PARENT=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
   . $PARENT/buildrc
-  . $BUILD_BASE/bin/applyconfig
 fi
 
+PREFIX=""
 . $BUILD_BASE/bin/mozconfig
+unset PREFIX
+
+if [ -n "$PARENT" ]; then
+  unset PARENT
+  unset BUILD_APP
+  unset BUILD_BASE
+  unset BUILD_CHANNEL
+  unset BUILD_LEVEL
+  unset BUILD_PLATFORM
+  unset BUILD_TARGET
+  unset BUILD_TYPE
+fi

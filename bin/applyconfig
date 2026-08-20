@@ -12,6 +12,12 @@ export BUILD_APP=${BUILD_APP:-$BUILD_APP_DEFAULT}
 export BUILD_TARGET=${BUILD_TARGET:-$BUILD_TARGET_DEFAULT}
 export BUILD_CHANNEL=${BUILD_CHANNEL:-$BUILD_CHANNEL_DEFAULT}
 
+unset BUILD_APP_DEFAULT
+unset BUILD_CHANNEL_DEFAULT
+unset BUILD_LEVEL_DEFAULT
+unset BUILD_TARGET_DEFAULT
+unset BUILD_TYPE_DEFAULT
+
 MOZ_OBJDIR=""
 
 include $BUILD_BASE/config/config
@@ -19,11 +25,6 @@ include $BUILD_BASE/config/apps/$BUILD_APP.config
 include $BUILD_BASE/config/channels/$BUILD_CHANNEL.config
 include $BUILD_BASE/config/platforms/$BUILD_PLATFORM.config
 include $BUILD_BASE/config/targets/$BUILD_TARGET.config
-
-CHANNEL=""
-if [ "$BUILD_CHANNEL" != "default" ]; then
-  CHANNEL="${BUILD_CHANNEL}-"
-fi
 
 export XPCOM_DEBUG_BREAK=warn
 export MOZCONFIG=$BUILD_BASE/bin/entrymozconfig

@@ -1,7 +1,10 @@
 #! /bin/bash
 
+if [ -z "$BUILD_BASE" ]; then
+  export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]}") && cd .. && pwd)
+fi
+
 export CCODE_EXTRA_BIN_DIR=$(mktemp -d)
-export MOZCONFIG=$CCODE_EXTRA_BIN_DIR/mozconfig
 
 CCODE_EXTRA_BINS=(
   jj
@@ -18,9 +21,7 @@ if [ -n "$DOTFILES" ]; then
   ln -f "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude" 2>/dev/null || cp "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude"
 fi
 
-$BUILD_BASE/bin/gen_mozconfig > $CCODE_EXTRA_BIN_DIR/mozconfig
-
-export CCODE_SRC="$BUILD_BASE/source"
+export CCODE_SRC="$BUILD_BASE"
 
 if [[ "${1:-}" != "--exec" ]]; then
   cp $BUILD_BASE/config/claude.json $CCODE_EXTRA_BIN_DIR/claude.json
