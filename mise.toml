@@ -6,7 +6,6 @@ node = "22"
 "npm:web-ext" = "latest"
 "pipx:MozPhab" = "latest"
 "pipx:mozregression" = "latest"
-python = "3.11"
 uv = "latest"
 "cargo:jj-cli" = "latest"
 

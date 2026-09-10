@@ -1,5 +1,5 @@
 ac_add_options --enable-clang-plugin
-# ac_add_options --enable-warnings-as-errors
+ac_add_options --enable-warnings-as-errors
 
 ac_add_options --without-ccache
 
