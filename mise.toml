@@ -1,9 +1,5 @@
 [tools]
-"cargo:searchfox-cli" = "latest"
-"cargo:treeherder-cli" = "latest"
-"cargo:lrv" = "latest"
 node = "22"
-"npm:web-ext" = "latest"
 "pipx:MozPhab" = "latest"
 "pipx:mozregression" = "latest"
 uv = "latest"
