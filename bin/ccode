@@ -4,15 +4,17 @@ if [ -z "$BUILD_BASE" ]; then
   export BUILD_BASE=$(cd $(dirname "${BASH_SOURCE[0]}") && cd .. && pwd)
 fi
 
-export CCODE_EXTRA_BIN_DIR=$(mktemp -d)
+export MOZSB_EXTRA_BIN_DIR=$(mktemp -d)
 
-CCODE_EXTRA_BINS=(
+MOZSB_EXTRA_BINS=(
   jj
   lrv
 )
 
-for bin in "${CCODE_EXTRA_BINS[@]}"; do
-  cp $(mise which $bin) $CCODE_EXTRA_BIN_DIR
+for bin in "${MOZSB_EXTRA_BINS[@]}"; do
+  if command -v $bin 1>/dev/null 2>&1; then
+    cp $(mise which $bin) $MOZSB_EXTRA_BIN_DIR
+  fi
 done
 
 if [ -n "$DOTFILES" ]; then
@@ -21,13 +23,17 @@ if [ -n "$DOTFILES" ]; then
   ln -f "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude" 2>/dev/null || cp "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude"
 fi
 
-export CCODE_SRC="$BUILD_BASE"
+export MOZSB_SRC="$BUILD_BASE"
 
 if [[ "${1:-}" != "--exec" ]]; then
-  cp $BUILD_BASE/config/claude.json $CCODE_EXTRA_BIN_DIR/claude.json
-  $BUILD_BASE/moz-local-sandbox/ccode-macos --settings $CCODE_EXTRA_BIN_DIR/claude.json $@
+  cp $BUILD_BASE/config/claude.json $MOZSB_EXTRA_BIN_DIR/claude.json
+  args=()
+  for arg in "$@"; do
+    [[ "$arg" != --permission-mode=* ]] && args+=("$arg")
+  done
+  ~/moz-local-sandbox/ccode-macos claude --settings $MOZSB_EXTRA_BIN_DIR/claude.json "${args[@]}"
 else
-  $BUILD_BASE/moz-local-sandbox/ccode-macos $@
+  ~/moz-local-sandbox/ccode-macos $@
 fi
 
-rm -rf $CCODE_EXTRA_BIN_DIR
+rm -rf $MOZSB_EXTRA_BIN_DIR
