@@ -12,6 +12,7 @@ env_file = ".env"
 BUILD_BASE = "{{config_root}}"
 BUILD_PLATFORM = "{{os()}}"
 CLAUDE_WRAPPER = "{{config_root}}/bin/ccode"
+SCCACHE_DIR = "{{config_root}}/cache/sccache"
 _.path = [
   "{{config_root}}/bin",
   "{{env.HOME}}/.mozbuild/git-cinnabar",

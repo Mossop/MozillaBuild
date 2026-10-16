@@ -23,6 +23,10 @@ if [ -n "$DOTFILES" ]; then
   ln -f "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude" 2>/dev/null || cp "$DOTFILES/shared/git/gitignore" "$REPO/info/exclude"
 fi
 
+if [ -n "$CLAUDE_BINARY" ]; then
+  export MOZSB_CLAUDE_BIN="$CLAUDE_BINARY"
+fi
+
 export MOZSB_SRC="$BUILD_BASE"
 
 if [[ "${1:-}" != "--exec" ]]; then
